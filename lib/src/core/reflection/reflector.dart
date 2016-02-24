@@ -166,7 +166,7 @@ class Reflector {
   }
 
   /** @internal */
-  _getReflectionInfo(typeOrFunc) {
+  _getReflectionInfo(dynamic typeOrFunc) {
     if (isPresent(this._usedKeys)) {
       this._usedKeys.add(typeOrFunc);
     }
@@ -174,7 +174,7 @@ class Reflector {
   }
 
   /** @internal */
-  _containsReflectionInfo(typeOrFunc) {
+  _containsReflectionInfo(dynamic typeOrFunc) {
     return this._injectableInfo.containsKey(typeOrFunc);
   }
 
@@ -183,6 +183,6 @@ class Reflector {
   }
 }
 
-void _mergeMaps(Map<dynamic, dynamic> target, Map<String, Function> config) {
-  StringMapWrapper.forEach(config, (v, k) => target[k] = v);
+void _mergeMaps(Map<String, Function> target, Map<String, Function> config) {
+  StringMapWrapper.forEach(config, (Function v, String k) => target[k] = v);
 }

@@ -87,9 +87,10 @@ class FormBuilder {
 
   /** @internal */
   Map<String, modelModule.AbstractControl> _reduceControls(
-      dynamic controlsConfig) {
+      Map<String, dynamic> controlsConfig) {
     Map<String, modelModule.AbstractControl> controls = {};
-    StringMapWrapper.forEach(controlsConfig, (controlConfig, controlName) {
+    StringMapWrapper.forEach(controlsConfig,
+        (dynamic controlConfig, String controlName) {
       controls[controlName] = this._createControl(controlConfig);
     });
     return controls;

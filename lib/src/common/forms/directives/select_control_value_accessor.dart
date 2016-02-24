@@ -39,7 +39,7 @@ class SelectControlValueAccessor implements ControlValueAccessor {
   Renderer _renderer;
   ElementRef _elementRef;
   String value;
-  var onChange = (_) {};
+  var onChange = (dynamic _) {};
   var onTouched = () {};
   SelectControlValueAccessor(
       this._renderer,

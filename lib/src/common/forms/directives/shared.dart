@@ -34,14 +34,14 @@ void setUpControl(Control control, NgControl dir) {
       Validators.composeAsync([control.asyncValidator, dir.asyncValidator]);
   dir.valueAccessor.writeValue(control.value);
   // view -> model
-  dir.valueAccessor.registerOnChange((newValue) {
+  dir.valueAccessor.registerOnChange((dynamic newValue) {
     dir.viewToModelUpdate(newValue);
     control.updateValue(newValue, emitModelToViewChange: false);
     control.markAsDirty();
   });
   // model -> view
-  control
-      .registerOnChange((newValue) => dir.valueAccessor.writeValue(newValue));
+  control.registerOnChange(
+      (dynamic newValue) => dir.valueAccessor.writeValue(newValue));
   // touched
   dir.valueAccessor.registerOnTouched(() => control.markAsTouched());
 }
@@ -81,10 +81,10 @@ bool isPropertyUpdated(Map<String, dynamic> changes, dynamic viewModel) {
 ControlValueAccessor selectValueAccessor(
     NgControl dir, List<ControlValueAccessor> valueAccessors) {
   if (isBlank(valueAccessors)) return null;
-  var defaultAccessor;
-  var builtinAccessor;
-  var customAccessor;
-  valueAccessors.forEach((v) {
+  ControlValueAccessor defaultAccessor;
+  ControlValueAccessor builtinAccessor;
+  ControlValueAccessor customAccessor;
+  valueAccessors.forEach((ControlValueAccessor v) {
     if (hasConstructor(v, DefaultValueAccessor)) {
       defaultAccessor = v;
     } else if (hasConstructor(v, CheckboxControlValueAccessor) ||

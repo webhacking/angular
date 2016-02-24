@@ -32,7 +32,7 @@ const NUMBER_VALUE_ACCESSOR = const Provider(NG_VALUE_ACCESSOR,
 class NumberValueAccessor implements ControlValueAccessor {
   Renderer _renderer;
   ElementRef _elementRef;
-  var onChange = (_) {};
+  var onChange = (dynamic _) {};
   var onTouched = () {};
   NumberValueAccessor(this._renderer, this._elementRef) {}
   void writeValue(num value) {

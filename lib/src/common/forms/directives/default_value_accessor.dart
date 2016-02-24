@@ -31,7 +31,7 @@ const DEFAULT_VALUE_ACCESSOR = const Provider(NG_VALUE_ACCESSOR,
 class DefaultValueAccessor implements ControlValueAccessor {
   Renderer _renderer;
   ElementRef _elementRef;
-  var onChange = (_) {};
+  var onChange = (dynamic _) {};
   var onTouched = () {};
   DefaultValueAccessor(this._renderer, this._elementRef) {}
   void writeValue(dynamic value) {
