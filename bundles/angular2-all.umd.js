@@ -19166,6 +19166,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.RequiredValidator = validators_2.RequiredValidator;
 	exports.MinLengthValidator = validators_2.MinLengthValidator;
 	exports.MaxLengthValidator = validators_2.MaxLengthValidator;
+	exports.PatternValidator = validators_2.PatternValidator;
 	var form_builder_1 = __webpack_require__(153);
 	exports.FormBuilder = form_builder_1.FormBuilder;
 	var form_builder_2 = __webpack_require__(153);
@@ -20197,6 +20198,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	            return v.length > maxLength ?
 	                { "maxlength": { "requiredLength": maxLength, "actualLength": v.length } } :
 	                null;
+	        };
+	    };
+	    /**
+	     * Validator that requires a control to match a regex to its value.
+	     */
+	    Validators.pattern = function (pattern) {
+	        return function (control) {
+	            if (lang_1.isPresent(Validators.required(control)))
+	                return null;
+	            var regex = new RegExp("^" + pattern + "$");
+	            var v = control.value;
+	            return regex.test(v) ? null :
+	                { "pattern": { "requiredPattern": "^" + pattern + "$", "actualValue": v } };
 	        };
 	    };
 	    /**
@@ -21565,6 +21579,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.RequiredValidator = validators_2.RequiredValidator;
 	exports.MinLengthValidator = validators_2.MinLengthValidator;
 	exports.MaxLengthValidator = validators_2.MaxLengthValidator;
+	exports.PatternValidator = validators_2.PatternValidator;
 	var ng_control_1 = __webpack_require__(135);
 	exports.NgControl = ng_control_1.NgControl;
 	/**
@@ -21599,7 +21614,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    ng_control_status_1.NgControlStatus,
 	    validators_1.RequiredValidator,
 	    validators_1.MinLengthValidator,
-	    validators_1.MaxLengthValidator
+	    validators_1.MaxLengthValidator,
+	    validators_1.PatternValidator
 	]);
 
 
@@ -21703,6 +21719,35 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return MaxLengthValidator;
 	})();
 	exports.MaxLengthValidator = MaxLengthValidator;
+	/**
+	 * A Directive that adds the `pattern` validator to any controls marked with the
+	 * `pattern` attribute, via the {@link NG_VALIDATORS} binding. Uses attribute value
+	 * as the regex to validate Control value against.  Follows pattern attribute
+	 * semantics; i.e. regex must match entire Control value.
+	 *
+	 * ### Example
+	 *
+	 * ```
+	 * <input [ngControl]="fullName" pattern="[a-zA-Z ]*">
+	 * ```
+	 */
+	var PATTERN_VALIDATOR = lang_1.CONST_EXPR(new core_1.Provider(validators_1.NG_VALIDATORS, { useExisting: core_1.forwardRef(function () { return PatternValidator; }), multi: true }));
+	var PatternValidator = (function () {
+	    function PatternValidator(pattern) {
+	        this._validator = validators_1.Validators.pattern(pattern);
+	    }
+	    PatternValidator.prototype.validate = function (c) { return this._validator(c); };
+	    PatternValidator = __decorate([
+	        core_1.Directive({
+	            selector: '[pattern][ngControl],[pattern][ngFormControl],[pattern][ngModel]',
+	            providers: [PATTERN_VALIDATOR]
+	        }),
+	        __param(0, core_1.Attribute("pattern")), 
+	        __metadata('design:paramtypes', [String])
+	    ], PatternValidator);
+	    return PatternValidator;
+	})();
+	exports.PatternValidator = PatternValidator;
 
 
 /***/ },
