@@ -29,7 +29,7 @@ const CHECKBOX_VALUE_ACCESSOR = const Provider(NG_VALUE_ACCESSOR,
 class CheckboxControlValueAccessor implements ControlValueAccessor {
   Renderer _renderer;
   ElementRef _elementRef;
-  var onChange = (dynamic _) {};
+  var onChange = (_) {};
   var onTouched = () {};
   CheckboxControlValueAccessor(this._renderer, this._elementRef) {}
   void writeValue(dynamic value) {

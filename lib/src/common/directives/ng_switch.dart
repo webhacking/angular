@@ -83,7 +83,7 @@ class NgSwitch {
   bool _useDefault = false;
   var _valueViews = new Map<dynamic, List<SwitchView>>();
   List<SwitchView> _activeViews = [];
-  set ngSwitch(dynamic value) {
+  set ngSwitch(value) {
     // Empty the currently active ViewContainers
     this._emptyAllActiveViews();
     // Add the ViewContainers matching the value (with a fallback to default)
@@ -98,7 +98,7 @@ class NgSwitch {
   }
 
   /** @internal */
-  void _onWhenValueChanged(dynamic oldWhen, dynamic newWhen, SwitchView view) {
+  void _onWhenValueChanged(oldWhen, newWhen, SwitchView view) {
     this._deregisterView(oldWhen, view);
     this._registerView(newWhen, view);
     if (identical(oldWhen, this._switchValue)) {
@@ -140,7 +140,7 @@ class NgSwitch {
   }
 
   /** @internal */
-  void _registerView(dynamic value, SwitchView view) {
+  void _registerView(value, SwitchView view) {
     var views = this._valueViews[value];
     if (isBlank(views)) {
       views = [];
@@ -150,7 +150,7 @@ class NgSwitch {
   }
 
   /** @internal */
-  void _deregisterView(dynamic value, SwitchView view) {
+  void _deregisterView(value, SwitchView view) {
     // `_WHEN_DEFAULT` is used a marker for non-registered whens
     if (identical(value, _WHEN_DEFAULT)) return;
     var views = this._valueViews[value];
@@ -185,7 +185,7 @@ class NgSwitchWhen {
     this._switch = ngSwitch;
     this._view = new SwitchView(viewContainer, templateRef);
   }
-  set ngSwitchWhen(dynamic value) {
+  set ngSwitchWhen(value) {
     this._switch._onWhenValueChanged(this._value, value, this._view);
     this._value = value;
   }

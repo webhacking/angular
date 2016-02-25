@@ -345,6 +345,9 @@ class DefaultIterableDiffer implements IterableDiffer {
     if (!identical(this._removalsTail, null)) {
       this._removalsTail._nextRemoved = null;
     }
+    if (!identical(this._identityChangesTail, null)) {
+      this._identityChangesTail._nextIdentityChange = null;
+    }
   }
 
   /** @internal */

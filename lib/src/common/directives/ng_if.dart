@@ -32,7 +32,7 @@ class NgIf {
   TemplateRef _templateRef;
   bool _prevCondition = null;
   NgIf(this._viewContainer, this._templateRef) {}
-  set ngIf(dynamic newCondition) {
+  set ngIf(newCondition) {
     if (newCondition &&
         (isBlank(this._prevCondition) || !this._prevCondition)) {
       this._prevCondition = true;

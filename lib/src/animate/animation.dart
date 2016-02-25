@@ -43,7 +43,7 @@ class Animation {
     this.startTime = DateWrapper.toMillis(DateWrapper.now());
     this._stringPrefix = DOM.getAnimationPrefix();
     this.setup();
-    this.wait((dynamic timestamp) => this.start());
+    this.wait((timestamp) => this.start());
   }
   wait(Function callback) {
     // Firefox requires 2 frames for some reason
@@ -93,7 +93,7 @@ class Animation {
    * @param styles
    */
   void applyStyles(Map<String, dynamic> styles) {
-    StringMapWrapper.forEach(styles, (dynamic value, String key) {
+    StringMapWrapper.forEach(styles, (value, key) {
       var dashCaseKey = camelCaseToDashCase(key);
       if (isPresent(DOM.getStyle(this.element, dashCaseKey))) {
         DOM.setStyle(this.element, dashCaseKey, value.toString());

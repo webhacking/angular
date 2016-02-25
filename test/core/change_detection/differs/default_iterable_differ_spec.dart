@@ -262,7 +262,7 @@ main() {
         });
       });
     });
-    describe("trackBy function", () {
+    describe("trackBy function by id", () {
       var differ;
       var trackByItemId = (num index, dynamic item) => item.id;
       var buildItemList = (List<String> list) {
@@ -344,6 +344,23 @@ main() {
             collection: ["{id: a}", "{id: b}"],
             previous: ["{id: a}", "{id: b}", "{id: c}[2->null]"],
             removals: ["{id: c}[2->null]"]));
+      });
+    });
+    describe("trackBy function by index", () {
+      var differ;
+      var trackByIndex = (num index, dynamic item) => index;
+      beforeEach(() {
+        differ = new DefaultIterableDiffer(trackByIndex);
+      });
+      it("should track removals normally", () {
+        differ.check(["a", "b", "c", "d"]);
+        differ.check(["e", "f", "g", "h"]);
+        differ.check(["e", "f", "h"]);
+        expect(differ.toString()).toEqual(iterableChangesAsString(
+            collection: ["e", "f", "h"],
+            previous: ["e", "f", "h", "h[3->null]"],
+            removals: ["h[3->null]"],
+            identityChanges: ["h"]));
       });
     });
   });

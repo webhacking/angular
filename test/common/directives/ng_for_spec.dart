@@ -430,7 +430,7 @@ main() {
           inject([TestComponentBuilder, AsyncTestCompleter],
               (TestComponentBuilder tcb, async) {
             var template =
-                '''<template ngFor #item [ngForOf]="items" [ngForTrackBy]="customTrackBy" #i="index">
+                '''<template ngFor #item [ngForOf]="items" [ngForTrackBy]="trackById" #i="index">
                <p>{{items[i]}}</p>
               </template>''';
             tcb
@@ -455,7 +455,7 @@ main() {
           inject([TestComponentBuilder, AsyncTestCompleter],
               (TestComponentBuilder tcb, async) {
             var template =
-                '''<div><template ngFor #item [ngForOf]="items" [ngForTrackBy]="customTrackBy">{{item[\'color\']}}</template></div>''';
+                '''<div><template ngFor #item [ngForOf]="items" [ngForTrackBy]="trackById">{{item[\'color\']}}</template></div>''';
             tcb
                 .overrideTemplate(TestComponent, template)
                 .createAsync(TestComponent)
@@ -478,7 +478,7 @@ main() {
           inject([TestComponentBuilder, AsyncTestCompleter],
               (TestComponentBuilder tcb, async) {
             var template =
-                '''<div><template ngFor #item [ngForOf]="items" [ngForTrackBy]="customTrackBy">{{item[\'color\']}}</template></div>''';
+                '''<div><template ngFor #item [ngForOf]="items" [ngForTrackBy]="trackById">{{item[\'color\']}}</template></div>''';
             tcb
                 .overrideTemplate(TestComponent, template)
                 .createAsync(TestComponent)
@@ -497,6 +497,36 @@ main() {
               fixture.detectChanges();
               expect(fixture.debugElement.nativeElement)
                   .toHaveText("orangered");
+              async.done();
+            });
+          }));
+      it(
+          "should handle added and removed items properly when tracking by index",
+          inject([TestComponentBuilder, AsyncTestCompleter],
+              (TestComponentBuilder tcb, async) {
+            var template =
+                '''<div><template ngFor #item [ngForOf]="items" [ngForTrackBy]="trackByIndex">{{item}}</template></div>''';
+            tcb
+                .overrideTemplate(TestComponent, template)
+                .createAsync(TestComponent)
+                .then((fixture) {
+              fixture.debugElement.componentInstance.items = [
+                "a",
+                "b",
+                "c",
+                "d"
+              ];
+              fixture.detectChanges();
+              fixture.debugElement.componentInstance.items = [
+                "e",
+                "f",
+                "g",
+                "h"
+              ];
+              fixture.detectChanges();
+              fixture.debugElement.componentInstance.items = ["e", "f", "h"];
+              fixture.detectChanges();
+              expect(fixture.debugElement.nativeElement).toHaveText("efh");
               async.done();
             });
           }));
@@ -519,8 +549,12 @@ class TestComponent {
   TestComponent() {
     this.items = [1, 2];
   }
-  String customTrackBy(num index, dynamic item) {
+  String trackById(num index, dynamic item) {
     return item["id"];
+  }
+
+  num trackByIndex(num index, dynamic item) {
+    return index;
   }
 }
 

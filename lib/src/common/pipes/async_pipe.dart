@@ -114,7 +114,7 @@ class AsyncPipe implements PipeTransform, OnDestroy {
     this._obj = obj;
     this._strategy = this._selectStrategy(obj);
     this._subscription = this._strategy.createSubscription(
-        obj, (Object value) => this._updateLatestValue(obj, value));
+        obj, (value) => this._updateLatestValue(obj, value));
   }
 
   /** @internal */
