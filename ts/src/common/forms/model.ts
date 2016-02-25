@@ -62,7 +62,7 @@ export abstract class AbstractControl {
   private _pristine: boolean = true;
   private _touched: boolean = false;
   private _parent: ControlGroup | ControlArray;
-  private _asyncValidationSubscription: any;
+  private _asyncValidationSubscription;
 
   constructor(public validator: Function, public asyncValidator: Function) {}
 
@@ -379,8 +379,7 @@ export class ControlGroup extends AbstractControl {
 
   /** @internal */
   _setParentForControls() {
-    StringMapWrapper.forEach(
-        this.controls, (control: AbstractControl, name: string) => { control.setParent(this); });
+    StringMapWrapper.forEach(this.controls, (control, name) => { control.setParent(this); });
   }
 
   /** @internal */
@@ -389,7 +388,7 @@ export class ControlGroup extends AbstractControl {
   /** @internal */
   _anyControlsHaveStatus(status: string): boolean {
     var res = false;
-    StringMapWrapper.forEach(this.controls, (control: AbstractControl, name: string) => {
+    StringMapWrapper.forEach(this.controls, (control, name) => {
       res = res || (this.contains(name) && control.status == status);
     });
     return res;
@@ -397,17 +396,16 @@ export class ControlGroup extends AbstractControl {
 
   /** @internal */
   _reduceValue() {
-    return this._reduceChildren(
-        {}, (acc: {[k: string]: AbstractControl}, control: AbstractControl, name: string) => {
-          acc[name] = control.value;
-          return acc;
-        });
+    return this._reduceChildren({}, (acc, control, name) => {
+      acc[name] = control.value;
+      return acc;
+    });
   }
 
   /** @internal */
   _reduceChildren(initValue: any, fn: Function) {
     var res = initValue;
-    StringMapWrapper.forEach(this.controls, (control: AbstractControl, name: string) => {
+    StringMapWrapper.forEach(this.controls, (control, name) => {
       if (this._included(name)) {
         res = fn(res, control, name);
       }

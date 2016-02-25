@@ -44,7 +44,7 @@ let InputAttrDirective = class {
 InputAttrDirective = __decorate([
     Directive({ selector: 'input' }),
     __param(0, Attribute('type')), 
-    __metadata('design:paramtypes', [String])
+    __metadata('design:paramtypes', [Object])
 ], InputAttrDirective);
 // #enddocregion
 // #docregion directive

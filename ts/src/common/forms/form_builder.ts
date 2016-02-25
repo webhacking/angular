@@ -80,10 +80,9 @@ export class FormBuilder {
   }
 
   /** @internal */
-  _reduceControls(controlsConfig: {[k: string]:
-                                       any}): {[key: string]: modelModule.AbstractControl} {
+  _reduceControls(controlsConfig: any): {[key: string]: modelModule.AbstractControl} {
     var controls: {[key: string]: modelModule.AbstractControl} = {};
-    StringMapWrapper.forEach(controlsConfig, (controlConfig: any, controlName: string) => {
+    StringMapWrapper.forEach(controlsConfig, (controlConfig, controlName) => {
       controls[controlName] = this._createControl(controlConfig);
     });
     return controls;

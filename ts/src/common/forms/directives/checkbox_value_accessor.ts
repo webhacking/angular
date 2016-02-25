@@ -21,7 +21,7 @@ const CHECKBOX_VALUE_ACCESSOR = CONST_EXPR(new Provider(
   providers: [CHECKBOX_VALUE_ACCESSOR]
 })
 export class CheckboxControlValueAccessor implements ControlValueAccessor {
-  onChange = (_: any) => {};
+  onChange = (_) => {};
   onTouched = () => {};
 
   constructor(private _renderer: Renderer, private _elementRef: ElementRef) {}

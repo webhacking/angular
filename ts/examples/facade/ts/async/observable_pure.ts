@@ -1,10 +1,10 @@
 // #docregion Observable
-import {Observable, Subscriber} from 'rxjs/Rx';
+import {Observable} from 'rxjs/Observable';
 import {map} from 'rxjs/operator/map';
 
-var obs = new Observable<number>((sub: Subscriber<number>) => {
+var obs = new Observable(obs => {
   var i = 0;
-  setInterval(_ => sub.next(++i), 1000);
+  setInterval(_ => obs.next(++i), 1000);
 });
-map.call(obs, (i: number) => `${i} seconds elapsed`).subscribe((msg: string) => console.log(msg));
+map.call(obs, i => `${i} seconds elapsed`).subscribe(msg => console.log(msg));
 // #enddocregion

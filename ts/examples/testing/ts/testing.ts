@@ -73,7 +73,7 @@ describe('some component', () => {
 // #docregion beforeEachProviders
 describe('some component', () => {
   beforeEachProviders(() => [provide(MyService, {useClass: MyMockService})]);
-  it('uses MyService', inject([MyService], (service: MyMockService) => {
+  it('uses MyService', inject([MyService], (service) => {
                                                // service is an instance of MyMockService.
                                            }));
 });
@@ -81,7 +81,7 @@ describe('some component', () => {
 
 // #docregion afterEach
 describe('some component', () => {
-  afterEach((done: Function) => { db.reset().then((_: any) => done()); });
+  afterEach((done) => { db.reset().then((_) => done()); });
   it('uses the db', () => {
                         // This test can leave the database in a dirty state.
                         // The afterEach will ensure it gets reset.

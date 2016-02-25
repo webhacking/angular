@@ -2680,6 +2680,9 @@ System.register("angular2/src/core/change_detection/differs/default_iterable_dif
       if (this._removalsTail !== null) {
         this._removalsTail._nextRemoved = null;
       }
+      if (this._identityChangesTail !== null) {
+        this._identityChangesTail._nextIdentityChange = null;
+      }
     };
     DefaultIterableDiffer.prototype._reinsertAfter = function(record, prevRecord, index) {
       if (this._unlinkedRecords !== null) {
@@ -19633,26 +19636,26 @@ System.register("angular2/src/core/di/injector", ["angular2/src/facade/collectio
       var factory = resolvedFactory.factory;
       var deps = resolvedFactory.dependencies;
       var length = deps.length;
-      var d0;
-      var d1;
-      var d2;
-      var d3;
-      var d4;
-      var d5;
-      var d6;
-      var d7;
-      var d8;
-      var d9;
-      var d10;
-      var d11;
-      var d12;
-      var d13;
-      var d14;
-      var d15;
-      var d16;
-      var d17;
-      var d18;
-      var d19;
+      var d0,
+          d1,
+          d2,
+          d3,
+          d4,
+          d5,
+          d6,
+          d7,
+          d8,
+          d9,
+          d10,
+          d11,
+          d12,
+          d13,
+          d14,
+          d15,
+          d16,
+          d17,
+          d18,
+          d19;
       try {
         d0 = length > 0 ? this._getByDependency(provider, deps[0], visibility) : null;
         d1 = length > 1 ? this._getByDependency(provider, deps[1], visibility) : null;
@@ -23268,21 +23271,21 @@ System.register("angular2/src/core/application_ref", ["angular2/src/core/zone/ng
         return _;
       });
     };
-    ApplicationRef_.prototype._loadComponent = function(componentRef) {
-      var appChangeDetector = componentRef.location.internalElement.parentView.changeDetector;
+    ApplicationRef_.prototype._loadComponent = function(ref) {
+      var appChangeDetector = ref.location.internalElement.parentView.changeDetector;
       this._changeDetectorRefs.push(appChangeDetector.ref);
       this.tick();
-      this._rootComponents.push(componentRef);
+      this._rootComponents.push(ref);
       this._bootstrapListeners.forEach(function(listener) {
-        return listener(componentRef);
+        return listener(ref);
       });
     };
-    ApplicationRef_.prototype._unloadComponent = function(componentRef) {
-      if (!collection_1.ListWrapper.contains(this._rootComponents, componentRef)) {
+    ApplicationRef_.prototype._unloadComponent = function(ref) {
+      if (!collection_1.ListWrapper.contains(this._rootComponents, ref)) {
         return ;
       }
-      this.unregisterChangeDetector(componentRef.location.internalElement.parentView.changeDetector.ref);
-      collection_1.ListWrapper.remove(this._rootComponents, componentRef);
+      this.unregisterChangeDetector(ref.location.internalElement.parentView.changeDetector.ref);
+      collection_1.ListWrapper.remove(this._rootComponents, ref);
     };
     Object.defineProperty(ApplicationRef_.prototype, "injector", {
       get: function() {
