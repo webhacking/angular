@@ -3284,7 +3284,26 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var factory = resolvedFactory.factory;
 	        var deps = resolvedFactory.dependencies;
 	        var length = deps.length;
-	        var d0, d1, d2, d3, d4, d5, d6, d7, d8, d9, d10, d11, d12, d13, d14, d15, d16, d17, d18, d19;
+	        var d0;
+	        var d1;
+	        var d2;
+	        var d3;
+	        var d4;
+	        var d5;
+	        var d6;
+	        var d7;
+	        var d8;
+	        var d9;
+	        var d10;
+	        var d11;
+	        var d12;
+	        var d13;
+	        var d14;
+	        var d15;
+	        var d16;
+	        var d17;
+	        var d18;
+	        var d19;
 	        try {
 	            d0 = length > 0 ? this._getByDependency(provider, deps[0], visibility) : null;
 	            d1 = length > 1 ? this._getByDependency(provider, deps[1], visibility) : null;
@@ -4773,13 +4792,21 @@ return /******/ (function(modules) { // webpackBootstrap
 	            case 5:
 	                return function (a1, a2, a3, a4, a5) { return new t(a1, a2, a3, a4, a5); };
 	            case 6:
-	                return function (a1, a2, a3, a4, a5, a6) { return new t(a1, a2, a3, a4, a5, a6); };
+	                return function (a1, a2, a3, a4, a5, a6) {
+	                    return new t(a1, a2, a3, a4, a5, a6);
+	                };
 	            case 7:
-	                return function (a1, a2, a3, a4, a5, a6, a7) { return new t(a1, a2, a3, a4, a5, a6, a7); };
+	                return function (a1, a2, a3, a4, a5, a6, a7) {
+	                    return new t(a1, a2, a3, a4, a5, a6, a7);
+	                };
 	            case 8:
-	                return function (a1, a2, a3, a4, a5, a6, a7, a8) { return new t(a1, a2, a3, a4, a5, a6, a7, a8); };
+	                return function (a1, a2, a3, a4, a5, a6, a7, a8) {
+	                    return new t(a1, a2, a3, a4, a5, a6, a7, a8);
+	                };
 	            case 9:
-	                return function (a1, a2, a3, a4, a5, a6, a7, a8, a9) { return new t(a1, a2, a3, a4, a5, a6, a7, a8, a9); };
+	                return function (a1, a2, a3, a4, a5, a6, a7, a8, a9) {
+	                    return new t(a1, a2, a3, a4, a5, a6, a7, a8, a9);
+	                };
 	            case 10:
 	                return function (a1, a2, a3, a4, a5, a6, a7, a8, a9, a10) {
 	                    return new t(a1, a2, a3, a4, a5, a6, a7, a8, a9, a10);
@@ -13630,20 +13657,20 @@ return /******/ (function(modules) { // webpackBootstrap
 	        });
 	    };
 	    /** @internal */
-	    ApplicationRef_.prototype._loadComponent = function (ref) {
-	        var appChangeDetector = ref.location.internalElement.parentView.changeDetector;
+	    ApplicationRef_.prototype._loadComponent = function (componentRef) {
+	        var appChangeDetector = componentRef.location.internalElement.parentView.changeDetector;
 	        this._changeDetectorRefs.push(appChangeDetector.ref);
 	        this.tick();
-	        this._rootComponents.push(ref);
-	        this._bootstrapListeners.forEach(function (listener) { return listener(ref); });
+	        this._rootComponents.push(componentRef);
+	        this._bootstrapListeners.forEach(function (listener) { return listener(componentRef); });
 	    };
 	    /** @internal */
-	    ApplicationRef_.prototype._unloadComponent = function (ref) {
-	        if (!collection_1.ListWrapper.contains(this._rootComponents, ref)) {
+	    ApplicationRef_.prototype._unloadComponent = function (componentRef) {
+	        if (!collection_1.ListWrapper.contains(this._rootComponents, componentRef)) {
 	            return;
 	        }
-	        this.unregisterChangeDetector(ref.location.internalElement.parentView.changeDetector.ref);
-	        collection_1.ListWrapper.remove(this._rootComponents, ref);
+	        this.unregisterChangeDetector(componentRef.location.internalElement.parentView.changeDetector.ref);
+	        collection_1.ListWrapper.remove(this._rootComponents, componentRef);
 	    };
 	    Object.defineProperty(ApplicationRef_.prototype, "injector", {
 	        get: function () { return this._injector; },
@@ -17484,8 +17511,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var _this = this;
 	        this._obj = obj;
 	        this._strategy = this._selectStrategy(obj);
-	        this._subscription =
-	            this._strategy.createSubscription(obj, function (value) { return _this._updateLatestValue(obj, value); });
+	        this._subscription = this._strategy.createSubscription(obj, function (value) { return _this._updateLatestValue(obj, value); });
 	    };
 	    /** @internal */
 	    AsyncPipe.prototype._selectStrategy = function (obj) {
@@ -18566,7 +18592,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	        view.setLocal('odd', (record.currentIndex % 2 == 1));
 	    };
 	    NgFor.prototype._bulkRemove = function (tuples) {
-	        tuples.sort(function (a, b) { return a.record.previousIndex - b.record.previousIndex; });
+	        tuples.sort(function (a, b) {
+	            return a.record.previousIndex - b.record.previousIndex;
+	        });
 	        var movedTuples = [];
 	        for (var i = tuples.length - 1; i >= 0; i--) {
 	            var tuple = tuples[i];
@@ -29425,7 +29453,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	    RafQueue.prototype._raf = function () {
 	        var _this = this;
-	        this.currentFrameId = dom_adapter_1.DOM.requestAnimationFrame(function (timestamp) { return _this._nextFrame(timestamp); });
+	        this.currentFrameId =
+	            dom_adapter_1.DOM.requestAnimationFrame(function (timestamp) { return _this._nextFrame(timestamp); });
 	    };
 	    RafQueue.prototype._nextFrame = function (timestamp) {
 	        this.frames--;
