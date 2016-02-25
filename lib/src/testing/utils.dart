@@ -19,7 +19,12 @@ class Log {
   }
 
   fn(value) {
-    return ([a1 = null, a2 = null, a3 = null, a4 = null, a5 = null]) {
+    return (
+        [dynamic a1 = null,
+        dynamic a2 = null,
+        dynamic a3 = null,
+        dynamic a4 = null,
+        dynamic a5 = null]) {
       this._result.add(value);
     };
   }

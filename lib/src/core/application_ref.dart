@@ -253,7 +253,7 @@ class PlatformRef_ extends PlatformRef {
         provide(NgZone, useValue: zone),
         provide(ApplicationRef, useFactory: () => app, deps: [])
       ]);
-      var exceptionHandler;
+      Function exceptionHandler;
       try {
         injector = this.injector.resolveAndCreateChild(providers);
         exceptionHandler = injector.get(ExceptionHandler);
@@ -442,7 +442,7 @@ class ApplicationRef_ extends ApplicationRef {
             this._injector.resolveAndCreateChild(componentProviders);
         Future<ComponentRef> compRefToken =
             injector.get(APP_COMPONENT_REF_PROMISE);
-        var tick = (componentRef) {
+        var tick = (ComponentRef componentRef) {
           this._loadComponent(componentRef);
           completer.resolve(componentRef);
         };
@@ -475,28 +475,28 @@ class ApplicationRef_ extends ApplicationRef {
   }
 
   /** @internal */
-  void _loadComponent(ref) {
-    var appChangeDetector = ((ref.location as ElementRef_))
+  void _loadComponent(ComponentRef componentRef) {
+    var appChangeDetector = ((componentRef.location as ElementRef_))
         .internalElement
         .parentView
         .changeDetector;
     this._changeDetectorRefs.add(appChangeDetector.ref);
     this.tick();
-    this._rootComponents.add(ref);
-    this._bootstrapListeners.forEach((listener) => listener(ref));
+    this._rootComponents.add(componentRef);
+    this._bootstrapListeners.forEach((listener) => listener(componentRef));
   }
 
   /** @internal */
-  void _unloadComponent(ref) {
-    if (!ListWrapper.contains(this._rootComponents, ref)) {
+  void _unloadComponent(ComponentRef componentRef) {
+    if (!ListWrapper.contains(this._rootComponents, componentRef)) {
       return;
     }
-    this.unregisterChangeDetector(((ref.location as ElementRef_))
+    this.unregisterChangeDetector(((componentRef.location as ElementRef_))
         .internalElement
         .parentView
         .changeDetector
         .ref);
-    ListWrapper.remove(this._rootComponents, ref);
+    ListWrapper.remove(this._rootComponents, componentRef);
   }
 
   Injector get injector {

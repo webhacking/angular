@@ -63,7 +63,7 @@ abstract class AbstractControl {
   bool _pristine = true;
   bool _touched = false;
   dynamic /* ControlGroup | ControlArray */ _parent;
-  var _asyncValidationSubscription;
+  dynamic _asyncValidationSubscription;
   AbstractControl(this.validator, this.asyncValidator) {}
   dynamic get value {
     return this._value;
@@ -403,7 +403,8 @@ class ControlGroup extends AbstractControl {
 
   /** @internal */
   _setParentForControls() {
-    StringMapWrapper.forEach(this.controls, (control, name) {
+    StringMapWrapper.forEach(this.controls,
+        (AbstractControl control, String name) {
       control.setParent(this);
     });
   }
@@ -416,7 +417,8 @@ class ControlGroup extends AbstractControl {
   /** @internal */
   bool _anyControlsHaveStatus(String status) {
     var res = false;
-    StringMapWrapper.forEach(this.controls, (control, name) {
+    StringMapWrapper.forEach(this.controls,
+        (AbstractControl control, String name) {
       res = res || (this.contains(name) && control.status == status);
     });
     return res;
@@ -424,7 +426,8 @@ class ControlGroup extends AbstractControl {
 
   /** @internal */
   _reduceValue() {
-    return this._reduceChildren({}, (acc, control, name) {
+    return this._reduceChildren({}, (Map<String, AbstractControl> acc,
+        AbstractControl control, String name) {
       acc[name] = control.value;
       return acc;
     });
@@ -433,7 +436,8 @@ class ControlGroup extends AbstractControl {
   /** @internal */
   _reduceChildren(dynamic initValue, Function fn) {
     var res = initValue;
-    StringMapWrapper.forEach(this.controls, (control, name) {
+    StringMapWrapper.forEach(this.controls,
+        (AbstractControl control, String name) {
       if (this._included(name)) {
         res = fn(res, control, name);
       }

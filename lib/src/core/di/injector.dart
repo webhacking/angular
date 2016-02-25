@@ -798,26 +798,26 @@ class Injector {
     var factory = resolvedFactory.factory;
     var deps = resolvedFactory.dependencies;
     var length = deps.length;
-    var d0,
-        d1,
-        d2,
-        d3,
-        d4,
-        d5,
-        d6,
-        d7,
-        d8,
-        d9,
-        d10,
-        d11,
-        d12,
-        d13,
-        d14,
-        d15,
-        d16,
-        d17,
-        d18,
-        d19;
+    dynamic d0;
+    dynamic d1;
+    dynamic d2;
+    dynamic d3;
+    dynamic d4;
+    dynamic d5;
+    dynamic d6;
+    dynamic d7;
+    dynamic d8;
+    dynamic d9;
+    dynamic d10;
+    dynamic d11;
+    dynamic d12;
+    dynamic d13;
+    dynamic d14;
+    dynamic d15;
+    dynamic d16;
+    dynamic d17;
+    dynamic d18;
+    dynamic d19;
     try {
       d0 = length > 0
           ? this._getByDependency(provider, deps[0], visibility)
@@ -1069,7 +1069,7 @@ class Injector {
   }
 
   String get displayName {
-    return '''Injector(providers: [${ _mapProviders ( this , ( b ) => ''' "${ b . key . displayName}" ''' ) . join ( ", " )}])''';
+    return '''Injector(providers: [${ _mapProviders ( this , ( ResolvedProvider b ) => ''' "${ b . key . displayName}" ''' ) . join ( ", " )}])''';
   }
 
   String toString() {
