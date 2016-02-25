@@ -104,32 +104,3 @@ class MaxLengthValidator implements Validator {
     return this._validator(c);
   }
 }
-
-/**
- * A Directive that adds the `pattern` validator to any controls marked with the
- * `pattern` attribute, via the [NG_VALIDATORS] binding. Uses attribute value
- * as the regex to validate Control value against.  Follows pattern attribute
- * semantics; i.e. regex must match entire Control value.
- *
- * ### Example
- *
- * ```
- * <input [ngControl]="fullName" pattern="[a-zA-Z ]*">
- * ```
- */
-const PATTERN_VALIDATOR =
-    const Provider(NG_VALIDATORS, useExisting: PatternValidator, multi: true);
-
-@Directive(
-    selector:
-        "[pattern][ngControl],[pattern][ngFormControl],[pattern][ngModel]",
-    providers: const [PATTERN_VALIDATOR])
-class PatternValidator implements Validator {
-  Function _validator;
-  PatternValidator(@Attribute("pattern") String pattern) {
-    this._validator = Validators.pattern(pattern);
-  }
-  Map<String, dynamic> validate(Control c) {
-    return this._validator(c);
-  }
-}

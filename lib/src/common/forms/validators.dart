@@ -89,25 +89,6 @@ class Validators {
   }
 
   /**
-   * Validator that requires a control to match a regex to its value.
-   */
-  static Function pattern(String pattern) {
-    return /* Map < String , dynamic > */ (modelModule.Control control) {
-      if (isPresent(Validators.required(control))) return null;
-      var regex = new RegExp('''^${ pattern}\$''');
-      String v = control.value;
-      return regex.hasMatch(v)
-          ? null
-          : {
-              "pattern": {
-                "requiredPattern": '''^${ pattern}\$''',
-                "actualValue": v
-              }
-            };
-    };
-  }
-
-  /**
    * No-op validator.
    */
   static Map<String, bool> nullValidator(dynamic c) {

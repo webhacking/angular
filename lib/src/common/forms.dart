@@ -38,12 +38,7 @@ export "forms/directives.dart" show FORM_DIRECTIVES, RadioButtonState;
 export "forms/validators.dart"
     show NG_VALIDATORS, NG_ASYNC_VALIDATORS, Validators;
 export "forms/directives/validators.dart"
-    show
-        RequiredValidator,
-        MinLengthValidator,
-        MaxLengthValidator,
-        PatternValidator,
-        Validator;
+    show RequiredValidator, MinLengthValidator, MaxLengthValidator, Validator;
 export "forms/form_builder.dart" show FormBuilder;
 import "forms/form_builder.dart" show FormBuilder;
 import "forms/directives/radio_control_value_accessor.dart"
