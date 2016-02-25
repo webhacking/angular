@@ -364,6 +364,27 @@ List<dynamic> _flattenNestedViewRenderNodes(
   return renderNodes;
 }
 
+dynamic findLastRenderNode(dynamic node) {
+  var lastNode;
+  if (node is AppElement) {
+    var appEl = (node as AppElement);
+    lastNode = appEl.nativeElement;
+    if (isPresent(appEl.nestedViews)) {
+      // Note: Views might have no root nodes at all!
+      for (var i = appEl.nestedViews.length - 1; i >= 0; i--) {
+        var nestedView = appEl.nestedViews[i];
+        if (nestedView.rootNodesOrAppElements.length > 0) {
+          lastNode = findLastRenderNode(nestedView.rootNodesOrAppElements[
+              nestedView.rootNodesOrAppElements.length - 1]);
+        }
+      }
+    }
+  } else {
+    lastNode = node;
+  }
+  return lastNode;
+}
+
 void checkSlotCount(String componentName, num expectedSlotCount,
     List<List<dynamic>> projectableNodes) {
   var givenSlotCount =
