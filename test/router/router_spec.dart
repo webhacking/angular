@@ -8,6 +8,7 @@ import "package:angular2/testing_internal.dart"
         proxy,
         it,
         iit,
+        xit,
         ddescribe,
         expect,
         inject,
@@ -103,7 +104,11 @@ main() {
           });
         }));
     // See https://github.com/angular/angular/issues/5590
-    it(
+
+    // This test is disabled because it is flaky.
+
+    // TODO: bford. make this test not flaky and reenable it.
+    xit(
         "should replace history when triggered by a hashchange with a redirect",
         inject([AsyncTestCompleter], (async) {
           var outlet = makeDummyOutlet();
