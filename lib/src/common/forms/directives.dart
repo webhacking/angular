@@ -17,11 +17,7 @@ import "directives/ng_control_status.dart" show NgControlStatus;
 import "directives/select_control_value_accessor.dart"
     show SelectControlValueAccessor, NgSelectOption;
 import "directives/validators.dart"
-    show
-        RequiredValidator,
-        MinLengthValidator,
-        MaxLengthValidator,
-        PatternValidator;
+    show RequiredValidator, MinLengthValidator, MaxLengthValidator;
 export "directives/ng_control_name.dart" show NgControlName;
 export "directives/ng_form_control.dart" show NgFormControl;
 export "directives/ng_model.dart" show NgModel;
@@ -38,11 +34,7 @@ export "directives/ng_control_status.dart" show NgControlStatus;
 export "directives/select_control_value_accessor.dart"
     show SelectControlValueAccessor, NgSelectOption;
 export "directives/validators.dart"
-    show
-        RequiredValidator,
-        MinLengthValidator,
-        MaxLengthValidator,
-        PatternValidator;
+    show RequiredValidator, MinLengthValidator, MaxLengthValidator;
 export "directives/ng_control.dart" show NgControl;
 export "directives/control_value_accessor.dart" show ControlValueAccessor;
 
@@ -78,6 +70,5 @@ const List<Type> FORM_DIRECTIVES = const [
   NgControlStatus,
   RequiredValidator,
   MinLengthValidator,
-  MaxLengthValidator,
-  PatternValidator
+  MaxLengthValidator
 ];
