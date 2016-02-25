@@ -47,10 +47,6 @@ export declare class Validators {
      */
     static maxLength(maxLength: number): Function;
     /**
-     * Validator that requires a control to match a regex to its value.
-     */
-    static pattern(pattern: string): Function;
-    /**
      * No-op validator.
      */
     static nullValidator(c: any): {
