@@ -9182,18 +9182,6 @@ System.register("angular2/src/common/forms/validators", ["angular2/src/facade/la
           }} : null;
       };
     };
-    Validators.pattern = function(pattern) {
-      return function(control) {
-        if (lang_1.isPresent(Validators.required(control)))
-          return null;
-        var regex = new RegExp("^" + pattern + "$");
-        var v = control.value;
-        return regex.test(v) ? null : {"pattern": {
-            "requiredPattern": "^" + pattern + "$",
-            "actualValue": v
-          }};
-      };
-    };
     Validators.nullValidator = function(c) {
       return null;
     };
@@ -10437,26 +10425,6 @@ System.register("angular2/src/common/forms/directives/validators", ["angular2/co
     return MaxLengthValidator;
   })();
   exports.MaxLengthValidator = MaxLengthValidator;
-  var PATTERN_VALIDATOR = lang_1.CONST_EXPR(new core_1.Provider(validators_1.NG_VALIDATORS, {
-    useExisting: core_1.forwardRef(function() {
-      return PatternValidator;
-    }),
-    multi: true
-  }));
-  var PatternValidator = (function() {
-    function PatternValidator(pattern) {
-      this._validator = validators_1.Validators.pattern(pattern);
-    }
-    PatternValidator.prototype.validate = function(c) {
-      return this._validator(c);
-    };
-    PatternValidator = __decorate([core_1.Directive({
-      selector: '[pattern][ngControl],[pattern][ngFormControl],[pattern][ngModel]',
-      providers: [PATTERN_VALIDATOR]
-    }), __param(0, core_1.Attribute("pattern")), __metadata('design:paramtypes', [String])], PatternValidator);
-    return PatternValidator;
-  })();
-  exports.PatternValidator = PatternValidator;
   global.define = __define;
   return module.exports;
 });
@@ -22824,10 +22792,9 @@ System.register("angular2/src/common/forms/directives", ["angular2/src/facade/la
   exports.RequiredValidator = validators_2.RequiredValidator;
   exports.MinLengthValidator = validators_2.MinLengthValidator;
   exports.MaxLengthValidator = validators_2.MaxLengthValidator;
-  exports.PatternValidator = validators_2.PatternValidator;
   var ng_control_1 = require("angular2/src/common/forms/directives/ng_control");
   exports.NgControl = ng_control_1.NgControl;
-  exports.FORM_DIRECTIVES = lang_1.CONST_EXPR([ng_control_name_1.NgControlName, ng_control_group_1.NgControlGroup, ng_form_control_1.NgFormControl, ng_model_1.NgModel, ng_form_model_1.NgFormModel, ng_form_1.NgForm, select_control_value_accessor_1.NgSelectOption, default_value_accessor_1.DefaultValueAccessor, number_value_accessor_1.NumberValueAccessor, checkbox_value_accessor_1.CheckboxControlValueAccessor, select_control_value_accessor_1.SelectControlValueAccessor, radio_control_value_accessor_1.RadioControlValueAccessor, ng_control_status_1.NgControlStatus, validators_1.RequiredValidator, validators_1.MinLengthValidator, validators_1.MaxLengthValidator, validators_1.PatternValidator]);
+  exports.FORM_DIRECTIVES = lang_1.CONST_EXPR([ng_control_name_1.NgControlName, ng_control_group_1.NgControlGroup, ng_form_control_1.NgFormControl, ng_model_1.NgModel, ng_form_model_1.NgFormModel, ng_form_1.NgForm, select_control_value_accessor_1.NgSelectOption, default_value_accessor_1.DefaultValueAccessor, number_value_accessor_1.NumberValueAccessor, checkbox_value_accessor_1.CheckboxControlValueAccessor, select_control_value_accessor_1.SelectControlValueAccessor, radio_control_value_accessor_1.RadioControlValueAccessor, ng_control_status_1.NgControlStatus, validators_1.RequiredValidator, validators_1.MinLengthValidator, validators_1.MaxLengthValidator]);
   global.define = __define;
   return module.exports;
 });
@@ -31227,7 +31194,6 @@ System.register("angular2/src/common/forms", ["angular2/src/common/forms/model",
   exports.RequiredValidator = validators_2.RequiredValidator;
   exports.MinLengthValidator = validators_2.MinLengthValidator;
   exports.MaxLengthValidator = validators_2.MaxLengthValidator;
-  exports.PatternValidator = validators_2.PatternValidator;
   var form_builder_1 = require("angular2/src/common/forms/form_builder");
   exports.FormBuilder = form_builder_1.FormBuilder;
   var form_builder_2 = require("angular2/src/common/forms/form_builder");
