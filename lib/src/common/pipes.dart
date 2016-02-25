@@ -12,7 +12,6 @@ import "pipes/json_pipe.dart" show JsonPipe;
 import "pipes/slice_pipe.dart" show SlicePipe;
 import "pipes/date_pipe.dart" show DatePipe;
 import "pipes/number_pipe.dart" show DecimalPipe, PercentPipe, CurrencyPipe;
-import "pipes/replace_pipe.dart" show ReplacePipe;
 export "pipes/async_pipe.dart" show AsyncPipe;
 export "pipes/date_pipe.dart" show DatePipe;
 export "pipes/json_pipe.dart" show JsonPipe;
@@ -21,7 +20,6 @@ export "pipes/lowercase_pipe.dart" show LowerCasePipe;
 export "pipes/number_pipe.dart"
     show NumberPipe, DecimalPipe, PercentPipe, CurrencyPipe;
 export "pipes/uppercase_pipe.dart" show UpperCasePipe;
-export "pipes/replace_pipe.dart" show ReplacePipe;
 
 /**
  * A collection of Angular core pipes that are likely to be used in each and every
@@ -39,6 +37,5 @@ const COMMON_PIPES = const [
   DecimalPipe,
   PercentPipe,
   CurrencyPipe,
-  DatePipe,
-  ReplacePipe
+  DatePipe
 ];
