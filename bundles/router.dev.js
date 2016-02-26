@@ -2943,6 +2943,7 @@ System.register("angular2/src/router/router", ["angular2/src/facade/async", "ang
       var ancestorInstructions = this._getAncestorInstructions();
       return this.registry.generate(linkParams, ancestorInstructions);
     };
+    Router = __decorate([core_1.Injectable(), __metadata('design:paramtypes', [route_registry_1.RouteRegistry, Router, Object])], Router);
     return Router;
   })();
   exports.Router = Router;
