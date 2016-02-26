@@ -14,7 +14,8 @@ import { Inject, Injectable } from 'angular2/src/core/di';
 import { isPresent, isBlank } from 'angular2/src/facade/lang';
 import { ListWrapper, StringMapWrapper } from 'angular2/src/facade/collection';
 import { BaseException } from 'angular2/src/facade/exceptions';
-import { flattenNestedViewRenderNodes, findLastRenderNode } from './view';
+import { flattenNestedViewRenderNodes } from './view';
+import { AppElement } from './element';
 import { RootRenderer, RenderComponentType } from 'angular2/src/core/render/api';
 import { wtfCreateScope, wtfLeave } from '../profile/profile';
 import { APP_ID } from 'angular2/src/core/application_tokens';
@@ -154,7 +155,13 @@ export let AppViewManager_ = class extends AppViewManager {
             refNode = vcAppElement.nativeElement;
         }
         if (isPresent(refNode)) {
-            var refRenderNode = findLastRenderNode(refNode);
+            var refRenderNode;
+            if (refNode instanceof AppElement) {
+                refRenderNode = refNode.nativeElement;
+            }
+            else {
+                refRenderNode = refNode;
+            }
             view.renderer.attachViewAfter(refRenderNode, flattenNestedViewRenderNodes(view.rootNodesOrAppElements));
         }
         // TODO: This is only needed when a view is destroyed,

@@ -14891,27 +14891,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	    return renderNodes;
 	}
-	function findLastRenderNode(node) {
-	    var lastNode;
-	    if (node instanceof element_1.AppElement) {
-	        var appEl = node;
-	        lastNode = appEl.nativeElement;
-	        if (lang_1.isPresent(appEl.nestedViews)) {
-	            // Note: Views might have no root nodes at all!
-	            for (var i = appEl.nestedViews.length - 1; i >= 0; i--) {
-	                var nestedView = appEl.nestedViews[i];
-	                if (nestedView.rootNodesOrAppElements.length > 0) {
-	                    lastNode = findLastRenderNode(nestedView.rootNodesOrAppElements[nestedView.rootNodesOrAppElements.length - 1]);
-	                }
-	            }
-	        }
-	    }
-	    else {
-	        lastNode = node;
-	    }
-	    return lastNode;
-	}
-	exports.findLastRenderNode = findLastRenderNode;
 	function checkSlotCount(componentName, expectedSlotCount, projectableNodes) {
 	    var givenSlotCount = lang_1.isPresent(projectableNodes) ? projectableNodes.length : 0;
 	    if (givenSlotCount < expectedSlotCount) {
@@ -16460,6 +16439,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	var collection_1 = __webpack_require__(12);
 	var exceptions_1 = __webpack_require__(14);
 	var view_1 = __webpack_require__(85);
+	var element_1 = __webpack_require__(86);
 	var api_1 = __webpack_require__(90);
 	var profile_1 = __webpack_require__(45);
 	var application_tokens_1 = __webpack_require__(81);
@@ -16605,7 +16585,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	            refNode = vcAppElement.nativeElement;
 	        }
 	        if (lang_1.isPresent(refNode)) {
-	            var refRenderNode = view_1.findLastRenderNode(refNode);
+	            var refRenderNode;
+	            if (refNode instanceof element_1.AppElement) {
+	                refRenderNode = refNode.nativeElement;
+	            }
+	            else {
+	                refRenderNode = refNode;
+	            }
 	            view.renderer.attachViewAfter(refRenderNode, view_1.flattenNestedViewRenderNodes(view.rootNodesOrAppElements));
 	        }
 	        // TODO: This is only needed when a view is destroyed,

@@ -6431,7 +6431,7 @@ System.register("angular2/src/core/render/util", ["angular2/src/facade/lang"], t
   return module.exports;
 });
 
-System.register("angular2/src/core/linker/view_manager", ["angular2/src/core/di", "angular2/src/facade/lang", "angular2/src/facade/collection", "angular2/src/facade/exceptions", "angular2/src/core/linker/view", "angular2/src/core/render/api", "angular2/src/core/profile/profile", "angular2/src/core/application_tokens", "angular2/src/core/linker/view_type"], true, function(require, exports, module) {
+System.register("angular2/src/core/linker/view_manager", ["angular2/src/core/di", "angular2/src/facade/lang", "angular2/src/facade/collection", "angular2/src/facade/exceptions", "angular2/src/core/linker/view", "angular2/src/core/linker/element", "angular2/src/core/render/api", "angular2/src/core/profile/profile", "angular2/src/core/application_tokens", "angular2/src/core/linker/view_type"], true, function(require, exports, module) {
   var global = System.global,
       __define = global.define;
   global.define = undefined;
@@ -6470,6 +6470,7 @@ System.register("angular2/src/core/linker/view_manager", ["angular2/src/core/di"
   var collection_1 = require("angular2/src/facade/collection");
   var exceptions_1 = require("angular2/src/facade/exceptions");
   var view_1 = require("angular2/src/core/linker/view");
+  var element_1 = require("angular2/src/core/linker/element");
   var api_1 = require("angular2/src/core/render/api");
   var profile_1 = require("angular2/src/core/profile/profile");
   var application_tokens_1 = require("angular2/src/core/application_tokens");
@@ -6594,7 +6595,12 @@ System.register("angular2/src/core/linker/view_manager", ["angular2/src/core/di"
         refNode = vcAppElement.nativeElement;
       }
       if (lang_1.isPresent(refNode)) {
-        var refRenderNode = view_1.findLastRenderNode(refNode);
+        var refRenderNode;
+        if (refNode instanceof element_1.AppElement) {
+          refRenderNode = refNode.nativeElement;
+        } else {
+          refRenderNode = refNode;
+        }
         view.renderer.attachViewAfter(refRenderNode, view_1.flattenNestedViewRenderNodes(view.rootNodesOrAppElements));
       }
       vcAppElement.parentView.changeDetector.addContentChild(view.changeDetector);
@@ -22177,25 +22183,6 @@ System.register("angular2/src/core/linker/view", ["angular2/src/facade/collectio
     }
     return renderNodes;
   }
-  function findLastRenderNode(node) {
-    var lastNode;
-    if (node instanceof element_1.AppElement) {
-      var appEl = node;
-      lastNode = appEl.nativeElement;
-      if (lang_1.isPresent(appEl.nestedViews)) {
-        for (var i = appEl.nestedViews.length - 1; i >= 0; i--) {
-          var nestedView = appEl.nestedViews[i];
-          if (nestedView.rootNodesOrAppElements.length > 0) {
-            lastNode = findLastRenderNode(nestedView.rootNodesOrAppElements[nestedView.rootNodesOrAppElements.length - 1]);
-          }
-        }
-      }
-    } else {
-      lastNode = node;
-    }
-    return lastNode;
-  }
-  exports.findLastRenderNode = findLastRenderNode;
   function checkSlotCount(componentName, expectedSlotCount, projectableNodes) {
     var givenSlotCount = lang_1.isPresent(projectableNodes) ? projectableNodes.length : 0;
     if (givenSlotCount < expectedSlotCount) {

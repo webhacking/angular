@@ -9,7 +9,7 @@ import {
 import {isPresent, isBlank, isArray} from 'angular2/src/facade/lang';
 import {ListWrapper, StringMapWrapper} from 'angular2/src/facade/collection';
 import {BaseException} from 'angular2/src/facade/exceptions';
-import {AppView, HostViewFactory, flattenNestedViewRenderNodes, findLastRenderNode} from './view';
+import {AppView, HostViewFactory, flattenNestedViewRenderNodes} from './view';
 import {AppElement} from './element';
 import {ElementRef, ElementRef_} from './element_ref';
 import {
@@ -344,7 +344,12 @@ export class AppViewManager_ extends AppViewManager {
       refNode = vcAppElement.nativeElement;
     }
     if (isPresent(refNode)) {
-      var refRenderNode = findLastRenderNode(refNode);
+      var refRenderNode;
+      if (refNode instanceof AppElement) {
+        refRenderNode = (<AppElement>refNode).nativeElement;
+      } else {
+        refRenderNode = refNode;
+      }
       view.renderer.attachViewAfter(refRenderNode,
                                     flattenNestedViewRenderNodes(view.rootNodesOrAppElements));
     }
