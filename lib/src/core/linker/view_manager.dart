@@ -6,12 +6,7 @@ import "package:angular2/src/facade/lang.dart" show isPresent, isBlank, isArray;
 import "package:angular2/src/facade/collection.dart"
     show ListWrapper, StringMapWrapper;
 import "package:angular2/src/facade/exceptions.dart" show BaseException;
-import "view.dart"
-    show
-        AppView,
-        HostViewFactory,
-        flattenNestedViewRenderNodes,
-        findLastRenderNode;
+import "view.dart" show AppView, HostViewFactory, flattenNestedViewRenderNodes;
 import "element.dart" show AppElement;
 import "element_ref.dart" show ElementRef, ElementRef_;
 import "view_ref.dart"
@@ -370,7 +365,12 @@ class AppViewManager_ extends AppViewManager {
       refNode = vcAppElement.nativeElement;
     }
     if (isPresent(refNode)) {
-      var refRenderNode = findLastRenderNode(refNode);
+      var refRenderNode;
+      if (refNode is AppElement) {
+        refRenderNode = ((refNode as AppElement)).nativeElement;
+      } else {
+        refRenderNode = refNode;
+      }
       view.renderer.attachViewAfter(refRenderNode,
           flattenNestedViewRenderNodes(view.rootNodesOrAppElements));
     }
