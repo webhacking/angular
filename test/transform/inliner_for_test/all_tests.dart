@@ -4,9 +4,9 @@ import 'dart:async';
 import 'dart:convert' show LineSplitter;
 
 import 'package:barback/barback.dart';
+import 'package:code_transformers/tests.dart';
 import 'package:guinness/guinness.dart';
 import 'package:dart_style/dart_style.dart';
-import 'package:transformer_test/utils.dart';
 
 import 'package:angular2/src/transform/common/annotation_matcher.dart';
 import 'package:angular2/src/transform/common/asset_reader.dart';
@@ -26,7 +26,7 @@ DartFormatter formatter = new DartFormatter();
 AnnotationMatcher annotationMatcher;
 
 void allTests() {
-  TestAssetReader absoluteReader;
+  AssetReader absoluteReader;
 
   beforeEach(() {
     absoluteReader = new TestAssetReader();
@@ -198,7 +198,8 @@ void _runAbsoluteUrlEndToEndTest() {
         [transformer]
       ],
       inputMap,
-      outputMap);
+      outputMap,
+      []);
 }
 
 void _runMultiStylesEndToEndTest() {
@@ -223,7 +224,8 @@ void _runMultiStylesEndToEndTest() {
         [transformer]
       ],
       inputMap,
-      outputMap);
+      outputMap,
+      []);
 }
 
 /// Smooths over differences in CWD between IDEs and running tests in Travis.

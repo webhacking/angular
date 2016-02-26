@@ -18,6 +18,7 @@ import "package:angular2/src/facade/collection.dart" show ListWrapper;
 import "package:angular2/core.dart"
     show Component, View, TemplateRef, ContentChild;
 import "package:angular2/src/common/directives/ng_for.dart" show NgFor;
+import "package:angular2/src/common/directives/ng_if.dart" show NgIf;
 import "package:angular2/platform/common_dom.dart" show By;
 
 main() {
@@ -262,6 +263,31 @@ main() {
             fixture.detectChanges();
             expect(fixture.debugElement.nativeElement)
                 .toHaveText("e-1;f-2;g-2;");
+            async.done();
+          });
+        }));
+    it(
+        "should repeat over nested ngIf that are the last node in the ngFor temlate",
+        inject([TestComponentBuilder, AsyncTestCompleter],
+            (TestComponentBuilder tcb, async) {
+          var template =
+              '''<div><template ngFor #item [ngForOf]="items" #i="index"><div>{{i}}|</div>''' +
+                  '''<div *ngIf="i % 2 == 0">even|</div></template></div>''';
+          tcb
+              .overrideTemplate(TestComponent, template)
+              .createAsync(TestComponent)
+              .then((fixture) {
+            var el = fixture.debugElement.nativeElement;
+            var items = [1];
+            fixture.debugElement.componentInstance.items = items;
+            fixture.detectChanges();
+            expect(el).toHaveText("0|even|");
+            items.add(1);
+            fixture.detectChanges();
+            expect(el).toHaveText("0|even|1|");
+            items.add(1);
+            fixture.detectChanges();
+            expect(el).toHaveText("0|even|1|2|even|");
             async.done();
           });
         }));
@@ -541,7 +567,7 @@ class Foo {
 }
 
 @Component(selector: "test-cmp")
-@View(directives: const [NgFor])
+@View(directives: const [NgFor, NgIf])
 class TestComponent {
   @ContentChild(TemplateRef)
   TemplateRef contentTpl;
