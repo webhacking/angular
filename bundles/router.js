@@ -1143,9 +1143,7 @@ System.register("angular2/src/router/hash_location_strategy", ["angular2/core", 
     };
     HashLocationStrategy.prototype.path = function() {
       var path = this._platformLocation.hash;
-      if (!lang_1.isPresent(path))
-        path = '#';
-      return (path.length > 0 ? path.substring(1) : path);
+      return (path.length > 0 ? path.substring(1) : path) + location_strategy_1.normalizeQueryParams(this._platformLocation.search);
     };
     HashLocationStrategy.prototype.prepareExternalUrl = function(internal) {
       var url = location_strategy_1.joinWithSlash(this._baseHref, internal);
