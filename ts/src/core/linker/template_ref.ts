@@ -1,5 +1,4 @@
 import {ElementRef, ElementRef_} from './element_ref';
-import {Injectable} from 'angular2/src/core/di';
 
 /**
  * Represents an Embedded Template that can be used to instantiate Embedded Views.

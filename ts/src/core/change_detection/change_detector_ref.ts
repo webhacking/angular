@@ -1,6 +1,5 @@
 import {ChangeDetector} from './interfaces';
 import {ChangeDetectionStrategy} from './constants';
-import {Injectable} from 'angular2/src/core/di';
 
 export abstract class ChangeDetectorRef {
   /**

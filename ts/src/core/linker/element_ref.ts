@@ -1,5 +1,4 @@
 import {unimplemented} from 'angular2/src/facade/exceptions';
-import {Injectable} from 'angular2/src/core/di';
 import {AppElement} from './element';
 
 /**
