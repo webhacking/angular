@@ -10286,9 +10286,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	                protoIdx += this._computeSkipLength(protoIdx, proto, values);
 	            }
 	            else {
-	                var res = this._calculateCurrValue(proto, values, locals);
 	                if (proto.lastInBinding) {
 	                    this._markPathAsCheckOnce(proto);
+	                }
+	                var res = this._calculateCurrValue(proto, values, locals);
+	                if (proto.lastInBinding) {
 	                    return res;
 	                }
 	                else {
@@ -12506,7 +12508,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            var evalRecord = this._logic.genEventBindingEvalValue(eb, r);
 	            var markPath = this._genMarkPathToRootAsCheckOnce(r);
 	            var prevDefault = this._genUpdatePreventDefault(eb, r);
-	            return evalRecord + "\n" + markPath + "\n" + prevDefault;
+	            return markPath + "\n" + evalRecord + "\n" + prevDefault;
 	        }
 	        else {
 	            return this._logic.genEventBindingEvalValue(eb, r);
@@ -35949,11 +35951,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	        // the hash value is always prefixed with a `#`
 	        // and if it is empty then it will stay empty
 	        var path = this._platformLocation.hash;
+	        if (!lang_1.isPresent(path))
+	            path = '#';
 	        // Dart will complain if a call to substring is
 	        // executed with a position value that extends the
 	        // length of string.
-	        return (path.length > 0 ? path.substring(1) : path) +
-	            location_strategy_1.normalizeQueryParams(this._platformLocation.search);
+	        return (path.length > 0 ? path.substring(1) : path);
 	    };
 	    HashLocationStrategy.prototype.prepareExternalUrl = function (internal) {
 	        var url = location_strategy_1.joinWithSlash(this._baseHref, internal);
