@@ -36,7 +36,6 @@ import "view_ref.dart"
  *
  * <!-- TODO(i): we are also considering ElementRef#viewContainer api -->
  */
-@Injectable()
 abstract class ViewContainerRef {
   /**
    * Anchor element that specifies the location of this container in the containing View.

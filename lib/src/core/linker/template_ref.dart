@@ -15,7 +15,6 @@ import "package:angular2/src/core/di.dart" show Injectable;
  * [ViewContainerRef#createEmbeddedView], which will create the View and attach it to the
  * View Container.
  */
-@Injectable()
 abstract class TemplateRef {
   /**
    * The location in the View where the Embedded View logically belongs to.

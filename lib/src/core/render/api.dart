@@ -23,7 +23,6 @@ abstract class ParentRenderer {
   Renderer renderComponent(RenderComponentType componentType);
 }
 
-@Injectable()
 abstract class Renderer implements ParentRenderer {
   Renderer renderComponent(RenderComponentType componentType);
   dynamic selectRootElement(String selector);

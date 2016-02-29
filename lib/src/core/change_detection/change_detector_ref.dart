@@ -4,7 +4,6 @@ import "interfaces.dart" show ChangeDetector;
 import "constants.dart" show ChangeDetectionStrategy;
 import "package:angular2/src/core/di.dart" show Injectable;
 
-@Injectable()
 abstract class ChangeDetectorRef {
   /**
    * Marks all [ChangeDetectionStrategy#OnPush] ancestors as to be checked.

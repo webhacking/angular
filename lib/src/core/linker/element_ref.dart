@@ -14,7 +14,6 @@ import "element.dart" show AppElement;
  * An `ElementRef` is backed by a render-specific element. In the browser, this is usually a DOM
  * element.
  */
-@Injectable()
 abstract class ElementRef {
   /**
    * The underlying native element or `null` if direct access to native elements is not supported
