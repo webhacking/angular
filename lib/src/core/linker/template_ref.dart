@@ -1,7 +1,6 @@
 library angular2.src.core.linker.template_ref;
 
 import "element_ref.dart" show ElementRef, ElementRef_;
-import "package:angular2/src/core/di.dart" show Injectable;
 
 /**
  * Represents an Embedded Template that can be used to instantiate Embedded Views.

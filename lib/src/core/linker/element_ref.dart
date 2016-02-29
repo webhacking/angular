@@ -1,7 +1,6 @@
 library angular2.src.core.linker.element_ref;
 
 import "package:angular2/src/facade/exceptions.dart" show unimplemented;
-import "package:angular2/src/core/di.dart" show Injectable;
 import "element.dart" show AppElement;
 
 /**
