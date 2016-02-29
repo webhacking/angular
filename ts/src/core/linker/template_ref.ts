@@ -13,7 +13,6 @@ import {Injectable} from 'angular2/src/core/di';
  * {@link ViewContainerRef#createEmbeddedView}, which will create the View and attach it to the
  * View Container.
  */
-@Injectable()
 export abstract class TemplateRef {
   /**
    * The location in the View where the Embedded View logically belongs to.

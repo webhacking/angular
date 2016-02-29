@@ -5143,7 +5143,7 @@ System.register("angular2/src/core/change_detection/directive_record", ["angular
   return module.exports;
 });
 
-System.register("angular2/src/core/change_detection/change_detector_ref", ["angular2/src/core/change_detection/constants", "angular2/src/core/di"], true, function(require, exports, module) {
+System.register("angular2/src/core/change_detection/change_detector_ref", ["angular2/src/core/change_detection/constants"], true, function(require, exports, module) {
   var global = System.global,
       __define = global.define;
   global.define = undefined;
@@ -5156,27 +5156,9 @@ System.register("angular2/src/core/change_detection/change_detector_ref", ["angu
     }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
   };
-  var __decorate = (this && this.__decorate) || function(decorators, target, key, desc) {
-    var c = arguments.length,
-        r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc,
-        d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function")
-      r = Reflect.decorate(decorators, target, key, desc);
-    else
-      for (var i = decorators.length - 1; i >= 0; i--)
-        if (d = decorators[i])
-          r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-  };
-  var __metadata = (this && this.__metadata) || function(k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function")
-      return Reflect.metadata(k, v);
-  };
   var constants_1 = require("angular2/src/core/change_detection/constants");
-  var di_1 = require("angular2/src/core/di");
   var ChangeDetectorRef = (function() {
     function ChangeDetectorRef() {}
-    ChangeDetectorRef = __decorate([di_1.Injectable(), __metadata('design:paramtypes', [])], ChangeDetectorRef);
     return ChangeDetectorRef;
   })();
   exports.ChangeDetectorRef = ChangeDetectorRef;
@@ -6207,28 +6189,11 @@ System.register("angular2/src/core/linker/view_type", [], true, function(require
   return module.exports;
 });
 
-System.register("angular2/src/core/linker/element_ref", ["angular2/src/facade/exceptions", "angular2/src/core/di"], true, function(require, exports, module) {
+System.register("angular2/src/core/linker/element_ref", ["angular2/src/facade/exceptions"], true, function(require, exports, module) {
   var global = System.global,
       __define = global.define;
   global.define = undefined;
-  var __decorate = (this && this.__decorate) || function(decorators, target, key, desc) {
-    var c = arguments.length,
-        r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc,
-        d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function")
-      r = Reflect.decorate(decorators, target, key, desc);
-    else
-      for (var i = decorators.length - 1; i >= 0; i--)
-        if (d = decorators[i])
-          r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-  };
-  var __metadata = (this && this.__metadata) || function(k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function")
-      return Reflect.metadata(k, v);
-  };
   var exceptions_1 = require("angular2/src/facade/exceptions");
-  var di_1 = require("angular2/src/core/di");
   var ElementRef = (function() {
     function ElementRef() {}
     Object.defineProperty(ElementRef.prototype, "nativeElement", {
@@ -6238,7 +6203,6 @@ System.register("angular2/src/core/linker/element_ref", ["angular2/src/facade/ex
       enumerable: true,
       configurable: true
     });
-    ElementRef = __decorate([di_1.Injectable(), __metadata('design:paramtypes', [])], ElementRef);
     return ElementRef;
   })();
   exports.ElementRef = ElementRef;
@@ -6267,7 +6231,7 @@ System.register("angular2/src/core/linker/element_ref", ["angular2/src/facade/ex
   return module.exports;
 });
 
-System.register("angular2/src/core/linker/view_container_ref", ["angular2/src/facade/collection", "angular2/src/facade/exceptions", "angular2/src/core/di", "angular2/src/facade/lang"], true, function(require, exports, module) {
+System.register("angular2/src/core/linker/view_container_ref", ["angular2/src/facade/collection", "angular2/src/facade/exceptions", "angular2/src/facade/lang"], true, function(require, exports, module) {
   var global = System.global,
       __define = global.define;
   global.define = undefined;
@@ -6280,25 +6244,8 @@ System.register("angular2/src/core/linker/view_container_ref", ["angular2/src/fa
     }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
   };
-  var __decorate = (this && this.__decorate) || function(decorators, target, key, desc) {
-    var c = arguments.length,
-        r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc,
-        d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function")
-      r = Reflect.decorate(decorators, target, key, desc);
-    else
-      for (var i = decorators.length - 1; i >= 0; i--)
-        if (d = decorators[i])
-          r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-  };
-  var __metadata = (this && this.__metadata) || function(k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function")
-      return Reflect.metadata(k, v);
-  };
   var collection_1 = require("angular2/src/facade/collection");
   var exceptions_1 = require("angular2/src/facade/exceptions");
-  var di_1 = require("angular2/src/core/di");
   var lang_1 = require("angular2/src/facade/lang");
   var ViewContainerRef = (function() {
     function ViewContainerRef() {}
@@ -6322,7 +6269,6 @@ System.register("angular2/src/core/linker/view_container_ref", ["angular2/src/fa
       configurable: true
     });
     ;
-    ViewContainerRef = __decorate([di_1.Injectable(), __metadata('design:paramtypes', [])], ViewContainerRef);
     return ViewContainerRef;
   })();
   exports.ViewContainerRef = ViewContainerRef;
@@ -6411,27 +6357,10 @@ System.register("angular2/src/core/linker/view_container_ref", ["angular2/src/fa
   return module.exports;
 });
 
-System.register("angular2/src/core/render/api", ["angular2/src/core/di"], true, function(require, exports, module) {
+System.register("angular2/src/core/render/api", [], true, function(require, exports, module) {
   var global = System.global,
       __define = global.define;
   global.define = undefined;
-  var __decorate = (this && this.__decorate) || function(decorators, target, key, desc) {
-    var c = arguments.length,
-        r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc,
-        d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function")
-      r = Reflect.decorate(decorators, target, key, desc);
-    else
-      for (var i = decorators.length - 1; i >= 0; i--)
-        if (d = decorators[i])
-          r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-  };
-  var __metadata = (this && this.__metadata) || function(k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function")
-      return Reflect.metadata(k, v);
-  };
-  var di_1 = require("angular2/src/core/di");
   var RenderComponentType = (function() {
     function RenderComponentType(id, encapsulation, styles) {
       this.id = id;
@@ -6453,7 +6382,6 @@ System.register("angular2/src/core/render/api", ["angular2/src/core/di"], true, 
   exports.RenderDebugInfo = RenderDebugInfo;
   var Renderer = (function() {
     function Renderer() {}
-    Renderer = __decorate([di_1.Injectable(), __metadata('design:paramtypes', [])], Renderer);
     return Renderer;
   })();
   exports.Renderer = Renderer;
@@ -6466,7 +6394,7 @@ System.register("angular2/src/core/render/api", ["angular2/src/core/di"], true, 
   return module.exports;
 });
 
-System.register("angular2/src/core/linker/template_ref", ["angular2/src/core/di"], true, function(require, exports, module) {
+System.register("angular2/src/core/linker/template_ref", [], true, function(require, exports, module) {
   var global = System.global,
       __define = global.define;
   global.define = undefined;
@@ -6479,23 +6407,6 @@ System.register("angular2/src/core/linker/template_ref", ["angular2/src/core/di"
     }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
   };
-  var __decorate = (this && this.__decorate) || function(decorators, target, key, desc) {
-    var c = arguments.length,
-        r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc,
-        d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function")
-      r = Reflect.decorate(decorators, target, key, desc);
-    else
-      for (var i = decorators.length - 1; i >= 0; i--)
-        if (d = decorators[i])
-          r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-  };
-  var __metadata = (this && this.__metadata) || function(k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function")
-      return Reflect.metadata(k, v);
-  };
-  var di_1 = require("angular2/src/core/di");
   var TemplateRef = (function() {
     function TemplateRef() {}
     Object.defineProperty(TemplateRef.prototype, "elementRef", {
@@ -6505,7 +6416,6 @@ System.register("angular2/src/core/linker/template_ref", ["angular2/src/core/di"
       enumerable: true,
       configurable: true
     });
-    TemplateRef = __decorate([di_1.Injectable(), __metadata('design:paramtypes', [])], TemplateRef);
     return TemplateRef;
   })();
   exports.TemplateRef = TemplateRef;
