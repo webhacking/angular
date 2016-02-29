@@ -4619,14 +4619,13 @@ class ChangeDetector71 extends _gen.AbstractChangeDetector<dynamic> {
     var l_context = this.context, l_literal0_0, l_literal0_1;
     if (eventName == "event" && elIndex == 0) {
       l_literal0_0 = false;
-
       if (l_literal0_0 == false) {
         preventDefault = true;
       }
     }
     if (eventName == "host-event" && elIndex == 0) {
-      l_literal0_1 = false;
       this.detector_0_1.markPathToRootAsCheckOnce();
+      l_literal0_1 = false;
       if (l_literal0_1 == false) {
         preventDefault = true;
       }
@@ -4682,14 +4681,13 @@ class ChangeDetector72 extends _gen.AbstractChangeDetector<dynamic> {
     var l_context = this.context, l_literal0_0, l_literal0_1;
     if (eventName == "event" && elIndex == 0) {
       l_literal0_0 = false;
-
       if (l_literal0_0 == false) {
         preventDefault = true;
       }
     }
     if (eventName == "host-event" && elIndex == 0) {
-      l_literal0_1 = false;
       this.detector_0_1.markPathToRootAsCheckOnce();
+      l_literal0_1 = false;
       if (l_literal0_1 == false) {
         preventDefault = true;
       }
@@ -5382,8 +5380,8 @@ class ChangeDetector81 extends _gen.AbstractChangeDetector<dynamic> {
     var l_context = this.context, l_event0_0, l_onEvent1_0;
     if (eventName == "event" && elIndex == 0) {
       l_event0_0 = locals.get(r'$event');
-      l_onEvent1_0 = l_context.onEvent(l_event0_0);
 
+      l_onEvent1_0 = l_context.onEvent(l_event0_0);
       if (l_onEvent1_0 == false) {
         preventDefault = true;
       }
@@ -5423,8 +5421,8 @@ class ChangeDetector82 extends _gen.AbstractChangeDetector<dynamic> {
     if (eventName == "event" && elIndex == 0) {
       l_event0_0 = locals.get(r'$event');
       l_a1_0 = l_context.a = l_event0_0;
-      l_b2_0 = l_context.b = l_a1_0;
 
+      l_b2_0 = l_context.b = l_a1_0;
       if (l_b2_0 == false) {
         preventDefault = true;
       }
@@ -5465,8 +5463,8 @@ class ChangeDetector83 extends _gen.AbstractChangeDetector<dynamic> {
       l_a0_0 = l_context.a;
       l_literal1_0 = 0;
       l_event2_0 = locals.get(r'$event');
-      l_null3_0 = l_a0_0[l_literal1_0] = l_event2_0;
 
+      l_null3_0 = l_a0_0[l_literal1_0] = l_event2_0;
       if (l_null3_0 == false) {
         preventDefault = true;
       }
@@ -5523,8 +5521,8 @@ class ChangeDetector84 extends _gen.AbstractChangeDetector<dynamic> {
       l_operation_add6_0 =
           _gen.ChangeDetectionUtil.operation_add(l_a4_0, l_literal5_0);
       l_a7_0 = l_context.a = l_operation_add6_0;
-      l_chain8_0 = l_a7_0;
 
+      l_chain8_0 = l_a7_0;
       if (l_chain8_0 == false) {
         preventDefault = true;
       }
@@ -5564,8 +5562,8 @@ class ChangeDetector85 extends _gen.AbstractChangeDetector<dynamic> {
     if (eventName == "event" && elIndex == 0) {
       l_literal0_0 = true;
       l_literal1_0 = false;
-      l_chain2_0 = l_literal1_0;
 
+      l_chain2_0 = l_literal1_0;
       if (l_chain2_0 == false) {
         preventDefault = true;
       }
@@ -5604,7 +5602,6 @@ class ChangeDetector86 extends _gen.AbstractChangeDetector<dynamic> {
     var l_context = this.context, l_literal0_0;
     if (eventName == "event" && elIndex == 0) {
       l_literal0_0 = false;
-
       if (l_literal0_0 == false) {
         preventDefault = true;
       }
@@ -5643,7 +5640,6 @@ class ChangeDetector87 extends _gen.AbstractChangeDetector<dynamic> {
     var l_context = this.context, l_literal0_0;
     if (eventName == "event" && elIndex == 0) {
       l_literal0_0 = true;
-
       if (l_literal0_0 == false) {
         preventDefault = true;
       }
@@ -5707,8 +5703,8 @@ class ChangeDetector88 extends _gen.AbstractChangeDetector<dynamic> {
             _gen.ChangeDetectionUtil.operation_add(l_a7_0, l_literal8_0);
         l_a10_0 = l_context.a = l_operation_add9_0;
       }
-      l_cond11_0 = _gen.ChangeDetectionUtil.cond(l_literal0_0, l_a5_0, l_a10_0);
 
+      l_cond11_0 = _gen.ChangeDetectionUtil.cond(l_literal0_0, l_a5_0, l_a10_0);
       if (l_cond11_0 == false) {
         preventDefault = true;
       }
@@ -5749,8 +5745,8 @@ class ChangeDetector89 extends _gen.AbstractChangeDetector<dynamic> {
     var l_context = this.context, l_event0_0, l_onEvent1_0;
     if (eventName == "host-event" && elIndex == 0) {
       l_event0_0 = locals.get(r'$event');
-      l_onEvent1_0 = this.directive_0_0.onEvent(l_event0_0);
 
+      l_onEvent1_0 = this.directive_0_0.onEvent(l_event0_0);
       if (l_onEvent1_0 == false) {
         preventDefault = true;
       }
