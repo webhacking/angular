@@ -115,28 +115,13 @@ class CompileDiDependencyMetadata {
   }
   static CompileDiDependencyMetadata fromJson(Map<String, dynamic> data) {
     return new CompileDiDependencyMetadata(
-        token: objFromJson(data["token"], CompileIdentifierMetadata.fromJson),
-        query: objFromJson(data["query"], CompileQueryMetadata.fromJson),
-        viewQuery:
-            objFromJson(data["viewQuery"], CompileQueryMetadata.fromJson),
-        isAttribute: data["isAttribute"],
-        isSelf: data["isSelf"],
-        isHost: data["isHost"],
-        isSkipSelf: data["isSkipSelf"],
-        isOptional: data["isOptional"]);
+        token: objFromJson(data["token"], CompileIdentifierMetadata.fromJson));
   }
 
   Map<String, dynamic> toJson() {
     return {
       // Note: Runtime type can't be serialized...
-      "token": objToJson(this.token),
-      "query": objToJson(this.query),
-      "viewQuery": objToJson(this.viewQuery),
-      "isAttribute": this.isAttribute,
-      "isSelf": this.isSelf,
-      "isHost": this.isHost,
-      "isSkipSelf": this.isSkipSelf,
-      "isOptional": this.isOptional
+      "token": objToJson(this.token)
     };
   }
 }
@@ -259,24 +244,8 @@ class CompileQueryMetadata {
   CompileQueryMetadata({selectors, descendants, first, propertyName}) {
     this.selectors = selectors;
     this.descendants = descendants;
-    this.first = normalizeBool(first);
+    this.first = first;
     this.propertyName = propertyName;
-  }
-  static CompileQueryMetadata fromJson(Map<String, dynamic> data) {
-    return new CompileQueryMetadata(
-        selectors: arrayFromJson(
-            data["selectors"], CompileIdentifierMetadata.fromJson),
-        descendants: data["descendants"],
-        first: data["first"],
-        propertyName: data["propertyName"]);
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      // Note: Runtime type can't be serialized...
-      "selectors": arrayToJson(this.selectors), "descendants": this.descendants,
-      "first": this.first, "propertyName": this.propertyName
-    };
   }
 }
 
@@ -591,11 +560,11 @@ var _COMPILE_METADATA_FROM_JSON = {
 };
 dynamic arrayFromJson(
     List<dynamic> obj, dynamic /* (a: {[key: string]: any}) => any */ fn) {
-  return isBlank(obj) ? null : obj.map((o) => objFromJson(o, fn)).toList();
+  return isBlank(obj) ? null : obj.map(fn).toList();
 }
 
 dynamic /* String | Map < String , dynamic > */ arrayToJson(List<dynamic> obj) {
-  return isBlank(obj) ? null : obj.map(objToJson).toList();
+  return isBlank(obj) ? null : obj.map((o) => o.toJson()).toList();
 }
 
 dynamic objFromJson(

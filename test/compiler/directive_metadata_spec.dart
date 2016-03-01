@@ -18,9 +18,7 @@ import "package:angular2/src/compiler/directive_metadata.dart"
         CompileDirectiveMetadata,
         CompileTypeMetadata,
         CompileTemplateMetadata,
-        CompileProviderMetadata,
-        CompileDiDependencyMetadata,
-        CompileQueryMetadata;
+        CompileProviderMetadata;
 import "package:angular2/src/core/metadata/view.dart" show ViewEncapsulation;
 import "package:angular2/src/core/change_detection.dart"
     show ChangeDetectionStrategy;
@@ -33,28 +31,7 @@ main() {
     CompileDirectiveMetadata fullDirectiveMeta;
     beforeEach(() {
       fullTypeMeta = new CompileTypeMetadata(
-          name: "SomeType",
-          moduleUrl: "someUrl",
-          isHost: true,
-          diDeps: [
-            new CompileDiDependencyMetadata(
-                isAttribute: true,
-                isSelf: true,
-                isHost: true,
-                isSkipSelf: true,
-                isOptional: true,
-                token: "someToken",
-                query: new CompileQueryMetadata(
-                    selectors: ["one"],
-                    descendants: true,
-                    first: true,
-                    propertyName: "one"),
-                viewQuery: new CompileQueryMetadata(
-                    selectors: ["one"],
-                    descendants: true,
-                    first: true,
-                    propertyName: "one"))
-          ]);
+          name: "SomeType", moduleUrl: "someUrl", isHost: true, diDeps: []);
       fullTemplateMeta = new CompileTemplateMetadata(
           encapsulation: ViewEncapsulation.Emulated,
           template: "<a></a>",

@@ -19,7 +19,6 @@ import "binding_record.dart" show BindingTarget;
 import "parser/locals.dart" show Locals;
 import "constants.dart" show ChangeDetectionStrategy, ChangeDetectorState;
 import "../profile/profile.dart" show wtfCreateScope, wtfLeave, WtfScopeFn;
-import "observable_facade.dart" show isObservable;
 import "package:angular2/src/facade/async.dart" show ObservableWrapper;
 
 WtfScopeFn _scope_check =
@@ -56,9 +55,6 @@ class AbstractChangeDetector<T> implements ChangeDetector {
   Pipes pipes = null;
   num propertyBindingIndex;
   List<dynamic> outputSubscriptions;
-  // This is an experimental feature. Works only in Dart.
-  List<dynamic> subscriptions;
-  List<dynamic> streams;
   ChangeDispatcher dispatcher;
   AbstractChangeDetector(this.id, this.numberOfPropertyProtoRecords,
       this.bindingTargets, this.directiveIndices, this.strategy) {
@@ -181,9 +177,6 @@ class AbstractChangeDetector<T> implements ChangeDetector {
     this.dispatcher = dispatcher;
     this.mode = ChangeDetectionUtil.changeDetectionMode(this.strategy);
     this.context = context;
-    if (identical(this.strategy, ChangeDetectionStrategy.OnPushObserve)) {
-      this.observeComponent(context);
-    }
     this.locals = locals;
     this.pipes = pipes;
     this.hydrateDirectives(dispatcher);
@@ -197,10 +190,6 @@ class AbstractChangeDetector<T> implements ChangeDetector {
   // implementation of `dehydrateDirectives`.
   void dehydrate() {
     this.dehydrateDirectives(true);
-    // This is an experimental feature. Works only in Dart.
-    if (identical(this.strategy, ChangeDetectionStrategy.OnPushObserve)) {
-      this._unsubsribeFromObservables();
-    }
     this._unsubscribeFromOutputs();
     this.dispatcher = null;
     this.context = null;
@@ -270,76 +259,12 @@ class AbstractChangeDetector<T> implements ChangeDetector {
     }
   }
 
-  // This is an experimental feature. Works only in Dart.
-  void _unsubsribeFromObservables() {
-    if (isPresent(this.subscriptions)) {
-      for (var i = 0; i < this.subscriptions.length; ++i) {
-        var s = this.subscriptions[i];
-        if (isPresent(this.subscriptions[i])) {
-          s.cancel();
-          this.subscriptions[i] = null;
-        }
-      }
-    }
-  }
-
   void _unsubscribeFromOutputs() {
     if (isPresent(this.outputSubscriptions)) {
       for (var i = 0; i < this.outputSubscriptions.length; ++i) {
         ObservableWrapper.dispose(this.outputSubscriptions[i]);
         this.outputSubscriptions[i] = null;
       }
-    }
-  }
-
-  // This is an experimental feature. Works only in Dart.
-  dynamic observeValue(dynamic value, num index) {
-    if (isObservable(value)) {
-      this._createArrayToStoreObservables();
-      if (isBlank(this.subscriptions[index])) {
-        this.streams[index] = value.changes;
-        this.subscriptions[index] =
-            value.changes.listen((_) => this.ref.markForCheck());
-      } else if (!identical(this.streams[index], value.changes)) {
-        this.subscriptions[index].cancel();
-        this.streams[index] = value.changes;
-        this.subscriptions[index] =
-            value.changes.listen((_) => this.ref.markForCheck());
-      }
-    }
-    return value;
-  }
-
-  // This is an experimental feature. Works only in Dart.
-  dynamic observeDirective(dynamic value, num index) {
-    if (isObservable(value)) {
-      this._createArrayToStoreObservables();
-      var arrayIndex = this.numberOfPropertyProtoRecords + index + 2;
-      this.streams[arrayIndex] = value.changes;
-      this.subscriptions[arrayIndex] =
-          value.changes.listen((_) => this.ref.markForCheck());
-    }
-    return value;
-  }
-
-  // This is an experimental feature. Works only in Dart.
-  dynamic observeComponent(dynamic value) {
-    if (isObservable(value)) {
-      this._createArrayToStoreObservables();
-      var index = this.numberOfPropertyProtoRecords + 1;
-      this.streams[index] = value.changes;
-      this.subscriptions[index] =
-          value.changes.listen((_) => this.ref.markForCheck());
-    }
-    return value;
-  }
-
-  void _createArrayToStoreObservables() {
-    if (isBlank(this.subscriptions)) {
-      this.subscriptions = ListWrapper.createFixedSize(
-          this.numberOfPropertyProtoRecords + this.directiveIndices.length + 2);
-      this.streams = ListWrapper.createFixedSize(
-          this.numberOfPropertyProtoRecords + this.directiveIndices.length + 2);
     }
   }
 
