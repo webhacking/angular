@@ -149,12 +149,6 @@ export declare class CompileQueryMetadata {
         first?: boolean;
         propertyName?: string;
     });
-    static fromJson(data: {
-        [key: string]: any;
-    }): CompileQueryMetadata;
-    toJson(): {
-        [key: string]: any;
-    };
 }
 /**
  * Metadata regarding compilation of a template.
