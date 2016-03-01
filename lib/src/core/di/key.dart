@@ -3,9 +3,7 @@ library angular2.src.core.di.key;
 import "package:angular2/src/facade/lang.dart" show stringify, Type, isBlank;
 import "package:angular2/src/facade/exceptions.dart"
     show BaseException, WrappedException;
-import "type_literal.dart" show TypeLiteral;
 import "forward_ref.dart" show resolveForwardRef;
-export "type_literal.dart" show TypeLiteral;
 
 /**
  * A unique object used for retrieving items from the [Injector].
@@ -60,12 +58,6 @@ class KeyRegistry {
   var _allKeys = new Map<Object, Key>();
   Key get(Object token) {
     if (token is Key) return token;
-    // TODO: workaround for https://github.com/Microsoft/TypeScript/issues/3123
-    var theToken = token;
-    if (token is TypeLiteral) {
-      theToken = token.type;
-    }
-    token = theToken;
     if (this._allKeys.containsKey(token)) {
       return this._allKeys[token];
     }

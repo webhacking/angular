@@ -8,7 +8,6 @@ import 'package:angular2/src/transform/common/asset_reader.dart';
 import 'package:angular2/src/transform/common/mirror_mode.dart';
 import 'package:angular2/src/transform/common/names.dart';
 import 'package:angular2/src/transform/common/options.dart';
-import 'package:angular2/src/transform/common/options_reader.dart';
 import 'package:angular2/src/transform/common/zone.dart' as zone;
 
 import 'remove_reflection_capabilities.dart';
@@ -27,13 +26,8 @@ class ReflectionRemover extends Transformer implements LazyTransformer {
 
   ReflectionRemover(this.options);
 
-  /// Ctor which tells pub that this can be run as a standalone transformer.
-  factory ReflectionRemover.asPlugin(BarbackSettings settings) =>
-      new ReflectionRemover(parseBarbackSettings(settings));
-
   @override
-  bool isPrimary(AssetId id) =>
-      options.entryPointGlobs != null &&
+  bool isPrimary(AssetId id) => options.entryPointGlobs != null &&
       options.entryPointGlobs.any((g) => g.matches(id.path));
 
   @override

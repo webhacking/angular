@@ -29,7 +29,7 @@ export "di/provider.dart"
         Provider,
         ResolvedProvider,
         provide;
-export "di/key.dart" show Key, TypeLiteral;
+export "di/key.dart" show Key;
 export "di/exceptions.dart"
     show
         NoProviderError,
