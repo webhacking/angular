@@ -13,6 +13,8 @@ import "slice_pipe.dart" show SlicePipe;
 import "date_pipe.dart" show DatePipe;
 import "number_pipe.dart" show DecimalPipe, PercentPipe, CurrencyPipe;
 import "replace_pipe.dart" show ReplacePipe;
+import "i18n_plural_pipe.dart" show I18nPluralPipe;
+import "i18n_select_pipe.dart" show I18nSelectPipe;
 
 /**
  * A collection of Angular core pipes that are likely to be used in each and every
@@ -31,5 +33,7 @@ const COMMON_PIPES = const [
   PercentPipe,
   CurrencyPipe,
   DatePipe,
-  ReplacePipe
+  ReplacePipe,
+  I18nPluralPipe,
+  I18nSelectPipe
 ];
