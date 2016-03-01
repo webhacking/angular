@@ -14320,6 +14320,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    };
 	    TestabilityRegistry.prototype.getTestability = function (elem) { return this._applications.get(elem); };
 	    TestabilityRegistry.prototype.getAllTestabilities = function () { return collection_1.MapWrapper.values(this._applications); };
+	    TestabilityRegistry.prototype.getAllRootElements = function () { return collection_1.MapWrapper.keys(this._applications); };
 	    TestabilityRegistry.prototype.findTestabilityInTree = function (elem, findInAncestors) {
 	        if (findInAncestors === void 0) { findInAncestors = true; }
 	        return _testabilityGetter.findTestabilityInTree(this, elem, findInAncestors);
@@ -30454,6 +30455,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            var testabilities = registry.getAllTestabilities();
 	            return testabilities.map(function (testability) { return new PublicTestability(testability); });
 	        };
+	        lang_1.global.getAllAngularRootElements = function () { return registry.getAllRootElements(); };
 	        var whenAllStable = function (callback) {
 	            var testabilities = lang_1.global.getAllAngularTestabilities();
 	            var count = testabilities.length;
@@ -30595,7 +30597,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	var dom_renderer_1 = __webpack_require__(197);
 	var core_1 = __webpack_require__(2);
 	var debug_renderer_1 = __webpack_require__(214);
+	var CORE_TOKENS = lang_1.CONST_EXPR({ 'ApplicationRef': core_1.ApplicationRef, 'NgZone': core_1.NgZone });
 	var INSPECT_GLOBAL_NAME = 'ng.probe';
+	var CORE_TOKENS_GLOBAL_NAME = 'ng.coreTokens';
 	/**
 	 * Returns a {@link DebugElement} for the given native DOM element, or
 	 * null if the given native element does not have an Angular view associated
@@ -30613,6 +30617,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 	function _createRootRenderer(rootRenderer) {
 	    dom_adapter_1.DOM.setGlobalVar(INSPECT_GLOBAL_NAME, inspectNativeElement);
+	    dom_adapter_1.DOM.setGlobalVar(CORE_TOKENS_GLOBAL_NAME, CORE_TOKENS);
 	    return new debug_renderer_1.DebugDomRootRenderer(rootRenderer);
 	}
 	/**

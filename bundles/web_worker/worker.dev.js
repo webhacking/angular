@@ -6191,6 +6191,9 @@ System.register("angular2/src/core/testability/testability", ["angular2/src/core
     TestabilityRegistry.prototype.getAllTestabilities = function() {
       return collection_1.MapWrapper.values(this._applications);
     };
+    TestabilityRegistry.prototype.getAllRootElements = function() {
+      return collection_1.MapWrapper.keys(this._applications);
+    };
     TestabilityRegistry.prototype.findTestabilityInTree = function(elem, findInAncestors) {
       if (findInAncestors === void 0) {
         findInAncestors = true;
@@ -24056,7 +24059,12 @@ System.register("angular2/src/platform/dom/debug/ng_probe", ["angular2/src/facad
   var dom_renderer_1 = require("angular2/src/platform/dom/dom_renderer");
   var core_1 = require("angular2/core");
   var debug_renderer_1 = require("angular2/src/core/debug/debug_renderer");
+  var CORE_TOKENS = lang_1.CONST_EXPR({
+    'ApplicationRef': core_1.ApplicationRef,
+    'NgZone': core_1.NgZone
+  });
   var INSPECT_GLOBAL_NAME = 'ng.probe';
+  var CORE_TOKENS_GLOBAL_NAME = 'ng.coreTokens';
   function inspectNativeElement(element) {
     return debug_node_1.getDebugNode(element);
   }
@@ -24069,6 +24077,7 @@ System.register("angular2/src/platform/dom/debug/ng_probe", ["angular2/src/facad
   }
   function _createRootRenderer(rootRenderer) {
     dom_adapter_1.DOM.setGlobalVar(INSPECT_GLOBAL_NAME, inspectNativeElement);
+    dom_adapter_1.DOM.setGlobalVar(CORE_TOKENS_GLOBAL_NAME, CORE_TOKENS);
     return new debug_renderer_1.DebugDomRootRenderer(rootRenderer);
   }
   exports.ELEMENT_PROBE_PROVIDERS = lang_1.CONST_EXPR([new di_1.Provider(core_1.RootRenderer, {
