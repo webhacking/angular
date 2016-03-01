@@ -130,10 +130,6 @@ class TestabilityRegistry {
     return MapWrapper.values(this._applications);
   }
 
-  List<dynamic> getAllRootElements() {
-    return MapWrapper.keys(this._applications);
-  }
-
   Testability findTestabilityInTree(dynamic elem,
       [bool findInAncestors = true]) {
     return _testabilityGetter.findTestabilityInTree(
