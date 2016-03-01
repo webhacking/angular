@@ -3,7 +3,7 @@ import { BaseException } from 'angular2/src/facade/exceptions';
 import { ListWrapper } from 'angular2/src/facade/collection';
 import { AbstractChangeDetector } from './abstract_change_detector';
 import { ChangeDetectionUtil } from './change_detection_util';
-import { ChangeDetectionStrategy, ChangeDetectorState } from './constants';
+import { ChangeDetectorState } from './constants';
 import { RecordType } from './proto_record';
 import { reflector } from 'angular2/src/core/reflection/reflection';
 import { ObservableWrapper } from 'angular2/src/facade/async';
@@ -84,12 +84,6 @@ export class DynamicChangeDetector extends AbstractChangeDetector {
     hydrateDirectives(dispatcher) {
         this.values[0] = this.context;
         this.dispatcher = dispatcher;
-        if (this.strategy === ChangeDetectionStrategy.OnPushObserve) {
-            for (var i = 0; i < this.directiveIndices.length; ++i) {
-                var index = this.directiveIndices[i];
-                super.observeDirective(this._getDirectiveFor(index), i);
-            }
-        }
         this.outputSubscriptions = [];
         for (var i = 0; i < this._directiveRecords.length; ++i) {
             var r = this._directiveRecords[i];
@@ -253,9 +247,6 @@ export class DynamicChangeDetector extends AbstractChangeDetector {
             return null;
         }
         var currValue = this._calculateCurrValue(proto, values, locals);
-        if (this.strategy === ChangeDetectionStrategy.OnPushObserve) {
-            super.observeValue(currValue, proto.selfIndex);
-        }
         if (proto.shouldBeChecked()) {
             var prevValue = this._readSelf(proto, values);
             var detectedChange = throwOnChange ?
