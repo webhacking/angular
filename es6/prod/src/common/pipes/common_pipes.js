@@ -6,8 +6,6 @@ import { SlicePipe } from './slice_pipe';
 import { DatePipe } from './date_pipe';
 import { DecimalPipe, PercentPipe, CurrencyPipe } from './number_pipe';
 import { ReplacePipe } from './replace_pipe';
-import { I18nPluralPipe } from './i18n_plural_pipe';
-import { I18nSelectPipe } from './i18n_select_pipe';
 import { CONST_EXPR } from 'angular2/src/facade/lang';
 /**
  * A collection of Angular core pipes that are likely to be used in each and every
@@ -26,7 +24,5 @@ export const COMMON_PIPES = CONST_EXPR([
     PercentPipe,
     CurrencyPipe,
     DatePipe,
-    ReplacePipe,
-    I18nPluralPipe,
-    I18nSelectPipe
+    ReplacePipe
 ]);
