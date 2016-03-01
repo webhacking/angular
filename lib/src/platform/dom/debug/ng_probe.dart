@@ -8,11 +8,13 @@ import "package:angular2/src/core/debug/debug_node.dart"
     show DebugNode, getDebugNode;
 import "package:angular2/src/platform/dom/dom_renderer.dart"
     show DomRootRenderer;
-import "package:angular2/core.dart" show RootRenderer;
+import "package:angular2/core.dart" show RootRenderer, NgZone, ApplicationRef;
 import "package:angular2/src/core/debug/debug_renderer.dart"
     show DebugDomRootRenderer;
 
+const CORE_TOKENS = const {"ApplicationRef": ApplicationRef, "NgZone": NgZone};
 const INSPECT_GLOBAL_NAME = "ng.probe";
+const CORE_TOKENS_GLOBAL_NAME = "ng.coreTokens";
 /**
  * Returns a [DebugElement] for the given native DOM element, or
  * null if the given native element does not have an Angular view associated
@@ -31,6 +33,7 @@ _createConditionalRootRenderer(rootRenderer) {
 
 _createRootRenderer(rootRenderer) {
   DOM.setGlobalVar(INSPECT_GLOBAL_NAME, inspectNativeElement);
+  DOM.setGlobalVar(CORE_TOKENS_GLOBAL_NAME, CORE_TOKENS);
   return new DebugDomRootRenderer(rootRenderer);
 }
 
