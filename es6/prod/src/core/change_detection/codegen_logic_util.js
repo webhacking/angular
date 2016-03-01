@@ -1,15 +1,17 @@
 import { IS_DART, isPresent, isBlank } from 'angular2/src/facade/lang';
 import { codify, combineGeneratedStrings, rawString } from './codegen_facade';
 import { RecordType } from './proto_record';
+import { ChangeDetectionStrategy } from './constants';
 import { BaseException } from 'angular2/src/facade/exceptions';
 /**
  * Class responsible for providing change detection logic for change detector classes.
  */
 export class CodegenLogicUtil {
-    constructor(_names, _utilName, _changeDetectorStateName) {
+    constructor(_names, _utilName, _changeDetectorStateName, _changeDetection) {
         this._names = _names;
         this._utilName = _utilName;
         this._changeDetectorStateName = _changeDetectorStateName;
+        this._changeDetection = _changeDetection;
     }
     /**
      * Generates a statement which updates the local variable representing `protoRec` with the current
@@ -39,24 +41,26 @@ export class CodegenLogicUtil {
                 rhs = codify(protoRec.funcOrValue);
                 break;
             case RecordType.PropertyRead:
-                rhs = `${context}.${protoRec.name}`;
+                rhs = this._observe(`${context}.${protoRec.name}`, protoRec);
                 break;
             case RecordType.SafeProperty:
-                var read = `${context}.${protoRec.name}`;
-                rhs = `${this._utilName}.isValueBlank(${context}) ? null : ${read}`;
+                var read = this._observe(`${context}.${protoRec.name}`, protoRec);
+                rhs =
+                    `${this._utilName}.isValueBlank(${context}) ? null : ${this._observe(read, protoRec)}`;
                 break;
             case RecordType.PropertyWrite:
                 rhs = `${context}.${protoRec.name} = ${getLocalName(protoRec.args[0])}`;
                 break;
             case RecordType.Local:
-                rhs = `${localsAccessor}.get(${rawString(protoRec.name)})`;
+                rhs = this._observe(`${localsAccessor}.get(${rawString(protoRec.name)})`, protoRec);
                 break;
             case RecordType.InvokeMethod:
-                rhs = `${context}.${protoRec.name}(${argString})`;
+                rhs = this._observe(`${context}.${protoRec.name}(${argString})`, protoRec);
                 break;
             case RecordType.SafeMethodInvoke:
                 var invoke = `${context}.${protoRec.name}(${argString})`;
-                rhs = `${this._utilName}.isValueBlank(${context}) ? null : ${invoke}`;
+                rhs =
+                    `${this._utilName}.isValueBlank(${context}) ? null : ${this._observe(invoke, protoRec)}`;
                 break;
             case RecordType.InvokeClosure:
                 rhs = `${context}(${argString})`;
@@ -71,7 +75,7 @@ export class CodegenLogicUtil {
                 rhs = this._genInterpolation(protoRec);
                 break;
             case RecordType.KeyedRead:
-                rhs = `${context}[${getLocalName(protoRec.args[0])}]`;
+                rhs = this._observe(`${context}[${getLocalName(protoRec.args[0])}]`, protoRec);
                 break;
             case RecordType.KeyedWrite:
                 rhs = `${context}[${getLocalName(protoRec.args[0])}] = ${getLocalName(protoRec.args[1])}`;
@@ -83,6 +87,16 @@ export class CodegenLogicUtil {
                 throw new BaseException(`Unknown operation ${protoRec.mode}`);
         }
         return `${getLocalName(protoRec.selfIndex)} = ${rhs};`;
+    }
+    /** @internal */
+    _observe(exp, rec) {
+        // This is an experimental feature. Works only in Dart.
+        if (this._changeDetection === ChangeDetectionStrategy.OnPushObserve) {
+            return `this.observeValue(${exp}, ${rec.selfIndex})`;
+        }
+        else {
+            return exp;
+        }
     }
     genPropertyBindingTargets(propertyBindingTargets, genDebugInfo) {
         var bs = propertyBindingTargets.map(b => {
@@ -157,7 +171,16 @@ export class CodegenLogicUtil {
             return `(function(event) { return this.handleEvent('${eventName}', ${boundElementIndex}, event); }).bind(this)`;
         }
     }
-    _genReadDirective(index) { return `this.getDirectiveFor(directives, ${index})`; }
+    _genReadDirective(index) {
+        var directiveExpr = `this.getDirectiveFor(directives, ${index})`;
+        // This is an experimental feature. Works only in Dart.
+        if (this._changeDetection === ChangeDetectionStrategy.OnPushObserve) {
+            return `this.observeDirective(${directiveExpr}, ${index})`;
+        }
+        else {
+            return directiveExpr;
+        }
+    }
     genHydrateDetectors(directiveRecords) {
         var res = [];
         for (var i = 0; i < directiveRecords.length; ++i) {
