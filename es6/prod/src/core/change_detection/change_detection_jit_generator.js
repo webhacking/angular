@@ -36,7 +36,8 @@ export class ChangeDetectorJITGenerator {
         this.eventBindings = eventBindingRecords;
         this.directiveRecords = definition.directiveRecords;
         this._names = new CodegenNameUtil(this.records, this.eventBindings, this.directiveRecords, this.changeDetectionUtilVarName);
-        this._logic = new CodegenLogicUtil(this._names, this.changeDetectionUtilVarName, this.changeDetectorStateVarName);
+        this._logic =
+            new CodegenLogicUtil(this._names, this.changeDetectionUtilVarName, this.changeDetectorStateVarName, this.changeDetectionStrategy);
         this.typeName = sanitizeName(`ChangeDetector_${this.id}`);
     }
     generate() {

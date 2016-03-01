@@ -4,6 +4,7 @@ import {codify, combineGeneratedStrings, rawString} from './codegen_facade';
 import {ProtoRecord, RecordType} from './proto_record';
 import {BindingTarget} from './binding_record';
 import {DirectiveRecord} from './directive_record';
+import {ChangeDetectionStrategy} from './constants';
 import {BaseException} from 'angular2/src/facade/exceptions';
 
 /**
@@ -11,7 +12,8 @@ import {BaseException} from 'angular2/src/facade/exceptions';
  */
 export class CodegenLogicUtil {
   constructor(private _names: CodegenNameUtil, private _utilName: string,
-              private _changeDetectorStateName: string) {}
+              private _changeDetectorStateName: string,
+              private _changeDetection: ChangeDetectionStrategy) {}
 
   /**
    * Generates a statement which updates the local variable representing `protoRec` with the current
@@ -49,12 +51,13 @@ export class CodegenLogicUtil {
         break;
 
       case RecordType.PropertyRead:
-        rhs = `${context}.${protoRec.name}`;
+        rhs = this._observe(`${context}.${protoRec.name}`, protoRec);
         break;
 
       case RecordType.SafeProperty:
-        var read = `${context}.${protoRec.name}`;
-        rhs = `${this._utilName}.isValueBlank(${context}) ? null : ${read}`;
+        var read = this._observe(`${context}.${protoRec.name}`, protoRec);
+        rhs =
+            `${this._utilName}.isValueBlank(${context}) ? null : ${this._observe(read, protoRec)}`;
         break;
 
       case RecordType.PropertyWrite:
@@ -62,16 +65,17 @@ export class CodegenLogicUtil {
         break;
 
       case RecordType.Local:
-        rhs = `${localsAccessor}.get(${rawString(protoRec.name)})`;
+        rhs = this._observe(`${localsAccessor}.get(${rawString(protoRec.name)})`, protoRec);
         break;
 
       case RecordType.InvokeMethod:
-        rhs = `${context}.${protoRec.name}(${argString})`;
+        rhs = this._observe(`${context}.${protoRec.name}(${argString})`, protoRec);
         break;
 
       case RecordType.SafeMethodInvoke:
         var invoke = `${context}.${protoRec.name}(${argString})`;
-        rhs = `${this._utilName}.isValueBlank(${context}) ? null : ${invoke}`;
+        rhs =
+            `${this._utilName}.isValueBlank(${context}) ? null : ${this._observe(invoke, protoRec)}`;
         break;
 
       case RecordType.InvokeClosure:
@@ -91,7 +95,7 @@ export class CodegenLogicUtil {
         break;
 
       case RecordType.KeyedRead:
-        rhs = `${context}[${getLocalName(protoRec.args[0])}]`;
+        rhs = this._observe(`${context}[${getLocalName(protoRec.args[0])}]`, protoRec);
         break;
 
       case RecordType.KeyedWrite:
@@ -106,6 +110,16 @@ export class CodegenLogicUtil {
         throw new BaseException(`Unknown operation ${protoRec.mode}`);
     }
     return `${getLocalName(protoRec.selfIndex)} = ${rhs};`;
+  }
+
+  /** @internal */
+  _observe(exp: string, rec: ProtoRecord): string {
+    // This is an experimental feature. Works only in Dart.
+    if (this._changeDetection === ChangeDetectionStrategy.OnPushObserve) {
+      return `this.observeValue(${exp}, ${rec.selfIndex})`;
+    } else {
+      return exp;
+    }
   }
 
   genPropertyBindingTargets(propertyBindingTargets: BindingTarget[],
@@ -188,7 +202,15 @@ export class CodegenLogicUtil {
     }
   }
 
-  private _genReadDirective(index: number) { return `this.getDirectiveFor(directives, ${index})`; }
+  private _genReadDirective(index: number) {
+    var directiveExpr = `this.getDirectiveFor(directives, ${index})`;
+    // This is an experimental feature. Works only in Dart.
+    if (this._changeDetection === ChangeDetectionStrategy.OnPushObserve) {
+      return `this.observeDirective(${directiveExpr}, ${index})`;
+    } else {
+      return directiveExpr;
+    }
+  }
 
   genHydrateDetectors(directiveRecords: DirectiveRecord[]): string {
     var res = [];
