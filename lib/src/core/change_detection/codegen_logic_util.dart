@@ -7,7 +7,6 @@ import "codegen_facade.dart" show codify, combineGeneratedStrings, rawString;
 import "proto_record.dart" show ProtoRecord, RecordType;
 import "binding_record.dart" show BindingTarget;
 import "directive_record.dart" show DirectiveRecord;
-import "constants.dart" show ChangeDetectionStrategy;
 import "package:angular2/src/facade/exceptions.dart" show BaseException;
 
 /**
@@ -17,9 +16,8 @@ class CodegenLogicUtil {
   CodegenNameUtil _names;
   String _utilName;
   String _changeDetectorStateName;
-  ChangeDetectionStrategy _changeDetection;
-  CodegenLogicUtil(this._names, this._utilName, this._changeDetectorStateName,
-      this._changeDetection) {}
+  CodegenLogicUtil(
+      this._names, this._utilName, this._changeDetectorStateName) {}
   /**
    * Generates a statement which updates the local variable representing `protoRec` with the current
    * value of the record. Used by property bindings.
@@ -54,31 +52,27 @@ class CodegenLogicUtil {
         rhs = codify(protoRec.funcOrValue);
         break;
       case RecordType.PropertyRead:
-        rhs = this._observe('''${ context}.${ protoRec . name}''', protoRec);
+        rhs = '''${ context}.${ protoRec . name}''';
         break;
       case RecordType.SafeProperty:
-        var read =
-            this._observe('''${ context}.${ protoRec . name}''', protoRec);
+        var read = '''${ context}.${ protoRec . name}''';
         rhs =
-            '''${ this . _utilName}.isValueBlank(${ context}) ? null : ${ this . _observe ( read , protoRec )}''';
+            '''${ this . _utilName}.isValueBlank(${ context}) ? null : ${ read}''';
         break;
       case RecordType.PropertyWrite:
         rhs =
             '''${ context}.${ protoRec . name} = ${ getLocalName ( protoRec . args [ 0 ] )}''';
         break;
       case RecordType.Local:
-        rhs = this._observe(
-            '''${ localsAccessor}.get(${ rawString ( protoRec . name )})''',
-            protoRec);
+        rhs = '''${ localsAccessor}.get(${ rawString ( protoRec . name )})''';
         break;
       case RecordType.InvokeMethod:
-        rhs = this._observe(
-            '''${ context}.${ protoRec . name}(${ argString})''', protoRec);
+        rhs = '''${ context}.${ protoRec . name}(${ argString})''';
         break;
       case RecordType.SafeMethodInvoke:
         var invoke = '''${ context}.${ protoRec . name}(${ argString})''';
         rhs =
-            '''${ this . _utilName}.isValueBlank(${ context}) ? null : ${ this . _observe ( invoke , protoRec )}''';
+            '''${ this . _utilName}.isValueBlank(${ context}) ? null : ${ invoke}''';
         break;
       case RecordType.InvokeClosure:
         rhs = '''${ context}(${ argString})''';
@@ -93,9 +87,7 @@ class CodegenLogicUtil {
         rhs = this._genInterpolation(protoRec);
         break;
       case RecordType.KeyedRead:
-        rhs = this._observe(
-            '''${ context}[${ getLocalName ( protoRec . args [ 0 ] )}]''',
-            protoRec);
+        rhs = '''${ context}[${ getLocalName ( protoRec . args [ 0 ] )}]''';
         break;
       case RecordType.KeyedWrite:
         rhs =
@@ -109,17 +101,6 @@ class CodegenLogicUtil {
         throw new BaseException('''Unknown operation ${ protoRec . mode}''');
     }
     return '''${ getLocalName ( protoRec . selfIndex )} = ${ rhs};''';
-  }
-
-  /** @internal */
-  String _observe(String exp, ProtoRecord rec) {
-    // This is an experimental feature. Works only in Dart.
-    if (identical(
-        this._changeDetection, ChangeDetectionStrategy.OnPushObserve)) {
-      return '''this.observeValue(${ exp}, ${ rec . selfIndex})''';
-    } else {
-      return exp;
-    }
   }
 
   String genPropertyBindingTargets(
@@ -208,14 +189,7 @@ class CodegenLogicUtil {
   }
 
   _genReadDirective(num index) {
-    var directiveExpr = '''this.getDirectiveFor(directives, ${ index})''';
-    // This is an experimental feature. Works only in Dart.
-    if (identical(
-        this._changeDetection, ChangeDetectionStrategy.OnPushObserve)) {
-      return '''this.observeDirective(${ directiveExpr}, ${ index})''';
-    } else {
-      return directiveExpr;
-    }
+    return '''this.getDirectiveFor(directives, ${ index})''';
   }
 
   String genHydrateDetectors(List<DirectiveRecord> directiveRecords) {

@@ -5808,135 +5808,14 @@ class ChangeDetector89 extends _gen.AbstractChangeDetector<dynamic> {
 }
 
 class ChangeDetector90 extends _gen.AbstractChangeDetector<dynamic> {
-  var a0;
+  var name0;
 
   ChangeDetector90()
       : super(
-            "onPushObserveBinding",
+            "updateElementProduction",
             1,
             ChangeDetector90._gen_propertyBindingTargets,
             ChangeDetector90._gen_directiveIndices,
-            _gen.ChangeDetectionStrategy.OnPushObserve) {
-    dehydrateDirectives(false);
-  }
-
-  void detectChangesInRecordsInternal(throwOnChange) {
-    var l_context = this.context, l_a0;
-    var isChanged = false;
-    var changes = null;
-
-    this.propertyBindingIndex = 0;
-    l_a0 = this.observeValue(l_context.a, 1);
-    if (_gen.assertionsEnabled() &&
-        throwOnChange &&
-        !_gen.ChangeDetectionUtil.devModeEqual(this.a0, l_a0)) {
-      this.throwOnChangeError(this.a0, l_a0);
-    }
-
-    if (_gen.ChangeDetectionUtil.looseNotIdentical(l_a0, this.a0)) {
-      this.notifyDispatcher(l_a0);
-      this.logBindingUpdate(l_a0);
-
-      this.a0 = l_a0;
-    }
-
-    changes = null;
-
-    isChanged = false;
-  }
-
-  void dehydrateDirectives(destroyPipes) {
-    if (destroyPipes) {}
-    this.a0 = _gen.ChangeDetectionUtil.uninitialized;
-  }
-
-  static final _gen_propertyBindingTargets = [
-    _gen.ChangeDetectionUtil
-        .bindingTarget("elementProperty", 0, "propName", null, "a in location")
-  ];
-
-  static final _gen_directiveIndices = [];
-
-  static _gen.ChangeDetector newChangeDetector() {
-    return new ChangeDetector90();
-  }
-}
-
-class ChangeDetector91 extends _gen.AbstractChangeDetector<dynamic> {
-  ChangeDetector91()
-      : super(
-            "onPushObserveComponent",
-            0,
-            ChangeDetector91._gen_propertyBindingTargets,
-            ChangeDetector91._gen_directiveIndices,
-            _gen.ChangeDetectionStrategy.OnPushObserve) {
-    dehydrateDirectives(false);
-  }
-
-  void detectChangesInRecordsInternal(throwOnChange) {
-    var l_context = this.context;
-    var isChanged = false;
-    var changes = null;
-  }
-
-  static final _gen_propertyBindingTargets = [];
-
-  static final _gen_directiveIndices = [];
-
-  static _gen.ChangeDetector newChangeDetector() {
-    return new ChangeDetector91();
-  }
-}
-
-class ChangeDetector92 extends _gen.AbstractChangeDetector<dynamic> {
-  var directive_0_0;
-
-  ChangeDetector92()
-      : super(
-            "onPushObserveDirective",
-            0,
-            ChangeDetector92._gen_propertyBindingTargets,
-            ChangeDetector92._gen_directiveIndices,
-            _gen.ChangeDetectionStrategy.OnPushObserve) {
-    dehydrateDirectives(false);
-  }
-
-  void detectChangesInRecordsInternal(throwOnChange) {
-    var l_context = this.context;
-    var isChanged = false;
-    var changes = null;
-  }
-
-  void hydrateDirectives(directives) {
-    this.directive_0_0 =
-        this.observeDirective(this.getDirectiveFor(directives, 0), 0);
-  }
-
-  void dehydrateDirectives(destroyPipes) {
-    if (destroyPipes) {}
-    this.directive_0_0 = _gen.ChangeDetectionUtil.uninitialized;
-  }
-
-  static final _gen_propertyBindingTargets = [];
-
-  static final _gen_directiveIndices = [
-    _gen.ChangeDetectionUtil.directiveIndex(0, 0)
-  ];
-
-  static _gen.ChangeDetector newChangeDetector() {
-    return new ChangeDetector92();
-  }
-}
-
-class ChangeDetector93 extends _gen.AbstractChangeDetector<dynamic> {
-  var name0;
-
-  ChangeDetector93()
-      : super(
-            "updateElementProduction",
-            1,
-            ChangeDetector93._gen_propertyBindingTargets,
-            ChangeDetector93._gen_directiveIndices,
             null) {
     dehydrateDirectives(false);
   }
@@ -5978,7 +5857,7 @@ class ChangeDetector93 extends _gen.AbstractChangeDetector<dynamic> {
   static final _gen_directiveIndices = [];
 
   static _gen.ChangeDetector newChangeDetector() {
-    return new ChangeDetector93();
+    return new ChangeDetector90();
   }
 }
 
@@ -6077,10 +5956,7 @@ b"''': ChangeDetector3.newChangeDetector,
   '''(event)="true ? a = a + 1 : a = a + 1"''':
       ChangeDetector88.newChangeDetector,
   '''(host-event)="onEvent(\$event)"''': ChangeDetector89.newChangeDetector,
-  '''onPushObserveBinding''': ChangeDetector90.newChangeDetector,
-  '''onPushObserveComponent''': ChangeDetector91.newChangeDetector,
-  '''onPushObserveDirective''': ChangeDetector92.newChangeDetector,
-  '''updateElementProduction''': ChangeDetector93.newChangeDetector
+  '''updateElementProduction''': ChangeDetector90.newChangeDetector
 };
 
 getFactoryById(String id) => _idToProtoMap[id];
