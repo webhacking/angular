@@ -2047,22 +2047,66 @@ System.register("angular2/src/core/reflection/reflection_capabilities", ["angula
   return module.exports;
 });
 
-System.register("angular2/src/core/di/type_literal", [], true, function(require, exports, module) {
+System.register("angular2/src/core/di/key", ["angular2/src/facade/lang", "angular2/src/facade/exceptions", "angular2/src/core/di/forward_ref"], true, function(require, exports, module) {
   var global = System.global,
       __define = global.define;
   global.define = undefined;
-  var TypeLiteral = (function() {
-    function TypeLiteral() {}
-    Object.defineProperty(TypeLiteral.prototype, "type", {
+  var lang_1 = require("angular2/src/facade/lang");
+  var exceptions_1 = require("angular2/src/facade/exceptions");
+  var forward_ref_1 = require("angular2/src/core/di/forward_ref");
+  var Key = (function() {
+    function Key(token, id) {
+      this.token = token;
+      this.id = id;
+      if (lang_1.isBlank(token)) {
+        throw new exceptions_1.BaseException('Token must be defined!');
+      }
+    }
+    Object.defineProperty(Key.prototype, "displayName", {
       get: function() {
-        throw new Error("Type literals are only supported in Dart");
+        return lang_1.stringify(this.token);
       },
       enumerable: true,
       configurable: true
     });
-    return TypeLiteral;
+    Key.get = function(token) {
+      return _globalKeyRegistry.get(forward_ref_1.resolveForwardRef(token));
+    };
+    Object.defineProperty(Key, "numberOfKeys", {
+      get: function() {
+        return _globalKeyRegistry.numberOfKeys;
+      },
+      enumerable: true,
+      configurable: true
+    });
+    return Key;
   })();
-  exports.TypeLiteral = TypeLiteral;
+  exports.Key = Key;
+  var KeyRegistry = (function() {
+    function KeyRegistry() {
+      this._allKeys = new Map();
+    }
+    KeyRegistry.prototype.get = function(token) {
+      if (token instanceof Key)
+        return token;
+      if (this._allKeys.has(token)) {
+        return this._allKeys.get(token);
+      }
+      var newKey = new Key(token, Key.numberOfKeys);
+      this._allKeys.set(token, newKey);
+      return newKey;
+    };
+    Object.defineProperty(KeyRegistry.prototype, "numberOfKeys", {
+      get: function() {
+        return this._allKeys.size;
+      },
+      enumerable: true,
+      configurable: true
+    });
+    return KeyRegistry;
+  })();
+  exports.KeyRegistry = KeyRegistry;
+  var _globalKeyRegistry = new KeyRegistry();
   global.define = __define;
   return module.exports;
 });
@@ -21151,78 +21195,6 @@ System.register("angular2/src/core/reflection/reflection", ["angular2/src/core/r
   return module.exports;
 });
 
-System.register("angular2/src/core/di/key", ["angular2/src/facade/lang", "angular2/src/facade/exceptions", "angular2/src/core/di/type_literal", "angular2/src/core/di/forward_ref", "angular2/src/core/di/type_literal"], true, function(require, exports, module) {
-  var global = System.global,
-      __define = global.define;
-  global.define = undefined;
-  var lang_1 = require("angular2/src/facade/lang");
-  var exceptions_1 = require("angular2/src/facade/exceptions");
-  var type_literal_1 = require("angular2/src/core/di/type_literal");
-  var forward_ref_1 = require("angular2/src/core/di/forward_ref");
-  var type_literal_2 = require("angular2/src/core/di/type_literal");
-  exports.TypeLiteral = type_literal_2.TypeLiteral;
-  var Key = (function() {
-    function Key(token, id) {
-      this.token = token;
-      this.id = id;
-      if (lang_1.isBlank(token)) {
-        throw new exceptions_1.BaseException('Token must be defined!');
-      }
-    }
-    Object.defineProperty(Key.prototype, "displayName", {
-      get: function() {
-        return lang_1.stringify(this.token);
-      },
-      enumerable: true,
-      configurable: true
-    });
-    Key.get = function(token) {
-      return _globalKeyRegistry.get(forward_ref_1.resolveForwardRef(token));
-    };
-    Object.defineProperty(Key, "numberOfKeys", {
-      get: function() {
-        return _globalKeyRegistry.numberOfKeys;
-      },
-      enumerable: true,
-      configurable: true
-    });
-    return Key;
-  })();
-  exports.Key = Key;
-  var KeyRegistry = (function() {
-    function KeyRegistry() {
-      this._allKeys = new Map();
-    }
-    KeyRegistry.prototype.get = function(token) {
-      if (token instanceof Key)
-        return token;
-      var theToken = token;
-      if (token instanceof type_literal_1.TypeLiteral) {
-        theToken = token.type;
-      }
-      token = theToken;
-      if (this._allKeys.has(token)) {
-        return this._allKeys.get(token);
-      }
-      var newKey = new Key(token, Key.numberOfKeys);
-      this._allKeys.set(token, newKey);
-      return newKey;
-    };
-    Object.defineProperty(KeyRegistry.prototype, "numberOfKeys", {
-      get: function() {
-        return this._allKeys.size;
-      },
-      enumerable: true,
-      configurable: true
-    });
-    return KeyRegistry;
-  })();
-  exports.KeyRegistry = KeyRegistry;
-  var _globalKeyRegistry = new KeyRegistry();
-  global.define = __define;
-  return module.exports;
-});
-
 System.register("angular2/src/core/change_detection/change_detection_util", ["angular2/src/facade/lang", "angular2/src/facade/exceptions", "angular2/src/facade/collection", "angular2/src/core/change_detection/constants", "angular2/src/core/change_detection/pipe_lifecycle_reflector", "angular2/src/core/change_detection/binding_record", "angular2/src/core/change_detection/directive_record"], true, function(require, exports, module) {
   var global = System.global,
       __define = global.define;
@@ -34676,7 +34648,6 @@ System.register("angular2/src/core/di", ["angular2/src/core/di/metadata", "angul
   exports.provide = provider_1.provide;
   var key_1 = require("angular2/src/core/di/key");
   exports.Key = key_1.Key;
-  exports.TypeLiteral = key_1.TypeLiteral;
   var exceptions_1 = require("angular2/src/core/di/exceptions");
   exports.NoProviderError = exceptions_1.NoProviderError;
   exports.AbstractProviderError = exceptions_1.AbstractProviderError;
