@@ -22,7 +22,6 @@ export interface BrowserNodeGlobal {
     Zone: ZoneLikeConstructor;
     getAngularTestability: Function;
     getAllAngularTestabilities: Function;
-    getAllAngularRootElements: Function;
     frameworkStabilizers: Array<Function>;
     setTimeout: Function;
     clearTimeout: Function;

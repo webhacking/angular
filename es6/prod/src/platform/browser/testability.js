@@ -29,7 +29,6 @@ export class BrowserGetTestability {
             var testabilities = registry.getAllTestabilities();
             return testabilities.map((testability) => { return new PublicTestability(testability); });
         };
-        global.getAllAngularRootElements = () => registry.getAllRootElements();
         var whenAllStable = (callback) => {
             var testabilities = global.getAllAngularTestabilities();
             var count = testabilities.length;
