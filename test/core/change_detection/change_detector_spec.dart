@@ -51,6 +51,7 @@ import "package:angular2/src/core/change_detection/jit_proto_change_detector.dar
     show JitProtoChangeDetector;
 import "package:angular2/src/core/linker/interfaces.dart" show OnDestroy;
 import "change_detector_config.dart" show getDefinition;
+import "change_detector_spec_util.dart" show createObservableModel;
 import "generated/change_detector_classes.dart" show getFactoryById;
 import "package:angular2/src/facade/lang.dart" show IS_DART;
 import "package:angular2/src/facade/async.dart"
@@ -986,6 +987,87 @@ main() {
             expect(childDirectiveDetectorOnPush.mode)
                 .toEqual(ChangeDetectionStrategy.CheckOnce);
           });
+          if (IS_DART) {
+            describe("OnPushObserve", () {
+              it("should mark OnPushObserve detectors as CheckOnce when an observable fires an event",
+                  fakeAsync(() {
+                var context = new TestDirective();
+                context.a = createObservableModel();
+                var cd = _createWithoutHydrate("onPushObserveBinding")
+                    .changeDetector;
+                cd.hydrate(context, null, directives, null);
+                cd.detectChanges();
+                expect(cd.mode).toEqual(ChangeDetectionStrategy.Checked);
+                context.a.pushUpdate();
+                tick();
+                expect(cd.mode).toEqual(ChangeDetectionStrategy.CheckOnce);
+              }));
+              it("should mark OnPushObserve detectors as CheckOnce when an observable context fires an event",
+                  fakeAsync(() {
+                var context = createObservableModel();
+                var cd = _createWithoutHydrate("onPushObserveComponent")
+                    .changeDetector;
+                cd.hydrate(context, null, directives, null);
+                cd.detectChanges();
+                expect(cd.mode).toEqual(ChangeDetectionStrategy.Checked);
+                context.pushUpdate();
+                tick();
+                expect(cd.mode).toEqual(ChangeDetectionStrategy.CheckOnce);
+              }));
+              it("should mark OnPushObserve detectors as CheckOnce when an observable directive fires an event",
+                  fakeAsync(() {
+                var dir = createObservableModel();
+                var directives = new TestDispatcher([dir], []);
+                var cd = _createWithoutHydrate("onPushObserveDirective")
+                    .changeDetector;
+                cd.hydrate(_DEFAULT_CONTEXT, null, directives, null);
+                cd.detectChanges();
+                expect(cd.mode).toEqual(ChangeDetectionStrategy.Checked);
+                dir.pushUpdate();
+                tick();
+                expect(cd.mode).toEqual(ChangeDetectionStrategy.CheckOnce);
+              }));
+              it("should unsubscribe from an old observable when an object changes",
+                  fakeAsync(() {
+                var originalModel = createObservableModel();
+                var context = new TestDirective();
+                context.a = originalModel;
+                var cd = _createWithoutHydrate("onPushObserveBinding")
+                    .changeDetector;
+                cd.hydrate(context, null, directives, null);
+                cd.detectChanges();
+                context.a = createObservableModel();
+                cd.mode = ChangeDetectionStrategy.CheckOnce;
+                cd.detectChanges();
+                // Updating this model will not reenable the detector. This model is not longer
+
+                // used.
+                originalModel.pushUpdate();
+                tick();
+                expect(cd.mode).toEqual(ChangeDetectionStrategy.Checked);
+              }));
+              it("should unsubscribe from observables when dehydrating",
+                  fakeAsync(() {
+                var originalModel = createObservableModel();
+                var context = new TestDirective();
+                context.a = originalModel;
+                var cd = _createWithoutHydrate("onPushObserveBinding")
+                    .changeDetector;
+                cd.hydrate(context, null, directives, null);
+                cd.detectChanges();
+                cd.dehydrate();
+                context.a = "not an observable model";
+                cd.hydrate(context, null, directives, null);
+                cd.detectChanges();
+                // Updating this model will not reenable the detector. This model is not longer
+
+                // used.
+                originalModel.pushUpdate();
+                tick();
+                expect(cd.mode).toEqual(ChangeDetectionStrategy.Checked);
+              }));
+            });
+          }
         });
       });
       describe("markPathToRootAsCheckOnce", () {

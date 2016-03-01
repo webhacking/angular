@@ -115,6 +115,25 @@ TestDefinition getDefinition(String id) {
         ],
         genConfig);
     testDef = new TestDefinition(id, cdDef, null);
+  } else if (id == "onPushObserveBinding") {
+    var records = _createBindingRecords("a");
+    var cdDef = new ChangeDetectorDefinition(id,
+        ChangeDetectionStrategy.OnPushObserve, [], records, [], [], genConfig);
+    testDef = new TestDefinition(id, cdDef, null);
+  } else if (id == "onPushObserveComponent") {
+    var cdDef = new ChangeDetectorDefinition(
+        id, ChangeDetectionStrategy.OnPushObserve, [], [], [], [], genConfig);
+    testDef = new TestDefinition(id, cdDef, null);
+  } else if (id == "onPushObserveDirective") {
+    var cdDef = new ChangeDetectorDefinition(
+        id,
+        ChangeDetectionStrategy.OnPushObserve,
+        [],
+        [],
+        [],
+        [_DirectiveUpdating.recordNoCallbacks],
+        genConfig);
+    testDef = new TestDefinition(id, cdDef, null);
   } else if (id == "updateElementProduction") {
     var genConfig = new ChangeDetectorGenConfig(false, false, true);
     var records = _createBindingRecords("name");
@@ -149,7 +168,13 @@ List<TestDefinition> getAllDefinitions() {
     ..addAll(StringMapWrapper.keys(_DirectiveUpdating.availableDefinitions)));
   allDefs = (new List.from(allDefs)..addAll(_availableEventDefinitions));
   allDefs = (new List.from(allDefs)..addAll(_availableHostEventDefinitions));
-  allDefs = (new List.from(allDefs)..addAll(["updateElementProduction"]));
+  allDefs = (new List.from(allDefs)
+    ..addAll([
+      "onPushObserveBinding",
+      "onPushObserveComponent",
+      "onPushObserveDirective",
+      "updateElementProduction"
+    ]));
   return allDefs.map(getDefinition).toList();
 }
 
