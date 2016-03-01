@@ -808,7 +808,6 @@ var NG_CORE = [
   "ChangeDetectionStrategy#Default",
   "ChangeDetectionStrategy#Detached",
   "ChangeDetectionStrategy#OnPush",
-  "ChangeDetectionStrategy#OnPushObserve",
   "ChangeDetectionStrategy#values",
   "ChangeDetectionStrategy",
   "ChangeDetectionStrategy.index",
