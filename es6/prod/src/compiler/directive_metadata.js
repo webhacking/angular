@@ -62,28 +62,12 @@ export class CompileDiDependencyMetadata {
         this.token = token;
     }
     static fromJson(data) {
-        return new CompileDiDependencyMetadata({
-            token: objFromJson(data['token'], CompileIdentifierMetadata.fromJson),
-            query: objFromJson(data['query'], CompileQueryMetadata.fromJson),
-            viewQuery: objFromJson(data['viewQuery'], CompileQueryMetadata.fromJson),
-            isAttribute: data['isAttribute'],
-            isSelf: data['isSelf'],
-            isHost: data['isHost'],
-            isSkipSelf: data['isSkipSelf'],
-            isOptional: data['isOptional']
-        });
+        return new CompileDiDependencyMetadata({ token: objFromJson(data['token'], CompileIdentifierMetadata.fromJson) });
     }
     toJson() {
         return {
             // Note: Runtime type can't be serialized...
-            'token': objToJson(this.token),
-            'query': objToJson(this.query),
-            'viewQuery': objToJson(this.viewQuery),
-            'isAttribute': this.isAttribute,
-            'isSelf': this.isSelf,
-            'isHost': this.isHost,
-            'isSkipSelf': this.isSkipSelf,
-            'isOptional': this.isOptional
+            'token': objToJson(this.token)
         };
     }
 }
@@ -164,25 +148,8 @@ export class CompileQueryMetadata {
     constructor({ selectors, descendants, first, propertyName } = {}) {
         this.selectors = selectors;
         this.descendants = descendants;
-        this.first = normalizeBool(first);
+        this.first = first;
         this.propertyName = propertyName;
-    }
-    static fromJson(data) {
-        return new CompileQueryMetadata({
-            selectors: arrayFromJson(data['selectors'], CompileIdentifierMetadata.fromJson),
-            descendants: data['descendants'],
-            first: data['first'],
-            propertyName: data['propertyName']
-        });
-    }
-    toJson() {
-        return {
-            // Note: Runtime type can't be serialized...
-            'selectors': arrayToJson(this.selectors),
-            'descendants': this.descendants,
-            'first': this.first,
-            'propertyName': this.propertyName
-        };
     }
 }
 /**
@@ -399,10 +366,10 @@ var _COMPILE_METADATA_FROM_JSON = {
     'Identifier': CompileIdentifierMetadata.fromJson
 };
 function arrayFromJson(obj, fn) {
-    return isBlank(obj) ? null : obj.map(o => objFromJson(o, fn));
+    return isBlank(obj) ? null : obj.map(fn);
 }
 function arrayToJson(obj) {
-    return isBlank(obj) ? null : obj.map(objToJson);
+    return isBlank(obj) ? null : obj.map(o => o.toJson());
 }
 function objFromJson(obj, fn) {
     return (isString(obj) || isBlank(obj)) ? obj : fn(obj);

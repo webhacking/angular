@@ -23121,28 +23121,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.token = token;
 	    }
 	    CompileDiDependencyMetadata.fromJson = function (data) {
-	        return new CompileDiDependencyMetadata({
-	            token: objFromJson(data['token'], CompileIdentifierMetadata.fromJson),
-	            query: objFromJson(data['query'], CompileQueryMetadata.fromJson),
-	            viewQuery: objFromJson(data['viewQuery'], CompileQueryMetadata.fromJson),
-	            isAttribute: data['isAttribute'],
-	            isSelf: data['isSelf'],
-	            isHost: data['isHost'],
-	            isSkipSelf: data['isSkipSelf'],
-	            isOptional: data['isOptional']
-	        });
+	        return new CompileDiDependencyMetadata({ token: objFromJson(data['token'], CompileIdentifierMetadata.fromJson) });
 	    };
 	    CompileDiDependencyMetadata.prototype.toJson = function () {
 	        return {
 	            // Note: Runtime type can't be serialized...
-	            'token': objToJson(this.token),
-	            'query': objToJson(this.query),
-	            'viewQuery': objToJson(this.viewQuery),
-	            'isAttribute': this.isAttribute,
-	            'isSelf': this.isSelf,
-	            'isHost': this.isHost,
-	            'isSkipSelf': this.isSkipSelf,
-	            'isOptional': this.isOptional
+	            'token': objToJson(this.token)
 	        };
 	    };
 	    return CompileDiDependencyMetadata;
@@ -23247,26 +23231,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var _b = _a === void 0 ? {} : _a, selectors = _b.selectors, descendants = _b.descendants, first = _b.first, propertyName = _b.propertyName;
 	        this.selectors = selectors;
 	        this.descendants = descendants;
-	        this.first = lang_1.normalizeBool(first);
+	        this.first = first;
 	        this.propertyName = propertyName;
 	    }
-	    CompileQueryMetadata.fromJson = function (data) {
-	        return new CompileQueryMetadata({
-	            selectors: arrayFromJson(data['selectors'], CompileIdentifierMetadata.fromJson),
-	            descendants: data['descendants'],
-	            first: data['first'],
-	            propertyName: data['propertyName']
-	        });
-	    };
-	    CompileQueryMetadata.prototype.toJson = function () {
-	        return {
-	            // Note: Runtime type can't be serialized...
-	            'selectors': arrayToJson(this.selectors),
-	            'descendants': this.descendants,
-	            'first': this.first,
-	            'propertyName': this.propertyName
-	        };
-	    };
 	    return CompileQueryMetadata;
 	})();
 	exports.CompileQueryMetadata = CompileQueryMetadata;
@@ -23503,10 +23470,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	    'Identifier': CompileIdentifierMetadata.fromJson
 	};
 	function arrayFromJson(obj, fn) {
-	    return lang_1.isBlank(obj) ? null : obj.map(function (o) { return objFromJson(o, fn); });
+	    return lang_1.isBlank(obj) ? null : obj.map(fn);
 	}
 	function arrayToJson(obj) {
-	    return lang_1.isBlank(obj) ? null : obj.map(objToJson);
+	    return lang_1.isBlank(obj) ? null : obj.map(function (o) { return o.toJson(); });
 	}
 	function objFromJson(obj, fn) {
 	    return (lang_1.isString(obj) || lang_1.isBlank(obj)) ? obj : fn(obj);
