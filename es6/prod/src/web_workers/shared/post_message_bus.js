@@ -51,7 +51,7 @@ export class PostMessageBusSink {
         if (StringMapWrapper.contains(this._channels, channel)) {
             throw new BaseException(`${channel} has already been initialized`);
         }
-        var emitter = new EventEmitter();
+        var emitter = new EventEmitter(false);
         var channelInfo = new _Channel(emitter, runInZone);
         this._channels[channel] = channelInfo;
         emitter.subscribe((data) => {
@@ -96,7 +96,7 @@ export class PostMessageBusSource {
         if (StringMapWrapper.contains(this._channels, channel)) {
             throw new BaseException(`${channel} has already been initialized`);
         }
-        var emitter = new EventEmitter();
+        var emitter = new EventEmitter(false);
         var channelInfo = new _Channel(emitter, runInZone);
         this._channels[channel] = channelInfo;
     }

@@ -11581,7 +11581,7 @@ System.register("angular2/src/web_workers/shared/post_message_bus", ["angular2/s
       if (collection_1.StringMapWrapper.contains(this._channels, channel)) {
         throw new exceptions_1.BaseException(channel + " has already been initialized");
       }
-      var emitter = new async_1.EventEmitter();
+      var emitter = new async_1.EventEmitter(false);
       var channelInfo = new _Channel(emitter, runInZone);
       this._channels[channel] = channelInfo;
       emitter.subscribe(function(data) {
@@ -11639,7 +11639,7 @@ System.register("angular2/src/web_workers/shared/post_message_bus", ["angular2/s
       if (collection_1.StringMapWrapper.contains(this._channels, channel)) {
         throw new exceptions_1.BaseException(channel + " has already been initialized");
       }
-      var emitter = new async_1.EventEmitter();
+      var emitter = new async_1.EventEmitter(false);
       var channelInfo = new _Channel(emitter, runInZone);
       this._channels[channel] = channelInfo;
     };
