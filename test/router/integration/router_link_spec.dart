@@ -42,7 +42,7 @@ import "package:angular2/router.dart"
 import "package:angular2/src/router/router.dart" show RootRouter;
 import "package:angular2/src/platform/dom/dom_adapter.dart" show DOM;
 import "package:angular2/compiler.dart" show TEMPLATE_TRANSFORMS;
-import "package:angular2/src/router/directives/router_link_transform.dart"
+import "package:angular2/src/router/router_link_transform.dart"
     show RouterLinkTransform;
 
 main() {

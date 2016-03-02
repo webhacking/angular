@@ -21,7 +21,7 @@ import "package:angular2/core.dart"
 import "package:angular2/src/facade/async.dart" show PromiseWrapper;
 import "package:angular2/router.dart"
     show Router, RouterOutlet, RouterLink, RouteParams, RouteData, Location;
-import "package:angular2/src/router/route_config/route_config_decorator.dart"
+import "package:angular2/src/router/route_config_decorator.dart"
     show RouteConfig, Route, AuxRoute, AsyncRoute, Redirect;
 import "util.dart" show TEST_ROUTER_PROVIDERS, RootCmp, compile;
 

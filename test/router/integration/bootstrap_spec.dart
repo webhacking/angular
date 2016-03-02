@@ -22,7 +22,7 @@ import "package:angular2/src/platform/dom/dom_adapter.dart" show DOM;
 import "package:angular2/src/core/console.dart" show Console;
 import "package:angular2/core.dart" show provide, ViewChild, AfterViewInit;
 import "package:angular2/src/platform/dom/dom_tokens.dart" show DOCUMENT;
-import "package:angular2/src/router/route_config/route_config_decorator.dart"
+import "package:angular2/src/router/route_config_decorator.dart"
     show RouteConfig, Route, Redirect, AuxRoute;
 import "package:angular2/src/facade/async.dart" show PromiseWrapper;
 import "package:angular2/src/facade/exceptions.dart"

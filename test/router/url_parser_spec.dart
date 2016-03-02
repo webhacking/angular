@@ -15,7 +15,7 @@ import "package:angular2/src/router/url_parser.dart" show UrlParser, Url;
 
 main() {
   describe("ParsedUrl", () {
-    UrlParser urlParser;
+    var urlParser;
     beforeEach(() {
       urlParser = new UrlParser();
     });

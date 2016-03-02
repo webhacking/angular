@@ -239,11 +239,15 @@ class ResolvedInstruction extends Instruction {
 /**
  * Represents a resolved default route
  */
-class DefaultInstruction extends ResolvedInstruction {
+class DefaultInstruction extends Instruction {
   DefaultInstruction(ComponentInstruction component, DefaultInstruction child)
       : super(component, child, {}) {
     /* super call moved to initializer */;
   }
+  Future<ComponentInstruction> resolveComponent() {
+    return PromiseWrapper.resolve(this.component);
+  }
+
   String toLinkUrl() {
     return "";
   }
@@ -310,7 +314,8 @@ class RedirectInstruction extends ResolvedInstruction {
 }
 
 /**
- * A `ComponentInstruction` represents the route state for a single component.
+ * A `ComponentInstruction` represents the route state for a single component. An `Instruction` is
+ * composed of a tree of these `ComponentInstruction`s.
  *
  * `ComponentInstructions` is a public API. Instances of `ComponentInstruction` are passed
  * to route lifecycle hooks, like [CanActivate].
@@ -330,9 +335,6 @@ class ComponentInstruction {
   Map<String, dynamic> params;
   bool reuse = false;
   RouteData routeData;
-  /**
-   * @internal
-   */
   ComponentInstruction(this.urlPath, this.urlParams, RouteData data,
       this.componentType, this.terminal, this.specificity,
       [this.params = null]) {

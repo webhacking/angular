@@ -24,11 +24,11 @@ import "package:angular2/src/facade/async.dart"
     show PromiseWrapper, PromiseCompleter, EventEmitter, ObservableWrapper;
 import "package:angular2/router.dart"
     show Router, RouterOutlet, RouterLink, RouteParams;
-import "package:angular2/src/router/route_config/route_config_decorator.dart"
+import "package:angular2/src/router/route_config_decorator.dart"
     show RouteConfig, Route, AuxRoute, AsyncRoute, Redirect;
 import "package:angular2/src/router/interfaces.dart"
     show OnActivate, OnDeactivate, OnReuse, CanDeactivate, CanReuse;
-import "package:angular2/src/router/lifecycle/lifecycle_annotations.dart"
+import "package:angular2/src/router/lifecycle_annotations.dart"
     show CanActivate;
 import "package:angular2/src/router/instruction.dart" show ComponentInstruction;
 import "util.dart" show TEST_ROUTER_PROVIDERS, RootCmp, compile;

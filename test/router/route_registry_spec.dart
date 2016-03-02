@@ -14,7 +14,7 @@ import "package:angular2/testing_internal.dart"
 import "package:angular2/src/facade/async.dart" show PromiseWrapper;
 import "package:angular2/src/facade/lang.dart" show Type, IS_DART;
 import "package:angular2/src/router/route_registry.dart" show RouteRegistry;
-import "package:angular2/src/router/route_config/route_config_decorator.dart"
+import "package:angular2/src/router/route_config_decorator.dart"
     show RouteConfig, Route, Redirect, AuxRoute, AsyncRoute;
 
 main() {
