@@ -20018,7 +20018,7 @@ System.register("angular2/src/core/angular_entrypoint", ["angular2/src/facade/la
   return module.exports;
 });
 
-System.register("angular2/src/router/location/platform_location", [], true, function(require, exports, module) {
+System.register("angular2/src/router/platform_location", [], true, function(require, exports, module) {
   var global = System.global,
       __define = global.define;
   global.define = undefined;
@@ -20031,7 +20031,7 @@ System.register("angular2/src/router/location/platform_location", [], true, func
   return module.exports;
 });
 
-System.register("angular2/src/web_workers/worker/platform_location", ["angular2/src/core/di", "angular2/src/router/location/platform_location", "angular2/src/web_workers/shared/client_message_broker", "angular2/src/web_workers/shared/messaging_api", "angular2/src/web_workers/shared/serialized_types", "angular2/src/facade/async", "angular2/src/facade/exceptions", "angular2/src/web_workers/shared/serializer", "angular2/src/web_workers/shared/message_bus", "angular2/src/facade/collection", "angular2/src/facade/lang", "angular2/src/web_workers/worker/event_deserializer"], true, function(require, exports, module) {
+System.register("angular2/src/web_workers/worker/platform_location", ["angular2/src/core/di", "angular2/src/router/platform_location", "angular2/src/web_workers/shared/client_message_broker", "angular2/src/web_workers/shared/messaging_api", "angular2/src/web_workers/shared/serialized_types", "angular2/src/facade/async", "angular2/src/facade/exceptions", "angular2/src/web_workers/shared/serializer", "angular2/src/web_workers/shared/message_bus", "angular2/src/facade/collection", "angular2/src/facade/lang", "angular2/src/web_workers/worker/event_deserializer"], true, function(require, exports, module) {
   var global = System.global,
       __define = global.define;
   global.define = undefined;
@@ -20061,7 +20061,7 @@ System.register("angular2/src/web_workers/worker/platform_location", ["angular2/
       return Reflect.metadata(k, v);
   };
   var di_1 = require("angular2/src/core/di");
-  var platform_location_1 = require("angular2/src/router/location/platform_location");
+  var platform_location_1 = require("angular2/src/router/platform_location");
   var client_message_broker_1 = require("angular2/src/web_workers/shared/client_message_broker");
   var messaging_api_1 = require("angular2/src/web_workers/shared/messaging_api");
   var serialized_types_1 = require("angular2/src/web_workers/shared/serialized_types");
@@ -20187,7 +20187,7 @@ System.register("angular2/src/web_workers/worker/platform_location", ["angular2/
   return module.exports;
 });
 
-System.register("angular2/src/router/location/location_strategy", ["angular2/src/facade/lang", "angular2/core"], true, function(require, exports, module) {
+System.register("angular2/src/router/location_strategy", ["angular2/src/facade/lang", "angular2/core"], true, function(require, exports, module) {
   var global = System.global,
       __define = global.define;
   global.define = undefined;
@@ -20230,7 +20230,7 @@ System.register("angular2/src/router/location/location_strategy", ["angular2/src
   return module.exports;
 });
 
-System.register("angular2/src/router/location/path_location_strategy", ["angular2/core", "angular2/src/facade/lang", "angular2/src/facade/exceptions", "angular2/src/router/location/location_strategy", "angular2/src/router/location/platform_location"], true, function(require, exports, module) {
+System.register("angular2/src/router/path_location_strategy", ["angular2/core", "angular2/src/facade/lang", "angular2/src/facade/exceptions", "angular2/src/router/location_strategy", "angular2/src/router/platform_location"], true, function(require, exports, module) {
   var global = System.global,
       __define = global.define;
   global.define = undefined;
@@ -20267,8 +20267,8 @@ System.register("angular2/src/router/location/path_location_strategy", ["angular
   var core_1 = require("angular2/core");
   var lang_1 = require("angular2/src/facade/lang");
   var exceptions_1 = require("angular2/src/facade/exceptions");
-  var location_strategy_1 = require("angular2/src/router/location/location_strategy");
-  var platform_location_1 = require("angular2/src/router/location/platform_location");
+  var location_strategy_1 = require("angular2/src/router/location_strategy");
+  var platform_location_1 = require("angular2/src/router/platform_location");
   var PathLocationStrategy = (function(_super) {
     __extends(PathLocationStrategy, _super);
     function PathLocationStrategy(_platformLocation, href) {
@@ -20317,19 +20317,10 @@ System.register("angular2/src/router/location/path_location_strategy", ["angular
   return module.exports;
 });
 
-System.register("angular2/src/router/route_config/route_config_impl", ["angular2/src/facade/lang"], true, function(require, exports, module) {
+System.register("angular2/src/router/route_config_impl", ["angular2/src/facade/lang"], true, function(require, exports, module) {
   var global = System.global,
       __define = global.define;
   global.define = undefined;
-  var __extends = (this && this.__extends) || function(d, b) {
-    for (var p in b)
-      if (b.hasOwnProperty(p))
-        d[p] = b[p];
-    function __() {
-      this.constructor = d;
-    }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-  };
   var __decorate = (this && this.__decorate) || function(decorators, target, key, desc) {
     var c = arguments.length,
         r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc,
@@ -20355,360 +20346,78 @@ System.register("angular2/src/router/route_config/route_config_impl", ["angular2
     return RouteConfig;
   })();
   exports.RouteConfig = RouteConfig;
-  var AbstractRoute = (function() {
-    function AbstractRoute(_a) {
-      var name = _a.name,
-          useAsDefault = _a.useAsDefault,
-          path = _a.path,
-          regex = _a.regex,
-          serializer = _a.serializer,
-          data = _a.data;
-      this.name = name;
-      this.useAsDefault = useAsDefault;
-      this.path = path;
-      this.regex = regex;
-      this.serializer = serializer;
-      this.data = data;
-    }
-    AbstractRoute = __decorate([lang_1.CONST(), __metadata('design:paramtypes', [Object])], AbstractRoute);
-    return AbstractRoute;
-  })();
-  exports.AbstractRoute = AbstractRoute;
-  var Route = (function(_super) {
-    __extends(Route, _super);
+  var Route = (function() {
     function Route(_a) {
-      var name = _a.name,
-          useAsDefault = _a.useAsDefault,
-          path = _a.path,
-          regex = _a.regex,
-          serializer = _a.serializer,
+      var path = _a.path,
+          component = _a.component,
+          name = _a.name,
           data = _a.data,
-          component = _a.component;
-      _super.call(this, {
-        name: name,
-        useAsDefault: useAsDefault,
-        path: path,
-        regex: regex,
-        serializer: serializer,
-        data: data
-      });
+          useAsDefault = _a.useAsDefault;
       this.aux = null;
+      this.loader = null;
+      this.redirectTo = null;
+      this.path = path;
       this.component = component;
+      this.name = name;
+      this.data = data;
+      this.useAsDefault = useAsDefault;
     }
     Route = __decorate([lang_1.CONST(), __metadata('design:paramtypes', [Object])], Route);
     return Route;
-  })(AbstractRoute);
+  })();
   exports.Route = Route;
-  var AuxRoute = (function(_super) {
-    __extends(AuxRoute, _super);
+  var AuxRoute = (function() {
     function AuxRoute(_a) {
-      var name = _a.name,
-          useAsDefault = _a.useAsDefault,
-          path = _a.path,
-          regex = _a.regex,
-          serializer = _a.serializer,
-          data = _a.data,
-          component = _a.component;
-      _super.call(this, {
-        name: name,
-        useAsDefault: useAsDefault,
-        path: path,
-        regex: regex,
-        serializer: serializer,
-        data: data
-      });
+      var path = _a.path,
+          component = _a.component,
+          name = _a.name;
+      this.data = null;
+      this.aux = null;
+      this.loader = null;
+      this.redirectTo = null;
+      this.useAsDefault = false;
+      this.path = path;
       this.component = component;
+      this.name = name;
     }
     AuxRoute = __decorate([lang_1.CONST(), __metadata('design:paramtypes', [Object])], AuxRoute);
     return AuxRoute;
-  })(AbstractRoute);
+  })();
   exports.AuxRoute = AuxRoute;
-  var AsyncRoute = (function(_super) {
-    __extends(AsyncRoute, _super);
+  var AsyncRoute = (function() {
     function AsyncRoute(_a) {
-      var name = _a.name,
-          useAsDefault = _a.useAsDefault,
-          path = _a.path,
-          regex = _a.regex,
-          serializer = _a.serializer,
+      var path = _a.path,
+          loader = _a.loader,
+          name = _a.name,
           data = _a.data,
-          loader = _a.loader;
-      _super.call(this, {
-        name: name,
-        useAsDefault: useAsDefault,
-        path: path,
-        regex: regex,
-        serializer: serializer,
-        data: data
-      });
+          useAsDefault = _a.useAsDefault;
       this.aux = null;
+      this.path = path;
       this.loader = loader;
+      this.name = name;
+      this.data = data;
+      this.useAsDefault = useAsDefault;
     }
     AsyncRoute = __decorate([lang_1.CONST(), __metadata('design:paramtypes', [Object])], AsyncRoute);
     return AsyncRoute;
-  })(AbstractRoute);
+  })();
   exports.AsyncRoute = AsyncRoute;
-  var Redirect = (function(_super) {
-    __extends(Redirect, _super);
+  var Redirect = (function() {
     function Redirect(_a) {
-      var name = _a.name,
-          useAsDefault = _a.useAsDefault,
-          path = _a.path,
-          regex = _a.regex,
-          serializer = _a.serializer,
-          data = _a.data,
+      var path = _a.path,
           redirectTo = _a.redirectTo;
-      _super.call(this, {
-        name: name,
-        useAsDefault: useAsDefault,
-        path: path,
-        regex: regex,
-        serializer: serializer,
-        data: data
-      });
+      this.name = null;
+      this.loader = null;
+      this.data = null;
+      this.aux = null;
+      this.useAsDefault = false;
+      this.path = path;
       this.redirectTo = redirectTo;
     }
     Redirect = __decorate([lang_1.CONST(), __metadata('design:paramtypes', [Object])], Redirect);
     return Redirect;
-  })(AbstractRoute);
+  })();
   exports.Redirect = Redirect;
-  global.define = __define;
-  return module.exports;
-});
-
-System.register("angular2/src/router/url_parser", ["angular2/src/facade/collection", "angular2/src/facade/lang", "angular2/src/facade/exceptions"], true, function(require, exports, module) {
-  var global = System.global,
-      __define = global.define;
-  global.define = undefined;
-  var __extends = (this && this.__extends) || function(d, b) {
-    for (var p in b)
-      if (b.hasOwnProperty(p))
-        d[p] = b[p];
-    function __() {
-      this.constructor = d;
-    }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-  };
-  var collection_1 = require("angular2/src/facade/collection");
-  var lang_1 = require("angular2/src/facade/lang");
-  var exceptions_1 = require("angular2/src/facade/exceptions");
-  function convertUrlParamsToArray(urlParams) {
-    var paramsArray = [];
-    if (lang_1.isBlank(urlParams)) {
-      return [];
-    }
-    collection_1.StringMapWrapper.forEach(urlParams, function(value, key) {
-      paramsArray.push((value === true) ? key : key + '=' + value);
-    });
-    return paramsArray;
-  }
-  exports.convertUrlParamsToArray = convertUrlParamsToArray;
-  function serializeParams(urlParams, joiner) {
-    if (joiner === void 0) {
-      joiner = '&';
-    }
-    return convertUrlParamsToArray(urlParams).join(joiner);
-  }
-  exports.serializeParams = serializeParams;
-  var Url = (function() {
-    function Url(path, child, auxiliary, params) {
-      if (child === void 0) {
-        child = null;
-      }
-      if (auxiliary === void 0) {
-        auxiliary = lang_1.CONST_EXPR([]);
-      }
-      if (params === void 0) {
-        params = lang_1.CONST_EXPR({});
-      }
-      this.path = path;
-      this.child = child;
-      this.auxiliary = auxiliary;
-      this.params = params;
-    }
-    Url.prototype.toString = function() {
-      return this.path + this._matrixParamsToString() + this._auxToString() + this._childString();
-    };
-    Url.prototype.segmentToString = function() {
-      return this.path + this._matrixParamsToString();
-    };
-    Url.prototype._auxToString = function() {
-      return this.auxiliary.length > 0 ? ('(' + this.auxiliary.map(function(sibling) {
-        return sibling.toString();
-      }).join('//') + ')') : '';
-    };
-    Url.prototype._matrixParamsToString = function() {
-      var paramString = serializeParams(this.params, ';');
-      if (paramString.length > 0) {
-        return ';' + paramString;
-      }
-      return '';
-    };
-    Url.prototype._childString = function() {
-      return lang_1.isPresent(this.child) ? ('/' + this.child.toString()) : '';
-    };
-    return Url;
-  })();
-  exports.Url = Url;
-  var RootUrl = (function(_super) {
-    __extends(RootUrl, _super);
-    function RootUrl(path, child, auxiliary, params) {
-      if (child === void 0) {
-        child = null;
-      }
-      if (auxiliary === void 0) {
-        auxiliary = lang_1.CONST_EXPR([]);
-      }
-      if (params === void 0) {
-        params = null;
-      }
-      _super.call(this, path, child, auxiliary, params);
-    }
-    RootUrl.prototype.toString = function() {
-      return this.path + this._auxToString() + this._childString() + this._queryParamsToString();
-    };
-    RootUrl.prototype.segmentToString = function() {
-      return this.path + this._queryParamsToString();
-    };
-    RootUrl.prototype._queryParamsToString = function() {
-      if (lang_1.isBlank(this.params)) {
-        return '';
-      }
-      return '?' + serializeParams(this.params);
-    };
-    return RootUrl;
-  })(Url);
-  exports.RootUrl = RootUrl;
-  function pathSegmentsToUrl(pathSegments) {
-    var url = new Url(pathSegments[pathSegments.length - 1]);
-    for (var i = pathSegments.length - 2; i >= 0; i -= 1) {
-      url = new Url(pathSegments[i], url);
-    }
-    return url;
-  }
-  exports.pathSegmentsToUrl = pathSegmentsToUrl;
-  var SEGMENT_RE = lang_1.RegExpWrapper.create('^[^\\/\\(\\)\\?;=&#]+');
-  function matchUrlSegment(str) {
-    var match = lang_1.RegExpWrapper.firstMatch(SEGMENT_RE, str);
-    return lang_1.isPresent(match) ? match[0] : '';
-  }
-  var UrlParser = (function() {
-    function UrlParser() {}
-    UrlParser.prototype.peekStartsWith = function(str) {
-      return this._remaining.startsWith(str);
-    };
-    UrlParser.prototype.capture = function(str) {
-      if (!this._remaining.startsWith(str)) {
-        throw new exceptions_1.BaseException("Expected \"" + str + "\".");
-      }
-      this._remaining = this._remaining.substring(str.length);
-    };
-    UrlParser.prototype.parse = function(url) {
-      this._remaining = url;
-      if (url == '' || url == '/') {
-        return new Url('');
-      }
-      return this.parseRoot();
-    };
-    UrlParser.prototype.parseRoot = function() {
-      if (this.peekStartsWith('/')) {
-        this.capture('/');
-      }
-      var path = matchUrlSegment(this._remaining);
-      this.capture(path);
-      var aux = [];
-      if (this.peekStartsWith('(')) {
-        aux = this.parseAuxiliaryRoutes();
-      }
-      if (this.peekStartsWith(';')) {
-        this.parseMatrixParams();
-      }
-      var child = null;
-      if (this.peekStartsWith('/') && !this.peekStartsWith('//')) {
-        this.capture('/');
-        child = this.parseSegment();
-      }
-      var queryParams = null;
-      if (this.peekStartsWith('?')) {
-        queryParams = this.parseQueryParams();
-      }
-      return new RootUrl(path, child, aux, queryParams);
-    };
-    UrlParser.prototype.parseSegment = function() {
-      if (this._remaining.length == 0) {
-        return null;
-      }
-      if (this.peekStartsWith('/')) {
-        this.capture('/');
-      }
-      var path = matchUrlSegment(this._remaining);
-      this.capture(path);
-      var matrixParams = null;
-      if (this.peekStartsWith(';')) {
-        matrixParams = this.parseMatrixParams();
-      }
-      var aux = [];
-      if (this.peekStartsWith('(')) {
-        aux = this.parseAuxiliaryRoutes();
-      }
-      var child = null;
-      if (this.peekStartsWith('/') && !this.peekStartsWith('//')) {
-        this.capture('/');
-        child = this.parseSegment();
-      }
-      return new Url(path, child, aux, matrixParams);
-    };
-    UrlParser.prototype.parseQueryParams = function() {
-      var params = {};
-      this.capture('?');
-      this.parseParam(params);
-      while (this._remaining.length > 0 && this.peekStartsWith('&')) {
-        this.capture('&');
-        this.parseParam(params);
-      }
-      return params;
-    };
-    UrlParser.prototype.parseMatrixParams = function() {
-      var params = {};
-      while (this._remaining.length > 0 && this.peekStartsWith(';')) {
-        this.capture(';');
-        this.parseParam(params);
-      }
-      return params;
-    };
-    UrlParser.prototype.parseParam = function(params) {
-      var key = matchUrlSegment(this._remaining);
-      if (lang_1.isBlank(key)) {
-        return ;
-      }
-      this.capture(key);
-      var value = true;
-      if (this.peekStartsWith('=')) {
-        this.capture('=');
-        var valueMatch = matchUrlSegment(this._remaining);
-        if (lang_1.isPresent(valueMatch)) {
-          value = valueMatch;
-          this.capture(value);
-        }
-      }
-      params[key] = value;
-    };
-    UrlParser.prototype.parseAuxiliaryRoutes = function() {
-      var routes = [];
-      this.capture('(');
-      while (!this.peekStartsWith(')') && this._remaining.length > 0) {
-        routes.push(this.parseSegment());
-        if (this.peekStartsWith('//')) {
-          this.capture('//');
-        }
-      }
-      this.capture(')');
-      return routes;
-    };
-    return UrlParser;
-  })();
-  exports.UrlParser = UrlParser;
-  exports.parser = new UrlParser();
   global.define = __define;
   return module.exports;
 });
@@ -20853,6 +20562,9 @@ System.register("angular2/src/router/instruction", ["angular2/src/facade/collect
     function DefaultInstruction(component, child) {
       _super.call(this, component, child, {});
     }
+    DefaultInstruction.prototype.resolveComponent = function() {
+      return async_1.PromiseWrapper.resolve(this.component);
+    };
     DefaultInstruction.prototype.toLinkUrl = function() {
       return '';
     };
@@ -20860,7 +20572,7 @@ System.register("angular2/src/router/instruction", ["angular2/src/facade/collect
       return '';
     };
     return DefaultInstruction;
-  })(ResolvedInstruction);
+  })(Instruction);
   exports.DefaultInstruction = DefaultInstruction;
   var UnresolvedInstruction = (function(_super) {
     __extends(UnresolvedInstruction, _super);
@@ -20952,7 +20664,239 @@ System.register("angular2/src/router/instruction", ["angular2/src/facade/collect
   return module.exports;
 });
 
-System.register("angular2/src/router/rules/route_handlers/async_route_handler", ["angular2/src/facade/lang", "angular2/src/router/instruction"], true, function(require, exports, module) {
+System.register("angular2/src/router/url_parser", ["angular2/src/facade/collection", "angular2/src/facade/lang", "angular2/src/facade/exceptions"], true, function(require, exports, module) {
+  var global = System.global,
+      __define = global.define;
+  global.define = undefined;
+  var __extends = (this && this.__extends) || function(d, b) {
+    for (var p in b)
+      if (b.hasOwnProperty(p))
+        d[p] = b[p];
+    function __() {
+      this.constructor = d;
+    }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+  };
+  var collection_1 = require("angular2/src/facade/collection");
+  var lang_1 = require("angular2/src/facade/lang");
+  var exceptions_1 = require("angular2/src/facade/exceptions");
+  var Url = (function() {
+    function Url(path, child, auxiliary, params) {
+      if (child === void 0) {
+        child = null;
+      }
+      if (auxiliary === void 0) {
+        auxiliary = lang_1.CONST_EXPR([]);
+      }
+      if (params === void 0) {
+        params = null;
+      }
+      this.path = path;
+      this.child = child;
+      this.auxiliary = auxiliary;
+      this.params = params;
+    }
+    Url.prototype.toString = function() {
+      return this.path + this._matrixParamsToString() + this._auxToString() + this._childString();
+    };
+    Url.prototype.segmentToString = function() {
+      return this.path + this._matrixParamsToString();
+    };
+    Url.prototype._auxToString = function() {
+      return this.auxiliary.length > 0 ? ('(' + this.auxiliary.map(function(sibling) {
+        return sibling.toString();
+      }).join('//') + ')') : '';
+    };
+    Url.prototype._matrixParamsToString = function() {
+      if (lang_1.isBlank(this.params)) {
+        return '';
+      }
+      return ';' + serializeParams(this.params).join(';');
+    };
+    Url.prototype._childString = function() {
+      return lang_1.isPresent(this.child) ? ('/' + this.child.toString()) : '';
+    };
+    return Url;
+  })();
+  exports.Url = Url;
+  var RootUrl = (function(_super) {
+    __extends(RootUrl, _super);
+    function RootUrl(path, child, auxiliary, params) {
+      if (child === void 0) {
+        child = null;
+      }
+      if (auxiliary === void 0) {
+        auxiliary = lang_1.CONST_EXPR([]);
+      }
+      if (params === void 0) {
+        params = null;
+      }
+      _super.call(this, path, child, auxiliary, params);
+    }
+    RootUrl.prototype.toString = function() {
+      return this.path + this._auxToString() + this._childString() + this._queryParamsToString();
+    };
+    RootUrl.prototype.segmentToString = function() {
+      return this.path + this._queryParamsToString();
+    };
+    RootUrl.prototype._queryParamsToString = function() {
+      if (lang_1.isBlank(this.params)) {
+        return '';
+      }
+      return '?' + serializeParams(this.params).join('&');
+    };
+    return RootUrl;
+  })(Url);
+  exports.RootUrl = RootUrl;
+  function pathSegmentsToUrl(pathSegments) {
+    var url = new Url(pathSegments[pathSegments.length - 1]);
+    for (var i = pathSegments.length - 2; i >= 0; i -= 1) {
+      url = new Url(pathSegments[i], url);
+    }
+    return url;
+  }
+  exports.pathSegmentsToUrl = pathSegmentsToUrl;
+  var SEGMENT_RE = lang_1.RegExpWrapper.create('^[^\\/\\(\\)\\?;=&#]+');
+  function matchUrlSegment(str) {
+    var match = lang_1.RegExpWrapper.firstMatch(SEGMENT_RE, str);
+    return lang_1.isPresent(match) ? match[0] : '';
+  }
+  var UrlParser = (function() {
+    function UrlParser() {}
+    UrlParser.prototype.peekStartsWith = function(str) {
+      return this._remaining.startsWith(str);
+    };
+    UrlParser.prototype.capture = function(str) {
+      if (!this._remaining.startsWith(str)) {
+        throw new exceptions_1.BaseException("Expected \"" + str + "\".");
+      }
+      this._remaining = this._remaining.substring(str.length);
+    };
+    UrlParser.prototype.parse = function(url) {
+      this._remaining = url;
+      if (url == '' || url == '/') {
+        return new Url('');
+      }
+      return this.parseRoot();
+    };
+    UrlParser.prototype.parseRoot = function() {
+      if (this.peekStartsWith('/')) {
+        this.capture('/');
+      }
+      var path = matchUrlSegment(this._remaining);
+      this.capture(path);
+      var aux = [];
+      if (this.peekStartsWith('(')) {
+        aux = this.parseAuxiliaryRoutes();
+      }
+      if (this.peekStartsWith(';')) {
+        this.parseMatrixParams();
+      }
+      var child = null;
+      if (this.peekStartsWith('/') && !this.peekStartsWith('//')) {
+        this.capture('/');
+        child = this.parseSegment();
+      }
+      var queryParams = null;
+      if (this.peekStartsWith('?')) {
+        queryParams = this.parseQueryParams();
+      }
+      return new RootUrl(path, child, aux, queryParams);
+    };
+    UrlParser.prototype.parseSegment = function() {
+      if (this._remaining.length == 0) {
+        return null;
+      }
+      if (this.peekStartsWith('/')) {
+        this.capture('/');
+      }
+      var path = matchUrlSegment(this._remaining);
+      this.capture(path);
+      var matrixParams = null;
+      if (this.peekStartsWith(';')) {
+        matrixParams = this.parseMatrixParams();
+      }
+      var aux = [];
+      if (this.peekStartsWith('(')) {
+        aux = this.parseAuxiliaryRoutes();
+      }
+      var child = null;
+      if (this.peekStartsWith('/') && !this.peekStartsWith('//')) {
+        this.capture('/');
+        child = this.parseSegment();
+      }
+      return new Url(path, child, aux, matrixParams);
+    };
+    UrlParser.prototype.parseQueryParams = function() {
+      var params = {};
+      this.capture('?');
+      this.parseParam(params);
+      while (this._remaining.length > 0 && this.peekStartsWith('&')) {
+        this.capture('&');
+        this.parseParam(params);
+      }
+      return params;
+    };
+    UrlParser.prototype.parseMatrixParams = function() {
+      var params = {};
+      while (this._remaining.length > 0 && this.peekStartsWith(';')) {
+        this.capture(';');
+        this.parseParam(params);
+      }
+      return params;
+    };
+    UrlParser.prototype.parseParam = function(params) {
+      var key = matchUrlSegment(this._remaining);
+      if (lang_1.isBlank(key)) {
+        return ;
+      }
+      this.capture(key);
+      var value = true;
+      if (this.peekStartsWith('=')) {
+        this.capture('=');
+        var valueMatch = matchUrlSegment(this._remaining);
+        if (lang_1.isPresent(valueMatch)) {
+          value = valueMatch;
+          this.capture(value);
+        }
+      }
+      params[key] = value;
+    };
+    UrlParser.prototype.parseAuxiliaryRoutes = function() {
+      var routes = [];
+      this.capture('(');
+      while (!this.peekStartsWith(')') && this._remaining.length > 0) {
+        routes.push(this.parseSegment());
+        if (this.peekStartsWith('//')) {
+          this.capture('//');
+        }
+      }
+      this.capture(')');
+      return routes;
+    };
+    return UrlParser;
+  })();
+  exports.UrlParser = UrlParser;
+  exports.parser = new UrlParser();
+  function serializeParams(paramMap) {
+    var params = [];
+    if (lang_1.isPresent(paramMap)) {
+      collection_1.StringMapWrapper.forEach(paramMap, function(value, key) {
+        if (value === true) {
+          params.push(key);
+        } else {
+          params.push(key + '=' + value);
+        }
+      });
+    }
+    return params;
+  }
+  exports.serializeParams = serializeParams;
+  global.define = __define;
+  return module.exports;
+});
+
+System.register("angular2/src/router/async_route_handler", ["angular2/src/facade/lang", "angular2/src/router/instruction"], true, function(require, exports, module) {
   var global = System.global,
       __define = global.define;
   global.define = undefined;
@@ -20984,7 +20928,7 @@ System.register("angular2/src/router/rules/route_handlers/async_route_handler", 
   return module.exports;
 });
 
-System.register("angular2/src/router/rules/route_handlers/sync_route_handler", ["angular2/src/facade/async", "angular2/src/facade/lang", "angular2/src/router/instruction"], true, function(require, exports, module) {
+System.register("angular2/src/router/sync_route_handler", ["angular2/src/facade/async", "angular2/src/facade/lang", "angular2/src/router/instruction"], true, function(require, exports, module) {
   var global = System.global,
       __define = global.define;
   global.define = undefined;
@@ -21008,127 +20952,13 @@ System.register("angular2/src/router/rules/route_handlers/sync_route_handler", [
   return module.exports;
 });
 
-System.register("angular2/src/router/utils", ["angular2/src/facade/lang", "angular2/src/facade/collection"], true, function(require, exports, module) {
+System.register("angular2/src/router/route_config_decorator", ["angular2/src/router/route_config_impl", "angular2/src/core/util/decorators", "angular2/src/router/route_config_impl"], true, function(require, exports, module) {
   var global = System.global,
       __define = global.define;
   global.define = undefined;
-  var lang_1 = require("angular2/src/facade/lang");
-  var collection_1 = require("angular2/src/facade/collection");
-  var TouchMap = (function() {
-    function TouchMap(map) {
-      var _this = this;
-      this.map = {};
-      this.keys = {};
-      if (lang_1.isPresent(map)) {
-        collection_1.StringMapWrapper.forEach(map, function(value, key) {
-          _this.map[key] = lang_1.isPresent(value) ? value.toString() : null;
-          _this.keys[key] = true;
-        });
-      }
-    }
-    TouchMap.prototype.get = function(key) {
-      collection_1.StringMapWrapper.delete(this.keys, key);
-      return this.map[key];
-    };
-    TouchMap.prototype.getUnused = function() {
-      var _this = this;
-      var unused = {};
-      var keys = collection_1.StringMapWrapper.keys(this.keys);
-      keys.forEach(function(key) {
-        return unused[key] = collection_1.StringMapWrapper.get(_this.map, key);
-      });
-      return unused;
-    };
-    return TouchMap;
-  })();
-  exports.TouchMap = TouchMap;
-  function normalizeString(obj) {
-    if (lang_1.isBlank(obj)) {
-      return null;
-    } else {
-      return obj.toString();
-    }
-  }
-  exports.normalizeString = normalizeString;
-  global.define = __define;
-  return module.exports;
-});
-
-System.register("angular2/src/router/rules/route_paths/route_path", [], true, function(require, exports, module) {
-  var global = System.global,
-      __define = global.define;
-  global.define = undefined;
-  var MatchedUrl = (function() {
-    function MatchedUrl(urlPath, urlParams, allParams, auxiliary, rest) {
-      this.urlPath = urlPath;
-      this.urlParams = urlParams;
-      this.allParams = allParams;
-      this.auxiliary = auxiliary;
-      this.rest = rest;
-    }
-    return MatchedUrl;
-  })();
-  exports.MatchedUrl = MatchedUrl;
-  var GeneratedUrl = (function() {
-    function GeneratedUrl(urlPath, urlParams) {
-      this.urlPath = urlPath;
-      this.urlParams = urlParams;
-    }
-    return GeneratedUrl;
-  })();
-  exports.GeneratedUrl = GeneratedUrl;
-  global.define = __define;
-  return module.exports;
-});
-
-System.register("angular2/src/router/rules/route_paths/regex_route_path", ["angular2/src/facade/lang", "angular2/src/router/rules/route_paths/route_path"], true, function(require, exports, module) {
-  var global = System.global,
-      __define = global.define;
-  global.define = undefined;
-  var lang_1 = require("angular2/src/facade/lang");
-  var route_path_1 = require("angular2/src/router/rules/route_paths/route_path");
-  var RegexRoutePath = (function() {
-    function RegexRoutePath(_reString, _serializer) {
-      this._reString = _reString;
-      this._serializer = _serializer;
-      this.terminal = true;
-      this.specificity = '2';
-      this.hash = this._reString;
-      this._regex = lang_1.RegExpWrapper.create(this._reString);
-    }
-    RegexRoutePath.prototype.matchUrl = function(url) {
-      var urlPath = url.toString();
-      var params = {};
-      var matcher = lang_1.RegExpWrapper.matcher(this._regex, urlPath);
-      var match = lang_1.RegExpMatcherWrapper.next(matcher);
-      if (lang_1.isBlank(match)) {
-        return null;
-      }
-      for (var i = 0; i < match.length; i += 1) {
-        params[i.toString()] = match[i];
-      }
-      return new route_path_1.MatchedUrl(urlPath, [], params, [], null);
-    };
-    RegexRoutePath.prototype.generateUrl = function(params) {
-      return this._serializer(params);
-    };
-    RegexRoutePath.prototype.toString = function() {
-      return this._reString;
-    };
-    return RegexRoutePath;
-  })();
-  exports.RegexRoutePath = RegexRoutePath;
-  global.define = __define;
-  return module.exports;
-});
-
-System.register("angular2/src/router/route_config/route_config_decorator", ["angular2/src/router/route_config/route_config_impl", "angular2/src/core/util/decorators", "angular2/src/router/route_config/route_config_impl"], true, function(require, exports, module) {
-  var global = System.global,
-      __define = global.define;
-  global.define = undefined;
-  var route_config_impl_1 = require("angular2/src/router/route_config/route_config_impl");
+  var route_config_impl_1 = require("angular2/src/router/route_config_impl");
   var decorators_1 = require("angular2/src/core/util/decorators");
-  var route_config_impl_2 = require("angular2/src/router/route_config/route_config_impl");
+  var route_config_impl_2 = require("angular2/src/router/route_config_impl");
   exports.Route = route_config_impl_2.Route;
   exports.Redirect = route_config_impl_2.Redirect;
   exports.AuxRoute = route_config_impl_2.AuxRoute;
@@ -21138,7 +20968,7 @@ System.register("angular2/src/router/route_config/route_config_decorator", ["ang
   return module.exports;
 });
 
-System.register("angular2/src/router/location/location", ["angular2/src/router/location/location_strategy", "angular2/src/facade/async", "angular2/core"], true, function(require, exports, module) {
+System.register("angular2/src/router/location", ["angular2/src/router/location_strategy", "angular2/src/facade/async", "angular2/core"], true, function(require, exports, module) {
   var global = System.global,
       __define = global.define;
   global.define = undefined;
@@ -21158,7 +20988,7 @@ System.register("angular2/src/router/location/location", ["angular2/src/router/l
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function")
       return Reflect.metadata(k, v);
   };
-  var location_strategy_1 = require("angular2/src/router/location/location_strategy");
+  var location_strategy_1 = require("angular2/src/router/location_strategy");
   var async_1 = require("angular2/src/facade/async");
   var core_1 = require("angular2/core");
   var Location = (function() {
@@ -21241,7 +21071,7 @@ System.register("angular2/src/router/location/location", ["angular2/src/router/l
   return module.exports;
 });
 
-System.register("angular2/src/router/lifecycle/lifecycle_annotations_impl", ["angular2/src/facade/lang"], true, function(require, exports, module) {
+System.register("angular2/src/router/lifecycle_annotations_impl", ["angular2/src/facade/lang"], true, function(require, exports, module) {
   var global = System.global,
       __define = global.define;
   global.define = undefined;
@@ -26287,355 +26117,379 @@ System.register("angular2/src/compiler/runtime_metadata", ["angular2/src/core/di
   return module.exports;
 });
 
-System.register("angular2/src/router/rules/rules", ["angular2/src/facade/lang", "angular2/src/facade/exceptions", "angular2/src/facade/promise", "angular2/src/facade/collection", "angular2/src/router/url_parser", "angular2/src/router/instruction"], true, function(require, exports, module) {
+System.register("angular2/src/router/path_recognizer", ["angular2/src/facade/lang", "angular2/src/facade/exceptions", "angular2/src/facade/collection", "angular2/src/router/url_parser"], true, function(require, exports, module) {
   var global = System.global,
       __define = global.define;
   global.define = undefined;
-  var __extends = (this && this.__extends) || function(d, b) {
-    for (var p in b)
-      if (b.hasOwnProperty(p))
-        d[p] = b[p];
-    function __() {
-      this.constructor = d;
-    }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-  };
   var lang_1 = require("angular2/src/facade/lang");
   var exceptions_1 = require("angular2/src/facade/exceptions");
-  var promise_1 = require("angular2/src/facade/promise");
   var collection_1 = require("angular2/src/facade/collection");
   var url_parser_1 = require("angular2/src/router/url_parser");
-  var instruction_1 = require("angular2/src/router/instruction");
-  var RouteMatch = (function() {
-    function RouteMatch() {}
-    return RouteMatch;
-  })();
-  exports.RouteMatch = RouteMatch;
-  var PathMatch = (function(_super) {
-    __extends(PathMatch, _super);
-    function PathMatch(instruction, remaining, remainingAux) {
-      _super.call(this);
-      this.instruction = instruction;
-      this.remaining = remaining;
-      this.remainingAux = remainingAux;
-    }
-    return PathMatch;
-  })(RouteMatch);
-  exports.PathMatch = PathMatch;
-  var RedirectMatch = (function(_super) {
-    __extends(RedirectMatch, _super);
-    function RedirectMatch(redirectTo, specificity) {
-      _super.call(this);
-      this.redirectTo = redirectTo;
-      this.specificity = specificity;
-    }
-    return RedirectMatch;
-  })(RouteMatch);
-  exports.RedirectMatch = RedirectMatch;
-  var RedirectRule = (function() {
-    function RedirectRule(_pathRecognizer, redirectTo) {
-      this._pathRecognizer = _pathRecognizer;
-      this.redirectTo = redirectTo;
-      this.hash = this._pathRecognizer.hash;
-    }
-    Object.defineProperty(RedirectRule.prototype, "path", {
-      get: function() {
-        return this._pathRecognizer.toString();
-      },
-      set: function(val) {
-        throw new exceptions_1.BaseException('you cannot set the path of a RedirectRule directly');
-      },
-      enumerable: true,
-      configurable: true
-    });
-    RedirectRule.prototype.recognize = function(beginningSegment) {
-      var match = null;
-      if (lang_1.isPresent(this._pathRecognizer.matchUrl(beginningSegment))) {
-        match = new RedirectMatch(this.redirectTo, this._pathRecognizer.specificity);
-      }
-      return promise_1.PromiseWrapper.resolve(match);
-    };
-    RedirectRule.prototype.generate = function(params) {
-      throw new exceptions_1.BaseException("Tried to generate a redirect.");
-    };
-    return RedirectRule;
-  })();
-  exports.RedirectRule = RedirectRule;
-  var RouteRule = (function() {
-    function RouteRule(_routePath, handler) {
-      this._routePath = _routePath;
-      this.handler = handler;
-      this._cache = new collection_1.Map();
-      this.specificity = this._routePath.specificity;
-      this.hash = this._routePath.hash;
-      this.terminal = this._routePath.terminal;
-    }
-    Object.defineProperty(RouteRule.prototype, "path", {
-      get: function() {
-        return this._routePath.toString();
-      },
-      set: function(val) {
-        throw new exceptions_1.BaseException('you cannot set the path of a RouteRule directly');
-      },
-      enumerable: true,
-      configurable: true
-    });
-    RouteRule.prototype.recognize = function(beginningSegment) {
+  var TouchMap = (function() {
+    function TouchMap(map) {
       var _this = this;
-      var res = this._routePath.matchUrl(beginningSegment);
-      if (lang_1.isBlank(res)) {
-        return null;
+      this.map = {};
+      this.keys = {};
+      if (lang_1.isPresent(map)) {
+        collection_1.StringMapWrapper.forEach(map, function(value, key) {
+          _this.map[key] = lang_1.isPresent(value) ? value.toString() : null;
+          _this.keys[key] = true;
+        });
       }
-      return this.handler.resolveComponentType().then(function(_) {
-        var componentInstruction = _this._getInstruction(res.urlPath, res.urlParams, res.allParams);
-        return new PathMatch(componentInstruction, res.rest, res.auxiliary);
-      });
-    };
-    RouteRule.prototype.generate = function(params) {
-      var generated = this._routePath.generateUrl(params);
-      var urlPath = generated.urlPath;
-      var urlParams = generated.urlParams;
-      return this._getInstruction(urlPath, url_parser_1.convertUrlParamsToArray(urlParams), params);
-    };
-    RouteRule.prototype.generateComponentPathValues = function(params) {
-      return this._routePath.generateUrl(params);
-    };
-    RouteRule.prototype._getInstruction = function(urlPath, urlParams, params) {
-      if (lang_1.isBlank(this.handler.componentType)) {
-        throw new exceptions_1.BaseException("Tried to get instruction before the type was loaded.");
-      }
-      var hashKey = urlPath + '?' + urlParams.join('&');
-      if (this._cache.has(hashKey)) {
-        return this._cache.get(hashKey);
-      }
-      var instruction = new instruction_1.ComponentInstruction(urlPath, urlParams, this.handler.data, this.handler.componentType, this.terminal, this.specificity, params);
-      this._cache.set(hashKey, instruction);
-      return instruction;
-    };
-    return RouteRule;
-  })();
-  exports.RouteRule = RouteRule;
-  global.define = __define;
-  return module.exports;
-});
-
-System.register("angular2/src/router/rules/route_paths/param_route_path", ["angular2/src/facade/lang", "angular2/src/facade/exceptions", "angular2/src/facade/collection", "angular2/src/router/utils", "angular2/src/router/url_parser", "angular2/src/router/rules/route_paths/route_path"], true, function(require, exports, module) {
-  var global = System.global,
-      __define = global.define;
-  global.define = undefined;
-  var lang_1 = require("angular2/src/facade/lang");
-  var exceptions_1 = require("angular2/src/facade/exceptions");
-  var collection_1 = require("angular2/src/facade/collection");
-  var utils_1 = require("angular2/src/router/utils");
-  var url_parser_1 = require("angular2/src/router/url_parser");
-  var route_path_1 = require("angular2/src/router/rules/route_paths/route_path");
-  var ContinuationPathSegment = (function() {
-    function ContinuationPathSegment() {
-      this.name = '';
-      this.specificity = '';
-      this.hash = '...';
     }
-    ContinuationPathSegment.prototype.generate = function(params) {
+    TouchMap.prototype.get = function(key) {
+      collection_1.StringMapWrapper.delete(this.keys, key);
+      return this.map[key];
+    };
+    TouchMap.prototype.getUnused = function() {
+      var _this = this;
+      var unused = {};
+      var keys = collection_1.StringMapWrapper.keys(this.keys);
+      keys.forEach(function(key) {
+        return unused[key] = collection_1.StringMapWrapper.get(_this.map, key);
+      });
+      return unused;
+    };
+    return TouchMap;
+  })();
+  function normalizeString(obj) {
+    if (lang_1.isBlank(obj)) {
+      return null;
+    } else {
+      return obj.toString();
+    }
+  }
+  var ContinuationSegment = (function() {
+    function ContinuationSegment() {
+      this.name = '';
+    }
+    ContinuationSegment.prototype.generate = function(params) {
       return '';
     };
-    ContinuationPathSegment.prototype.match = function(path) {
+    ContinuationSegment.prototype.match = function(path) {
       return true;
     };
-    return ContinuationPathSegment;
+    return ContinuationSegment;
   })();
-  var StaticPathSegment = (function() {
-    function StaticPathSegment(path) {
+  var StaticSegment = (function() {
+    function StaticSegment(path) {
       this.path = path;
       this.name = '';
-      this.specificity = '2';
-      this.hash = path;
     }
-    StaticPathSegment.prototype.match = function(path) {
+    StaticSegment.prototype.match = function(path) {
       return path == this.path;
     };
-    StaticPathSegment.prototype.generate = function(params) {
+    StaticSegment.prototype.generate = function(params) {
       return this.path;
     };
-    return StaticPathSegment;
+    return StaticSegment;
   })();
-  var DynamicPathSegment = (function() {
-    function DynamicPathSegment(name) {
+  var DynamicSegment = (function() {
+    function DynamicSegment(name) {
       this.name = name;
-      this.specificity = '1';
-      this.hash = ':';
     }
-    DynamicPathSegment.prototype.match = function(path) {
+    DynamicSegment.prototype.match = function(path) {
       return path.length > 0;
     };
-    DynamicPathSegment.prototype.generate = function(params) {
+    DynamicSegment.prototype.generate = function(params) {
       if (!collection_1.StringMapWrapper.contains(params.map, this.name)) {
         throw new exceptions_1.BaseException("Route generator for '" + this.name + "' was not included in parameters passed.");
       }
-      return utils_1.normalizeString(params.get(this.name));
+      return normalizeString(params.get(this.name));
     };
-    DynamicPathSegment.paramMatcher = /^:([^\/]+)$/g;
-    return DynamicPathSegment;
+    return DynamicSegment;
   })();
-  var StarPathSegment = (function() {
-    function StarPathSegment(name) {
+  var StarSegment = (function() {
+    function StarSegment(name) {
       this.name = name;
-      this.specificity = '0';
-      this.hash = '*';
     }
-    StarPathSegment.prototype.match = function(path) {
+    StarSegment.prototype.match = function(path) {
       return true;
     };
-    StarPathSegment.prototype.generate = function(params) {
-      return utils_1.normalizeString(params.get(this.name));
+    StarSegment.prototype.generate = function(params) {
+      return normalizeString(params.get(this.name));
     };
-    StarPathSegment.wildcardMatcher = /^\*([^\/]+)$/g;
-    return StarPathSegment;
+    return StarSegment;
   })();
-  var ParamRoutePath = (function() {
-    function ParamRoutePath(routePath) {
-      this.routePath = routePath;
-      this.terminal = true;
-      this._assertValidPath(routePath);
-      this._parsePathString(routePath);
-      this.specificity = this._calculateSpecificity();
-      this.hash = this._calculateHash();
-      var lastSegment = this._segments[this._segments.length - 1];
-      this.terminal = !(lastSegment instanceof ContinuationPathSegment);
+  var paramMatcher = /^:([^\/]+)$/g;
+  var wildcardMatcher = /^\*([^\/]+)$/g;
+  function parsePathString(route) {
+    if (route.startsWith("/")) {
+      route = route.substring(1);
     }
-    ParamRoutePath.prototype.matchUrl = function(url) {
-      var nextUrlSegment = url;
-      var currentUrlSegment;
+    var segments = splitBySlash(route);
+    var results = [];
+    var specificity = '';
+    if (segments.length == 0) {
+      specificity += '2';
+    }
+    var limit = segments.length - 1;
+    for (var i = 0; i <= limit; i++) {
+      var segment = segments[i],
+          match;
+      if (lang_1.isPresent(match = lang_1.RegExpWrapper.firstMatch(paramMatcher, segment))) {
+        results.push(new DynamicSegment(match[1]));
+        specificity += '1';
+      } else if (lang_1.isPresent(match = lang_1.RegExpWrapper.firstMatch(wildcardMatcher, segment))) {
+        results.push(new StarSegment(match[1]));
+        specificity += '0';
+      } else if (segment == '...') {
+        if (i < limit) {
+          throw new exceptions_1.BaseException("Unexpected \"...\" before the end of the path for \"" + route + "\".");
+        }
+        results.push(new ContinuationSegment());
+      } else {
+        results.push(new StaticSegment(segment));
+        specificity += '2';
+      }
+    }
+    return {
+      'segments': results,
+      'specificity': specificity
+    };
+  }
+  function pathDslHash(segments) {
+    return segments.map(function(segment) {
+      if (segment instanceof StarSegment) {
+        return '*';
+      } else if (segment instanceof ContinuationSegment) {
+        return '...';
+      } else if (segment instanceof DynamicSegment) {
+        return ':';
+      } else if (segment instanceof StaticSegment) {
+        return segment.path;
+      }
+    }).join('/');
+  }
+  function splitBySlash(url) {
+    return url.split('/');
+  }
+  var RESERVED_CHARS = lang_1.RegExpWrapper.create('//|\\(|\\)|;|\\?|=');
+  function assertPath(path) {
+    if (lang_1.StringWrapper.contains(path, '#')) {
+      throw new exceptions_1.BaseException("Path \"" + path + "\" should not include \"#\". Use \"HashLocationStrategy\" instead.");
+    }
+    var illegalCharacter = lang_1.RegExpWrapper.firstMatch(RESERVED_CHARS, path);
+    if (lang_1.isPresent(illegalCharacter)) {
+      throw new exceptions_1.BaseException("Path \"" + path + "\" contains \"" + illegalCharacter[0] + "\" which is not allowed in a route config.");
+    }
+  }
+  var PathRecognizer = (function() {
+    function PathRecognizer(path) {
+      this.path = path;
+      this.terminal = true;
+      assertPath(path);
+      var parsed = parsePathString(path);
+      this._segments = parsed['segments'];
+      this.specificity = parsed['specificity'];
+      this.hash = pathDslHash(this._segments);
+      var lastSegment = this._segments[this._segments.length - 1];
+      this.terminal = !(lastSegment instanceof ContinuationSegment);
+    }
+    PathRecognizer.prototype.recognize = function(beginningSegment) {
+      var nextSegment = beginningSegment;
+      var currentSegment;
       var positionalParams = {};
       var captured = [];
       for (var i = 0; i < this._segments.length; i += 1) {
-        var pathSegment = this._segments[i];
-        currentUrlSegment = nextUrlSegment;
-        if (pathSegment instanceof ContinuationPathSegment) {
+        var segment = this._segments[i];
+        currentSegment = nextSegment;
+        if (segment instanceof ContinuationSegment) {
           break;
         }
-        if (lang_1.isPresent(currentUrlSegment)) {
-          if (pathSegment instanceof StarPathSegment) {
-            positionalParams[pathSegment.name] = currentUrlSegment.toString();
-            captured.push(currentUrlSegment.toString());
-            nextUrlSegment = null;
+        if (lang_1.isPresent(currentSegment)) {
+          if (segment instanceof StarSegment) {
+            positionalParams[segment.name] = currentSegment.toString();
+            captured.push(currentSegment.toString());
+            nextSegment = null;
             break;
           }
-          captured.push(currentUrlSegment.path);
-          if (pathSegment instanceof DynamicPathSegment) {
-            positionalParams[pathSegment.name] = currentUrlSegment.path;
-          } else if (!pathSegment.match(currentUrlSegment.path)) {
+          captured.push(currentSegment.path);
+          if (segment instanceof DynamicSegment) {
+            positionalParams[segment.name] = currentSegment.path;
+          } else if (!segment.match(currentSegment.path)) {
             return null;
           }
-          nextUrlSegment = currentUrlSegment.child;
-        } else if (!pathSegment.match('')) {
+          nextSegment = currentSegment.child;
+        } else if (!segment.match('')) {
           return null;
         }
       }
-      if (this.terminal && lang_1.isPresent(nextUrlSegment)) {
+      if (this.terminal && lang_1.isPresent(nextSegment)) {
         return null;
       }
       var urlPath = captured.join('/');
-      var auxiliary = [];
-      var urlParams = [];
-      var allParams = positionalParams;
-      if (lang_1.isPresent(currentUrlSegment)) {
-        var paramsSegment = url instanceof url_parser_1.RootUrl ? url : currentUrlSegment;
-        if (lang_1.isPresent(paramsSegment.params)) {
-          allParams = collection_1.StringMapWrapper.merge(paramsSegment.params, positionalParams);
-          urlParams = url_parser_1.convertUrlParamsToArray(paramsSegment.params);
-        } else {
-          allParams = positionalParams;
-        }
-        auxiliary = currentUrlSegment.auxiliary;
+      var auxiliary;
+      var urlParams;
+      var allParams;
+      if (lang_1.isPresent(currentSegment)) {
+        var paramsSegment = beginningSegment instanceof url_parser_1.RootUrl ? beginningSegment : currentSegment;
+        allParams = lang_1.isPresent(paramsSegment.params) ? collection_1.StringMapWrapper.merge(paramsSegment.params, positionalParams) : positionalParams;
+        urlParams = url_parser_1.serializeParams(paramsSegment.params);
+        auxiliary = currentSegment.auxiliary;
+      } else {
+        allParams = positionalParams;
+        auxiliary = [];
+        urlParams = [];
       }
-      return new route_path_1.MatchedUrl(urlPath, urlParams, allParams, auxiliary, nextUrlSegment);
+      return {
+        urlPath: urlPath,
+        urlParams: urlParams,
+        allParams: allParams,
+        auxiliary: auxiliary,
+        nextSegment: nextSegment
+      };
     };
-    ParamRoutePath.prototype.generateUrl = function(params) {
-      var paramTokens = new utils_1.TouchMap(params);
+    PathRecognizer.prototype.generate = function(params) {
+      var paramTokens = new TouchMap(params);
       var path = [];
       for (var i = 0; i < this._segments.length; i++) {
         var segment = this._segments[i];
-        if (!(segment instanceof ContinuationPathSegment)) {
+        if (!(segment instanceof ContinuationSegment)) {
           path.push(segment.generate(paramTokens));
         }
       }
       var urlPath = path.join('/');
       var nonPositionalParams = paramTokens.getUnused();
-      var urlParams = nonPositionalParams;
-      return new route_path_1.GeneratedUrl(urlPath, urlParams);
+      var urlParams = url_parser_1.serializeParams(nonPositionalParams);
+      return {
+        urlPath: urlPath,
+        urlParams: urlParams
+      };
     };
-    ParamRoutePath.prototype.toString = function() {
-      return this.routePath;
-    };
-    ParamRoutePath.prototype._parsePathString = function(routePath) {
-      if (routePath.startsWith("/")) {
-        routePath = routePath.substring(1);
-      }
-      var segmentStrings = routePath.split('/');
-      this._segments = [];
-      var limit = segmentStrings.length - 1;
-      for (var i = 0; i <= limit; i++) {
-        var segment = segmentStrings[i],
-            match;
-        if (lang_1.isPresent(match = lang_1.RegExpWrapper.firstMatch(DynamicPathSegment.paramMatcher, segment))) {
-          this._segments.push(new DynamicPathSegment(match[1]));
-        } else if (lang_1.isPresent(match = lang_1.RegExpWrapper.firstMatch(StarPathSegment.wildcardMatcher, segment))) {
-          this._segments.push(new StarPathSegment(match[1]));
-        } else if (segment == '...') {
-          if (i < limit) {
-            throw new exceptions_1.BaseException("Unexpected \"...\" before the end of the path for \"" + routePath + "\".");
-          }
-          this._segments.push(new ContinuationPathSegment());
-        } else {
-          this._segments.push(new StaticPathSegment(segment));
-        }
-      }
-    };
-    ParamRoutePath.prototype._calculateSpecificity = function() {
-      var i,
-          length = this._segments.length,
-          specificity;
-      if (length == 0) {
-        specificity += '2';
-      } else {
-        specificity = '';
-        for (i = 0; i < length; i++) {
-          specificity += this._segments[i].specificity;
-        }
-      }
-      return specificity;
-    };
-    ParamRoutePath.prototype._calculateHash = function() {
-      var i,
-          length = this._segments.length;
-      var hashParts = [];
-      for (i = 0; i < length; i++) {
-        hashParts.push(this._segments[i].hash);
-      }
-      return hashParts.join('/');
-    };
-    ParamRoutePath.prototype._assertValidPath = function(path) {
-      if (lang_1.StringWrapper.contains(path, '#')) {
-        throw new exceptions_1.BaseException("Path \"" + path + "\" should not include \"#\". Use \"HashLocationStrategy\" instead.");
-      }
-      var illegalCharacter = lang_1.RegExpWrapper.firstMatch(ParamRoutePath.RESERVED_CHARS, path);
-      if (lang_1.isPresent(illegalCharacter)) {
-        throw new exceptions_1.BaseException("Path \"" + path + "\" contains \"" + illegalCharacter[0] + "\" which is not allowed in a route config.");
-      }
-    };
-    ParamRoutePath.RESERVED_CHARS = lang_1.RegExpWrapper.create('//|\\(|\\)|;|\\?|=');
-    return ParamRoutePath;
+    return PathRecognizer;
   })();
-  exports.ParamRoutePath = ParamRoutePath;
+  exports.PathRecognizer = PathRecognizer;
   global.define = __define;
   return module.exports;
 });
 
-System.register("angular2/src/router/route_config/route_config_normalizer", ["angular2/src/router/route_config/route_config_decorator", "angular2/src/facade/lang", "angular2/src/facade/exceptions"], true, function(require, exports, module) {
+System.register("angular2/src/router/component_recognizer", ["angular2/src/facade/lang", "angular2/src/facade/exceptions", "angular2/src/facade/collection", "angular2/src/facade/async", "angular2/src/router/route_recognizer", "angular2/src/router/route_config_impl", "angular2/src/router/async_route_handler", "angular2/src/router/sync_route_handler"], true, function(require, exports, module) {
   var global = System.global,
       __define = global.define;
   global.define = undefined;
-  var route_config_decorator_1 = require("angular2/src/router/route_config/route_config_decorator");
+  var lang_1 = require("angular2/src/facade/lang");
+  var exceptions_1 = require("angular2/src/facade/exceptions");
+  var collection_1 = require("angular2/src/facade/collection");
+  var async_1 = require("angular2/src/facade/async");
+  var route_recognizer_1 = require("angular2/src/router/route_recognizer");
+  var route_config_impl_1 = require("angular2/src/router/route_config_impl");
+  var async_route_handler_1 = require("angular2/src/router/async_route_handler");
+  var sync_route_handler_1 = require("angular2/src/router/sync_route_handler");
+  var ComponentRecognizer = (function() {
+    function ComponentRecognizer() {
+      this.names = new collection_1.Map();
+      this.auxNames = new collection_1.Map();
+      this.auxRoutes = new collection_1.Map();
+      this.matchers = [];
+      this.defaultRoute = null;
+    }
+    ComponentRecognizer.prototype.config = function(config) {
+      var handler;
+      if (lang_1.isPresent(config.name) && config.name[0].toUpperCase() != config.name[0]) {
+        var suggestedName = config.name[0].toUpperCase() + config.name.substring(1);
+        throw new exceptions_1.BaseException("Route \"" + config.path + "\" with name \"" + config.name + "\" does not begin with an uppercase letter. Route names should be CamelCase like \"" + suggestedName + "\".");
+      }
+      if (config instanceof route_config_impl_1.AuxRoute) {
+        handler = new sync_route_handler_1.SyncRouteHandler(config.component, config.data);
+        var path = config.path.startsWith('/') ? config.path.substring(1) : config.path;
+        var recognizer = new route_recognizer_1.RouteRecognizer(config.path, handler);
+        this.auxRoutes.set(path, recognizer);
+        if (lang_1.isPresent(config.name)) {
+          this.auxNames.set(config.name, recognizer);
+        }
+        return recognizer.terminal;
+      }
+      var useAsDefault = false;
+      if (config instanceof route_config_impl_1.Redirect) {
+        var redirector = new route_recognizer_1.RedirectRecognizer(config.path, config.redirectTo);
+        this._assertNoHashCollision(redirector.hash, config.path);
+        this.matchers.push(redirector);
+        return true;
+      }
+      if (config instanceof route_config_impl_1.Route) {
+        handler = new sync_route_handler_1.SyncRouteHandler(config.component, config.data);
+        useAsDefault = lang_1.isPresent(config.useAsDefault) && config.useAsDefault;
+      } else if (config instanceof route_config_impl_1.AsyncRoute) {
+        handler = new async_route_handler_1.AsyncRouteHandler(config.loader, config.data);
+        useAsDefault = lang_1.isPresent(config.useAsDefault) && config.useAsDefault;
+      }
+      var recognizer = new route_recognizer_1.RouteRecognizer(config.path, handler);
+      this._assertNoHashCollision(recognizer.hash, config.path);
+      if (useAsDefault) {
+        if (lang_1.isPresent(this.defaultRoute)) {
+          throw new exceptions_1.BaseException("Only one route can be default");
+        }
+        this.defaultRoute = recognizer;
+      }
+      this.matchers.push(recognizer);
+      if (lang_1.isPresent(config.name)) {
+        this.names.set(config.name, recognizer);
+      }
+      return recognizer.terminal;
+    };
+    ComponentRecognizer.prototype._assertNoHashCollision = function(hash, path) {
+      this.matchers.forEach(function(matcher) {
+        if (hash == matcher.hash) {
+          throw new exceptions_1.BaseException("Configuration '" + path + "' conflicts with existing route '" + matcher.path + "'");
+        }
+      });
+    };
+    ComponentRecognizer.prototype.recognize = function(urlParse) {
+      var solutions = [];
+      this.matchers.forEach(function(routeRecognizer) {
+        var pathMatch = routeRecognizer.recognize(urlParse);
+        if (lang_1.isPresent(pathMatch)) {
+          solutions.push(pathMatch);
+        }
+      });
+      if (solutions.length == 0 && lang_1.isPresent(urlParse) && urlParse.auxiliary.length > 0) {
+        return [async_1.PromiseWrapper.resolve(new route_recognizer_1.PathMatch(null, null, urlParse.auxiliary))];
+      }
+      return solutions;
+    };
+    ComponentRecognizer.prototype.recognizeAuxiliary = function(urlParse) {
+      var routeRecognizer = this.auxRoutes.get(urlParse.path);
+      if (lang_1.isPresent(routeRecognizer)) {
+        return [routeRecognizer.recognize(urlParse)];
+      }
+      return [async_1.PromiseWrapper.resolve(null)];
+    };
+    ComponentRecognizer.prototype.hasRoute = function(name) {
+      return this.names.has(name);
+    };
+    ComponentRecognizer.prototype.componentLoaded = function(name) {
+      return this.hasRoute(name) && lang_1.isPresent(this.names.get(name).handler.componentType);
+    };
+    ComponentRecognizer.prototype.loadComponent = function(name) {
+      return this.names.get(name).handler.resolveComponentType();
+    };
+    ComponentRecognizer.prototype.generate = function(name, params) {
+      var pathRecognizer = this.names.get(name);
+      if (lang_1.isBlank(pathRecognizer)) {
+        return null;
+      }
+      return pathRecognizer.generate(params);
+    };
+    ComponentRecognizer.prototype.generateAuxiliary = function(name, params) {
+      var pathRecognizer = this.auxNames.get(name);
+      if (lang_1.isBlank(pathRecognizer)) {
+        return null;
+      }
+      return pathRecognizer.generate(params);
+    };
+    return ComponentRecognizer;
+  })();
+  exports.ComponentRecognizer = ComponentRecognizer;
+  global.define = __define;
+  return module.exports;
+});
+
+System.register("angular2/src/router/route_config_nomalizer", ["angular2/src/router/route_config_decorator", "angular2/src/facade/lang", "angular2/src/facade/exceptions"], true, function(require, exports, module) {
+  var global = System.global,
+      __define = global.define;
+  global.define = undefined;
+  var route_config_decorator_1 = require("angular2/src/router/route_config_decorator");
   var lang_1 = require("angular2/src/facade/lang");
   var exceptions_1 = require("angular2/src/facade/exceptions");
   function normalizeRouteConfig(config, registry) {
@@ -26730,12 +26584,12 @@ System.register("angular2/src/router/route_config/route_config_normalizer", ["an
   return module.exports;
 });
 
-System.register("angular2/src/router/lifecycle/route_lifecycle_reflector", ["angular2/src/facade/lang", "angular2/src/router/lifecycle/lifecycle_annotations_impl", "angular2/src/core/reflection/reflection"], true, function(require, exports, module) {
+System.register("angular2/src/router/route_lifecycle_reflector", ["angular2/src/facade/lang", "angular2/src/router/lifecycle_annotations_impl", "angular2/src/core/reflection/reflection"], true, function(require, exports, module) {
   var global = System.global,
       __define = global.define;
   global.define = undefined;
   var lang_1 = require("angular2/src/facade/lang");
-  var lifecycle_annotations_impl_1 = require("angular2/src/router/lifecycle/lifecycle_annotations_impl");
+  var lifecycle_annotations_impl_1 = require("angular2/src/router/lifecycle_annotations_impl");
   var reflection_1 = require("angular2/src/core/reflection/reflection");
   function hasLifecycleHook(e, type) {
     if (!(type instanceof lang_1.Type))
@@ -30208,141 +30062,117 @@ System.register("angular2/src/compiler/html_parser", ["angular2/src/facade/lang"
   return module.exports;
 });
 
-System.register("angular2/src/router/rules/rule_set", ["angular2/src/facade/lang", "angular2/src/facade/exceptions", "angular2/src/facade/collection", "angular2/src/facade/async", "angular2/src/router/rules/rules", "angular2/src/router/route_config/route_config_impl", "angular2/src/router/rules/route_handlers/async_route_handler", "angular2/src/router/rules/route_handlers/sync_route_handler", "angular2/src/router/rules/route_paths/param_route_path", "angular2/src/router/rules/route_paths/regex_route_path"], true, function(require, exports, module) {
+System.register("angular2/src/router/route_recognizer", ["angular2/src/facade/lang", "angular2/src/facade/exceptions", "angular2/src/facade/promise", "angular2/src/facade/collection", "angular2/src/router/instruction", "angular2/src/router/path_recognizer"], true, function(require, exports, module) {
   var global = System.global,
       __define = global.define;
   global.define = undefined;
+  var __extends = (this && this.__extends) || function(d, b) {
+    for (var p in b)
+      if (b.hasOwnProperty(p))
+        d[p] = b[p];
+    function __() {
+      this.constructor = d;
+    }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+  };
   var lang_1 = require("angular2/src/facade/lang");
   var exceptions_1 = require("angular2/src/facade/exceptions");
+  var promise_1 = require("angular2/src/facade/promise");
   var collection_1 = require("angular2/src/facade/collection");
-  var async_1 = require("angular2/src/facade/async");
-  var rules_1 = require("angular2/src/router/rules/rules");
-  var route_config_impl_1 = require("angular2/src/router/route_config/route_config_impl");
-  var async_route_handler_1 = require("angular2/src/router/rules/route_handlers/async_route_handler");
-  var sync_route_handler_1 = require("angular2/src/router/rules/route_handlers/sync_route_handler");
-  var param_route_path_1 = require("angular2/src/router/rules/route_paths/param_route_path");
-  var regex_route_path_1 = require("angular2/src/router/rules/route_paths/regex_route_path");
-  var RuleSet = (function() {
-    function RuleSet() {
-      this.rulesByName = new collection_1.Map();
-      this.auxRulesByName = new collection_1.Map();
-      this.auxRulesByPath = new collection_1.Map();
-      this.rules = [];
-      this.defaultRule = null;
-    }
-    RuleSet.prototype.config = function(config) {
-      var handler;
-      if (lang_1.isPresent(config.name) && config.name[0].toUpperCase() != config.name[0]) {
-        var suggestedName = config.name[0].toUpperCase() + config.name.substring(1);
-        throw new exceptions_1.BaseException("Route \"" + config.path + "\" with name \"" + config.name + "\" does not begin with an uppercase letter. Route names should be CamelCase like \"" + suggestedName + "\".");
-      }
-      if (config instanceof route_config_impl_1.AuxRoute) {
-        handler = new sync_route_handler_1.SyncRouteHandler(config.component, config.data);
-        var routePath_1 = this._getRoutePath(config);
-        var auxRule = new rules_1.RouteRule(routePath_1, handler);
-        this.auxRulesByPath.set(routePath_1.toString(), auxRule);
-        if (lang_1.isPresent(config.name)) {
-          this.auxRulesByName.set(config.name, auxRule);
-        }
-        return auxRule.terminal;
-      }
-      var useAsDefault = false;
-      if (config instanceof route_config_impl_1.Redirect) {
-        var routePath_2 = this._getRoutePath(config);
-        var redirector = new rules_1.RedirectRule(routePath_2, config.redirectTo);
-        this._assertNoHashCollision(redirector.hash, config.path);
-        this.rules.push(redirector);
-        return true;
-      }
-      if (config instanceof route_config_impl_1.Route) {
-        handler = new sync_route_handler_1.SyncRouteHandler(config.component, config.data);
-        useAsDefault = lang_1.isPresent(config.useAsDefault) && config.useAsDefault;
-      } else if (config instanceof route_config_impl_1.AsyncRoute) {
-        handler = new async_route_handler_1.AsyncRouteHandler(config.loader, config.data);
-        useAsDefault = lang_1.isPresent(config.useAsDefault) && config.useAsDefault;
-      }
-      var routePath = this._getRoutePath(config);
-      var newRule = new rules_1.RouteRule(routePath, handler);
-      this._assertNoHashCollision(newRule.hash, config.path);
-      if (useAsDefault) {
-        if (lang_1.isPresent(this.defaultRule)) {
-          throw new exceptions_1.BaseException("Only one route can be default");
-        }
-        this.defaultRule = newRule;
-      }
-      this.rules.push(newRule);
-      if (lang_1.isPresent(config.name)) {
-        this.rulesByName.set(config.name, newRule);
-      }
-      return newRule.terminal;
-    };
-    RuleSet.prototype.recognize = function(urlParse) {
-      var solutions = [];
-      this.rules.forEach(function(routeRecognizer) {
-        var pathMatch = routeRecognizer.recognize(urlParse);
-        if (lang_1.isPresent(pathMatch)) {
-          solutions.push(pathMatch);
-        }
-      });
-      if (solutions.length == 0 && lang_1.isPresent(urlParse) && urlParse.auxiliary.length > 0) {
-        return [async_1.PromiseWrapper.resolve(new rules_1.PathMatch(null, null, urlParse.auxiliary))];
-      }
-      return solutions;
-    };
-    RuleSet.prototype.recognizeAuxiliary = function(urlParse) {
-      var routeRecognizer = this.auxRulesByPath.get(urlParse.path);
-      if (lang_1.isPresent(routeRecognizer)) {
-        return [routeRecognizer.recognize(urlParse)];
-      }
-      return [async_1.PromiseWrapper.resolve(null)];
-    };
-    RuleSet.prototype.hasRoute = function(name) {
-      return this.rulesByName.has(name);
-    };
-    RuleSet.prototype.componentLoaded = function(name) {
-      return this.hasRoute(name) && lang_1.isPresent(this.rulesByName.get(name).handler.componentType);
-    };
-    RuleSet.prototype.loadComponent = function(name) {
-      return this.rulesByName.get(name).handler.resolveComponentType();
-    };
-    RuleSet.prototype.generate = function(name, params) {
-      var rule = this.rulesByName.get(name);
-      if (lang_1.isBlank(rule)) {
-        return null;
-      }
-      return rule.generate(params);
-    };
-    RuleSet.prototype.generateAuxiliary = function(name, params) {
-      var rule = this.auxRulesByName.get(name);
-      if (lang_1.isBlank(rule)) {
-        return null;
-      }
-      return rule.generate(params);
-    };
-    RuleSet.prototype._assertNoHashCollision = function(hash, path) {
-      this.rules.forEach(function(rule) {
-        if (hash == rule.hash) {
-          throw new exceptions_1.BaseException("Configuration '" + path + "' conflicts with existing route '" + rule.path + "'");
-        }
-      });
-    };
-    RuleSet.prototype._getRoutePath = function(config) {
-      if (lang_1.isPresent(config.regex)) {
-        if (lang_1.isFunction(config.serializer)) {
-          return new regex_route_path_1.RegexRoutePath(config.regex, config.serializer);
-        } else {
-          throw new exceptions_1.BaseException("Route provides a regex property, '" + config.regex + "', but no serializer property");
-        }
-      }
-      if (lang_1.isPresent(config.path)) {
-        var path = (config instanceof route_config_impl_1.AuxRoute && config.path.startsWith('/')) ? config.path.substring(1) : config.path;
-        return new param_route_path_1.ParamRoutePath(path);
-      }
-      throw new exceptions_1.BaseException('Route must provide either a path or regex property');
-    };
-    return RuleSet;
+  var instruction_1 = require("angular2/src/router/instruction");
+  var path_recognizer_1 = require("angular2/src/router/path_recognizer");
+  var RouteMatch = (function() {
+    function RouteMatch() {}
+    return RouteMatch;
   })();
-  exports.RuleSet = RuleSet;
+  exports.RouteMatch = RouteMatch;
+  var PathMatch = (function(_super) {
+    __extends(PathMatch, _super);
+    function PathMatch(instruction, remaining, remainingAux) {
+      _super.call(this);
+      this.instruction = instruction;
+      this.remaining = remaining;
+      this.remainingAux = remainingAux;
+    }
+    return PathMatch;
+  })(RouteMatch);
+  exports.PathMatch = PathMatch;
+  var RedirectMatch = (function(_super) {
+    __extends(RedirectMatch, _super);
+    function RedirectMatch(redirectTo, specificity) {
+      _super.call(this);
+      this.redirectTo = redirectTo;
+      this.specificity = specificity;
+    }
+    return RedirectMatch;
+  })(RouteMatch);
+  exports.RedirectMatch = RedirectMatch;
+  var RedirectRecognizer = (function() {
+    function RedirectRecognizer(path, redirectTo) {
+      this.path = path;
+      this.redirectTo = redirectTo;
+      this._pathRecognizer = new path_recognizer_1.PathRecognizer(path);
+      this.hash = this._pathRecognizer.hash;
+    }
+    RedirectRecognizer.prototype.recognize = function(beginningSegment) {
+      var match = null;
+      if (lang_1.isPresent(this._pathRecognizer.recognize(beginningSegment))) {
+        match = new RedirectMatch(this.redirectTo, this._pathRecognizer.specificity);
+      }
+      return promise_1.PromiseWrapper.resolve(match);
+    };
+    RedirectRecognizer.prototype.generate = function(params) {
+      throw new exceptions_1.BaseException("Tried to generate a redirect.");
+    };
+    return RedirectRecognizer;
+  })();
+  exports.RedirectRecognizer = RedirectRecognizer;
+  var RouteRecognizer = (function() {
+    function RouteRecognizer(path, handler) {
+      this.path = path;
+      this.handler = handler;
+      this.terminal = true;
+      this._cache = new collection_1.Map();
+      this._pathRecognizer = new path_recognizer_1.PathRecognizer(path);
+      this.specificity = this._pathRecognizer.specificity;
+      this.hash = this._pathRecognizer.hash;
+      this.terminal = this._pathRecognizer.terminal;
+    }
+    RouteRecognizer.prototype.recognize = function(beginningSegment) {
+      var _this = this;
+      var res = this._pathRecognizer.recognize(beginningSegment);
+      if (lang_1.isBlank(res)) {
+        return null;
+      }
+      return this.handler.resolveComponentType().then(function(_) {
+        var componentInstruction = _this._getInstruction(res['urlPath'], res['urlParams'], res['allParams']);
+        return new PathMatch(componentInstruction, res['nextSegment'], res['auxiliary']);
+      });
+    };
+    RouteRecognizer.prototype.generate = function(params) {
+      var generated = this._pathRecognizer.generate(params);
+      var urlPath = generated['urlPath'];
+      var urlParams = generated['urlParams'];
+      return this._getInstruction(urlPath, urlParams, params);
+    };
+    RouteRecognizer.prototype.generateComponentPathValues = function(params) {
+      return this._pathRecognizer.generate(params);
+    };
+    RouteRecognizer.prototype._getInstruction = function(urlPath, urlParams, params) {
+      if (lang_1.isBlank(this.handler.componentType)) {
+        throw new exceptions_1.BaseException("Tried to get instruction before the type was loaded.");
+      }
+      var hashKey = urlPath + '?' + urlParams.join('?');
+      if (this._cache.has(hashKey)) {
+        return this._cache.get(hashKey);
+      }
+      var instruction = new instruction_1.ComponentInstruction(urlPath, urlParams, this.handler.data, this.handler.componentType, this.terminal, this.specificity, params);
+      this._cache.set(hashKey, instruction);
+      return instruction;
+    };
+    return RouteRecognizer;
+  })();
+  exports.RouteRecognizer = RouteRecognizer;
   global.define = __define;
   return module.exports;
 });
@@ -34442,7 +34272,7 @@ System.register("angular2/src/compiler/template_parser", ["angular2/src/facade/c
   return module.exports;
 });
 
-System.register("angular2/src/router/route_registry", ["angular2/src/facade/collection", "angular2/src/facade/async", "angular2/src/facade/lang", "angular2/src/facade/exceptions", "angular2/src/core/reflection/reflection", "angular2/core", "angular2/src/router/route_config/route_config_impl", "angular2/src/router/rules/rules", "angular2/src/router/rules/rule_set", "angular2/src/router/instruction", "angular2/src/router/route_config/route_config_normalizer", "angular2/src/router/url_parser"], true, function(require, exports, module) {
+System.register("angular2/src/router/route_registry", ["angular2/src/facade/collection", "angular2/src/facade/async", "angular2/src/facade/lang", "angular2/src/facade/exceptions", "angular2/src/core/reflection/reflection", "angular2/core", "angular2/src/router/route_config_impl", "angular2/src/router/route_recognizer", "angular2/src/router/component_recognizer", "angular2/src/router/instruction", "angular2/src/router/route_config_nomalizer", "angular2/src/router/url_parser"], true, function(require, exports, module) {
   var global = System.global,
       __define = global.define;
   global.define = undefined;
@@ -34473,11 +34303,11 @@ System.register("angular2/src/router/route_registry", ["angular2/src/facade/coll
   var exceptions_1 = require("angular2/src/facade/exceptions");
   var reflection_1 = require("angular2/src/core/reflection/reflection");
   var core_1 = require("angular2/core");
-  var route_config_impl_1 = require("angular2/src/router/route_config/route_config_impl");
-  var rules_1 = require("angular2/src/router/rules/rules");
-  var rule_set_1 = require("angular2/src/router/rules/rule_set");
+  var route_config_impl_1 = require("angular2/src/router/route_config_impl");
+  var route_recognizer_1 = require("angular2/src/router/route_recognizer");
+  var component_recognizer_1 = require("angular2/src/router/component_recognizer");
   var instruction_1 = require("angular2/src/router/instruction");
-  var route_config_normalizer_1 = require("angular2/src/router/route_config/route_config_normalizer");
+  var route_config_nomalizer_1 = require("angular2/src/router/route_config_nomalizer");
   var url_parser_1 = require("angular2/src/router/url_parser");
   var _resolveToNull = async_1.PromiseWrapper.resolve(null);
   exports.ROUTER_PRIMARY_COMPONENT = lang_1.CONST_EXPR(new core_1.OpaqueToken('RouterPrimaryComponent'));
@@ -34487,18 +34317,18 @@ System.register("angular2/src/router/route_registry", ["angular2/src/facade/coll
       this._rules = new collection_1.Map();
     }
     RouteRegistry.prototype.config = function(parentComponent, config) {
-      config = route_config_normalizer_1.normalizeRouteConfig(config, this);
+      config = route_config_nomalizer_1.normalizeRouteConfig(config, this);
       if (config instanceof route_config_impl_1.Route) {
-        route_config_normalizer_1.assertComponentExists(config.component, config.path);
+        route_config_nomalizer_1.assertComponentExists(config.component, config.path);
       } else if (config instanceof route_config_impl_1.AuxRoute) {
-        route_config_normalizer_1.assertComponentExists(config.component, config.path);
+        route_config_nomalizer_1.assertComponentExists(config.component, config.path);
       }
-      var rules = this._rules.get(parentComponent);
-      if (lang_1.isBlank(rules)) {
-        rules = new rule_set_1.RuleSet();
-        this._rules.set(parentComponent, rules);
+      var recognizer = this._rules.get(parentComponent);
+      if (lang_1.isBlank(recognizer)) {
+        recognizer = new component_recognizer_1.ComponentRecognizer();
+        this._rules.set(parentComponent, recognizer);
       }
-      var terminal = rules.config(config);
+      var terminal = recognizer.config(config);
       if (config instanceof route_config_impl_1.Route) {
         if (terminal) {
           assertTerminalComponent(config.component, config.path);
@@ -34539,22 +34369,22 @@ System.register("angular2/src/router/route_registry", ["angular2/src/facade/coll
       }
       var parentInstruction = collection_1.ListWrapper.last(ancestorInstructions);
       var parentComponent = lang_1.isPresent(parentInstruction) ? parentInstruction.component.componentType : this._rootComponent;
-      var rules = this._rules.get(parentComponent);
-      if (lang_1.isBlank(rules)) {
+      var componentRecognizer = this._rules.get(parentComponent);
+      if (lang_1.isBlank(componentRecognizer)) {
         return _resolveToNull;
       }
-      var possibleMatches = _aux ? rules.recognizeAuxiliary(parsedUrl) : rules.recognize(parsedUrl);
+      var possibleMatches = _aux ? componentRecognizer.recognizeAuxiliary(parsedUrl) : componentRecognizer.recognize(parsedUrl);
       var matchPromises = possibleMatches.map(function(candidate) {
         return candidate.then(function(candidate) {
-          if (candidate instanceof rules_1.PathMatch) {
+          if (candidate instanceof route_recognizer_1.PathMatch) {
             var auxParentInstructions = ancestorInstructions.length > 0 ? [collection_1.ListWrapper.last(ancestorInstructions)] : [];
             var auxInstructions = _this._auxRoutesToUnresolved(candidate.remainingAux, auxParentInstructions);
             var instruction = new instruction_1.ResolvedInstruction(candidate.instruction, null, auxInstructions);
             if (lang_1.isBlank(candidate.instruction) || candidate.instruction.terminal) {
               return instruction;
             }
-            var newAncestorInstructions = ancestorInstructions.concat([instruction]);
-            return _this._recognize(candidate.remaining, newAncestorInstructions).then(function(childInstruction) {
+            var newAncestorComponents = ancestorInstructions.concat([instruction]);
+            return _this._recognize(candidate.remaining, newAncestorComponents).then(function(childInstruction) {
               if (lang_1.isBlank(childInstruction)) {
                 return null;
               }
@@ -34565,7 +34395,7 @@ System.register("angular2/src/router/route_registry", ["angular2/src/facade/coll
               return instruction;
             });
           }
-          if (candidate instanceof rules_1.RedirectMatch) {
+          if (candidate instanceof route_recognizer_1.RedirectMatch) {
             var instruction = _this.generate(candidate.redirectTo, ancestorInstructions.concat([null]));
             return new instruction_1.RedirectInstruction(instruction.component, instruction.child, instruction.auxInstruction, candidate.specificity);
           }
@@ -34675,8 +34505,8 @@ System.register("angular2/src/router/route_registry", ["angular2/src/facade/coll
         auxInstructions = collection_1.StringMapWrapper.merge(prevInstruction.auxInstruction, auxInstructions);
         componentInstruction = prevInstruction.component;
       }
-      var rules = this._rules.get(parentComponentType);
-      if (lang_1.isBlank(rules)) {
+      var componentRecognizer = this._rules.get(parentComponentType);
+      if (lang_1.isBlank(componentRecognizer)) {
         throw new exceptions_1.BaseException("Component \"" + lang_1.getTypeNameForDebugging(parentComponentType) + "\" has no route config.");
       }
       var linkParamIndex = 0;
@@ -34694,19 +34524,19 @@ System.register("angular2/src/router/route_registry", ["angular2/src/facade/coll
             linkParamIndex += 1;
           }
         }
-        var routeRecognizer = (_aux ? rules.auxRulesByName : rules.rulesByName).get(routeName);
+        var routeRecognizer = (_aux ? componentRecognizer.auxNames : componentRecognizer.names).get(routeName);
         if (lang_1.isBlank(routeRecognizer)) {
           throw new exceptions_1.BaseException("Component \"" + lang_1.getTypeNameForDebugging(parentComponentType) + "\" has no route named \"" + routeName + "\".");
         }
         if (lang_1.isBlank(routeRecognizer.handler.componentType)) {
-          var generatedUrl = routeRecognizer.generateComponentPathValues(routeParams);
+          var compInstruction = routeRecognizer.generateComponentPathValues(routeParams);
           return new instruction_1.UnresolvedInstruction(function() {
             return routeRecognizer.handler.resolveComponentType().then(function(_) {
               return _this._generate(linkParams, ancestorInstructions, prevInstruction, _aux, _originalLink);
             });
-          }, generatedUrl.urlPath, url_parser_1.convertUrlParamsToArray(generatedUrl.urlParams));
+          }, compInstruction['urlPath'], compInstruction['urlParams']);
         }
-        componentInstruction = _aux ? rules.generateAuxiliary(routeName, routeParams) : rules.generate(routeName, routeParams);
+        componentInstruction = _aux ? componentRecognizer.generateAuxiliary(routeName, routeParams) : componentRecognizer.generate(routeName, routeParams);
       }
       while (linkParamIndex < linkParams.length && lang_1.isArray(linkParams[linkParamIndex])) {
         var auxParentInstruction = [parentInstruction];
@@ -34729,31 +34559,31 @@ System.register("angular2/src/router/route_registry", ["angular2/src/facade/coll
       return instruction;
     };
     RouteRegistry.prototype.hasRoute = function(name, parentComponent) {
-      var rules = this._rules.get(parentComponent);
-      if (lang_1.isBlank(rules)) {
+      var componentRecognizer = this._rules.get(parentComponent);
+      if (lang_1.isBlank(componentRecognizer)) {
         return false;
       }
-      return rules.hasRoute(name);
+      return componentRecognizer.hasRoute(name);
     };
     RouteRegistry.prototype.generateDefault = function(componentCursor) {
       var _this = this;
       if (lang_1.isBlank(componentCursor)) {
         return null;
       }
-      var rules = this._rules.get(componentCursor);
-      if (lang_1.isBlank(rules) || lang_1.isBlank(rules.defaultRule)) {
+      var componentRecognizer = this._rules.get(componentCursor);
+      if (lang_1.isBlank(componentRecognizer) || lang_1.isBlank(componentRecognizer.defaultRoute)) {
         return null;
       }
       var defaultChild = null;
-      if (lang_1.isPresent(rules.defaultRule.handler.componentType)) {
-        var componentInstruction = rules.defaultRule.generate({});
-        if (!rules.defaultRule.terminal) {
-          defaultChild = this.generateDefault(rules.defaultRule.handler.componentType);
+      if (lang_1.isPresent(componentRecognizer.defaultRoute.handler.componentType)) {
+        var componentInstruction = componentRecognizer.defaultRoute.generate({});
+        if (!componentRecognizer.defaultRoute.terminal) {
+          defaultChild = this.generateDefault(componentRecognizer.defaultRoute.handler.componentType);
         }
         return new instruction_1.DefaultInstruction(componentInstruction, defaultChild);
       }
       return new instruction_1.UnresolvedInstruction(function() {
-        return rules.defaultRule.handler.resolveComponentType().then(function(_) {
+        return componentRecognizer.defaultRoute.handler.resolveComponentType().then(function(_) {
           return _this.generateDefault(componentCursor);
         });
       });
@@ -34763,16 +34593,14 @@ System.register("angular2/src/router/route_registry", ["angular2/src/facade/coll
   })();
   exports.RouteRegistry = RouteRegistry;
   function splitAndFlattenLinkParams(linkParams) {
-    var accumulation = [];
-    linkParams.forEach(function(item) {
+    return linkParams.reduce(function(accumulation, item) {
       if (lang_1.isString(item)) {
         var strItem = item;
-        accumulation = accumulation.concat(strItem.split('/'));
-      } else {
-        accumulation.push(item);
+        return accumulation.concat(strItem.split('/'));
       }
-    });
-    return accumulation;
+      accumulation.push(item);
+      return accumulation;
+    }, []);
   }
   function mostSpecific(instructions) {
     instructions = instructions.filter(function(instruction) {
@@ -36202,7 +36030,7 @@ System.register("angular2/src/compiler/template_compiler", ["angular2/src/facade
   return module.exports;
 });
 
-System.register("angular2/src/router/router", ["angular2/src/facade/async", "angular2/src/facade/collection", "angular2/src/facade/lang", "angular2/src/facade/exceptions", "angular2/core", "angular2/src/router/route_registry", "angular2/src/router/location/location", "angular2/src/router/lifecycle/route_lifecycle_reflector"], true, function(require, exports, module) {
+System.register("angular2/src/router/router", ["angular2/src/facade/async", "angular2/src/facade/collection", "angular2/src/facade/lang", "angular2/src/facade/exceptions", "angular2/core", "angular2/src/router/route_registry", "angular2/src/router/location", "angular2/src/router/route_lifecycle_reflector"], true, function(require, exports, module) {
   var global = System.global,
       __define = global.define;
   global.define = undefined;
@@ -36242,8 +36070,8 @@ System.register("angular2/src/router/router", ["angular2/src/facade/async", "ang
   var exceptions_1 = require("angular2/src/facade/exceptions");
   var core_1 = require("angular2/core");
   var route_registry_1 = require("angular2/src/router/route_registry");
-  var location_1 = require("angular2/src/router/location/location");
-  var route_lifecycle_reflector_1 = require("angular2/src/router/lifecycle/route_lifecycle_reflector");
+  var location_1 = require("angular2/src/router/location");
+  var route_lifecycle_reflector_1 = require("angular2/src/router/route_lifecycle_reflector");
   var _resolveToTrue = async_1.PromiseWrapper.resolve(true);
   var _resolveToFalse = async_1.PromiseWrapper.resolve(false);
   var Router = (function() {
@@ -37428,15 +37256,15 @@ System.register("angular2/src/compiler/runtime_compiler", ["angular2/src/core/li
   return module.exports;
 });
 
-System.register("angular2/src/router/router_providers_common", ["angular2/src/router/location/location_strategy", "angular2/src/router/location/path_location_strategy", "angular2/src/router/router", "angular2/src/router/route_registry", "angular2/src/router/location/location", "angular2/src/facade/lang", "angular2/core", "angular2/src/facade/exceptions"], true, function(require, exports, module) {
+System.register("angular2/src/router/router_providers_common", ["angular2/src/router/location_strategy", "angular2/src/router/path_location_strategy", "angular2/src/router/router", "angular2/src/router/route_registry", "angular2/src/router/location", "angular2/src/facade/lang", "angular2/core", "angular2/src/facade/exceptions"], true, function(require, exports, module) {
   var global = System.global,
       __define = global.define;
   global.define = undefined;
-  var location_strategy_1 = require("angular2/src/router/location/location_strategy");
-  var path_location_strategy_1 = require("angular2/src/router/location/path_location_strategy");
+  var location_strategy_1 = require("angular2/src/router/location_strategy");
+  var path_location_strategy_1 = require("angular2/src/router/path_location_strategy");
   var router_1 = require("angular2/src/router/router");
   var route_registry_1 = require("angular2/src/router/route_registry");
-  var location_1 = require("angular2/src/router/location/location");
+  var location_1 = require("angular2/src/router/location");
   var lang_1 = require("angular2/src/facade/lang");
   var core_1 = require("angular2/core");
   var exceptions_1 = require("angular2/src/facade/exceptions");
@@ -38444,12 +38272,12 @@ System.register("angular2/src/compiler/compiler", ["angular2/src/compiler/runtim
   return module.exports;
 });
 
-System.register("angular2/src/web_workers/worker/router_providers", ["angular2/core", "angular2/src/router/location/platform_location", "angular2/src/web_workers/worker/platform_location", "angular2/src/router/router_providers_common"], true, function(require, exports, module) {
+System.register("angular2/src/web_workers/worker/router_providers", ["angular2/core", "angular2/src/router/platform_location", "angular2/src/web_workers/worker/platform_location", "angular2/src/router/router_providers_common"], true, function(require, exports, module) {
   var global = System.global,
       __define = global.define;
   global.define = undefined;
   var core_1 = require("angular2/core");
-  var platform_location_1 = require("angular2/src/router/location/platform_location");
+  var platform_location_1 = require("angular2/src/router/platform_location");
   var platform_location_2 = require("angular2/src/web_workers/worker/platform_location");
   var router_providers_common_1 = require("angular2/src/router/router_providers_common");
   exports.WORKER_APP_ROUTER = [router_providers_common_1.ROUTER_PROVIDERS_COMMON, new core_1.Provider(platform_location_1.PlatformLocation, {useClass: platform_location_2.WebWorkerPlatformLocation}), new core_1.Provider(core_1.APP_INITIALIZER, {

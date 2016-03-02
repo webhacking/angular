@@ -224,9 +224,13 @@ export class ResolvedInstruction extends Instruction {
 /**
  * Represents a resolved default route
  */
-export class DefaultInstruction extends ResolvedInstruction {
+export class DefaultInstruction extends Instruction {
   constructor(component: ComponentInstruction, child: DefaultInstruction) {
     super(component, child, {});
+  }
+
+  resolveComponent(): Promise<ComponentInstruction> {
+    return PromiseWrapper.resolve(this.component);
   }
 
   toLinkUrl(): string { return ''; }
@@ -288,7 +292,8 @@ export class RedirectInstruction extends ResolvedInstruction {
 
 
 /**
- * A `ComponentInstruction` represents the route state for a single component.
+ * A `ComponentInstruction` represents the route state for a single component. An `Instruction` is
+ * composed of a tree of these `ComponentInstruction`s.
  *
  * `ComponentInstructions` is a public API. Instances of `ComponentInstruction` are passed
  * to route lifecycle hooks, like {@link CanActivate}.
@@ -303,9 +308,6 @@ export class ComponentInstruction {
   reuse: boolean = false;
   public routeData: RouteData;
 
-  /**
-   * @internal
-   */
   constructor(public urlPath: string, public urlParams: string[], data: RouteData,
               public componentType, public terminal: boolean, public specificity: string,
               public params: {[key: string]: any} = null) {
