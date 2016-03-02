@@ -12,10 +12,10 @@ import "package:angular2/src/facade/exceptions.dart"
 import "package:angular2/core.dart" show Inject, Injectable;
 import "route_registry.dart" show RouteRegistry, ROUTER_PRIMARY_COMPONENT;
 import "instruction.dart" show ComponentInstruction, Instruction;
-import "router_outlet.dart" show RouterOutlet;
-import "location.dart" show Location;
-import "route_lifecycle_reflector.dart" show getCanActivateHook;
-import "route_config_impl.dart" show RouteDefinition;
+import "directives/router_outlet.dart" show RouterOutlet;
+import "location/location.dart" show Location;
+import "lifecycle/route_lifecycle_reflector.dart" show getCanActivateHook;
+import "route_config/route_config_impl.dart" show RouteDefinition;
 
 var _resolveToTrue = PromiseWrapper.resolve(true);
 var _resolveToFalse = PromiseWrapper.resolve(false);
