@@ -520,8 +520,7 @@ t</title>''')).toEqual([
         var src = "111\n222\n333\nE\n444\n555\n666\n";
         var file = new ParseSourceFile(src, "file://");
         var location = new ParseLocation(file, 12, 123, 456);
-        var span = new ParseSourceSpan(location, location);
-        var error = new HtmlTokenError("**ERROR**", null, span);
+        var error = new HtmlTokenError("**ERROR**", null, location);
         expect(error.toString()).toEqual('''**ERROR** ("
 222
 333
@@ -585,7 +584,7 @@ List<dynamic> tokenizeAndHumanizeErrors(String input) {
       .map((tokenError) => [
             (tokenError.tokenType as dynamic),
             tokenError.msg,
-            humanizeLineColumn(tokenError.span.start)
+            humanizeLineColumn(tokenError.location)
           ])
       .toList();
 }

@@ -87,8 +87,8 @@ var TEXT_CSS_SELECTOR = CssSelector.parse("*")[0];
 const TEMPLATE_TRANSFORMS = const OpaqueToken("TemplateTransforms");
 
 class TemplateParseError extends ParseError {
-  TemplateParseError(String message, ParseSourceSpan span)
-      : super(span, message) {
+  TemplateParseError(String message, ParseLocation location)
+      : super(location, message) {
     /* super call moved to initializer */;
   }
 }
@@ -148,7 +148,7 @@ class TemplateParseVisitor implements HtmlAstVisitor {
     pipes.forEach((pipe) => this.pipesByName[pipe.name] = pipe);
   }
   _reportError(String message, ParseSourceSpan sourceSpan) {
-    this.errors.add(new TemplateParseError(message, sourceSpan));
+    this.errors.add(new TemplateParseError(message, sourceSpan.start));
   }
 
   ASTWithSource _parseInterpolation(String value, ParseSourceSpan sourceSpan) {

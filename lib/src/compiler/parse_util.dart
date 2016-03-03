@@ -17,26 +17,13 @@ class ParseSourceFile {
   ParseSourceFile(this.content, this.url) {}
 }
 
-class ParseSourceSpan {
-  ParseLocation start;
-  ParseLocation end;
-  ParseSourceSpan(this.start, this.end) {}
-  String toString() {
-    return this
-        .start
-        .file
-        .content
-        .substring(this.start.offset, this.end.offset);
-  }
-}
-
 abstract class ParseError {
-  ParseSourceSpan span;
+  ParseLocation location;
   String msg;
-  ParseError(this.span, this.msg) {}
+  ParseError(this.location, this.msg) {}
   String toString() {
-    var source = this.span.start.file.content;
-    var ctxStart = this.span.start.offset;
+    var source = this.location.file.content;
+    var ctxStart = this.location.offset;
     if (ctxStart > source.length - 1) {
       ctxStart = source.length - 1;
     }
@@ -63,9 +50,22 @@ abstract class ParseError {
         }
       }
     }
-    var context = source.substring(ctxStart, this.span.start.offset) +
+    var context = source.substring(ctxStart, this.location.offset) +
         "[ERROR ->]" +
-        source.substring(this.span.start.offset, ctxEnd + 1);
-    return '''${ this . msg} ("${ context}"): ${ this . span . start}''';
+        source.substring(this.location.offset, ctxEnd + 1);
+    return '''${ this . msg} ("${ context}"): ${ this . location}''';
+  }
+}
+
+class ParseSourceSpan {
+  ParseLocation start;
+  ParseLocation end;
+  ParseSourceSpan(this.start, this.end) {}
+  String toString() {
+    return this
+        .start
+        .file
+        .content
+        .substring(this.start.offset, this.end.offset);
   }
 }
