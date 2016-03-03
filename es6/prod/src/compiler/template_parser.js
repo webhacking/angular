@@ -54,8 +54,8 @@ var TEXT_CSS_SELECTOR = CssSelector.parse('*')[0];
  */
 export const TEMPLATE_TRANSFORMS = CONST_EXPR(new OpaqueToken('TemplateTransforms'));
 export class TemplateParseError extends ParseError {
-    constructor(message, location) {
-        super(location, message);
+    constructor(message, span) {
+        super(span, message);
     }
 }
 export let TemplateParser = class {
@@ -103,7 +103,7 @@ class TemplateParseVisitor {
         pipes.forEach(pipe => this.pipesByName.set(pipe.name, pipe));
     }
     _reportError(message, sourceSpan) {
-        this.errors.push(new TemplateParseError(message, sourceSpan.start));
+        this.errors.push(new TemplateParseError(message, sourceSpan));
     }
     _parseInterpolation(value, sourceSpan) {
         var sourceInfo = sourceSpan.start.toString();
