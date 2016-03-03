@@ -20,12 +20,12 @@ import "html_tags.dart"
 class HtmlTreeError extends ParseError {
   String elementName;
   static HtmlTreeError create(
-      String elementName, ParseLocation location, String msg) {
-    return new HtmlTreeError(elementName, location, msg);
+      String elementName, ParseSourceSpan span, String msg) {
+    return new HtmlTreeError(elementName, span, msg);
   }
 
-  HtmlTreeError(this.elementName, ParseLocation location, String msg)
-      : super(location, msg) {
+  HtmlTreeError(this.elementName, ParseSourceSpan span, String msg)
+      : super(span, msg) {
     /* super call moved to initializer */;
   }
 }
@@ -151,9 +151,7 @@ class TreeBuilder {
       selfClosing = true;
       if (getNsPrefix(fullName) == null &&
           !getHtmlTagDefinition(fullName).isVoid) {
-        this.errors.add(HtmlTreeError.create(
-            fullName,
-            startTagToken.sourceSpan.start,
+        this.errors.add(HtmlTreeError.create(fullName, startTagToken.sourceSpan,
             '''Only void and foreign elements can be self closed "${ startTagToken . parts [ 1 ]}"'''));
       }
     } else if (identical(this.peek.type, HtmlTokenType.TAG_OPEN_END)) {
@@ -194,14 +192,10 @@ class TreeBuilder {
     var fullName = getElementFullName(
         endTagToken.parts[0], endTagToken.parts[1], this._getParentElement());
     if (getHtmlTagDefinition(fullName).isVoid) {
-      this.errors.add(HtmlTreeError.create(
-          fullName,
-          endTagToken.sourceSpan.start,
+      this.errors.add(HtmlTreeError.create(fullName, endTagToken.sourceSpan,
           '''Void elements do not have end tags "${ endTagToken . parts [ 1 ]}"'''));
     } else if (!this._popElement(fullName)) {
-      this.errors.add(HtmlTreeError.create(
-          fullName,
-          endTagToken.sourceSpan.start,
+      this.errors.add(HtmlTreeError.create(fullName, endTagToken.sourceSpan,
           '''Unexpected closing tag "${ endTagToken . parts [ 1 ]}"'''));
     }
   }
