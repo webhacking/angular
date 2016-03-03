@@ -25,6 +25,7 @@ import "fixture_components.dart"
         ParentCmp,
         ParentWithDefaultCmp,
         DynamicLoaderCmp;
+import "package:angular2/src/facade/async.dart" show PromiseWrapper;
 
 getLinkElement(ComponentFixture rtc) {
   return rtc.debugElement.query(By.css("a")).nativeElement;
@@ -563,10 +564,19 @@ syncRoutesWithDynamicComponents() {
               return fixture.componentInstance.onSomeAction();
             })
             .then((_) {
-              fixture.detectChanges();
-              expect(fixture.debugElement.nativeElement)
-                  .toHaveText("{ hello }");
-              async.done();
+              // TODO(i): This should be rewritten to use NgZone#onStable or
+
+              // something
+
+              // similar basically the assertion needs to run when the world is
+
+              // stable and we don't know when that is, only zones know.
+              PromiseWrapper.resolve(null).then((_) {
+                fixture.detectChanges();
+                expect(fixture.debugElement.nativeElement)
+                    .toHaveText("{ hello }");
+                async.done();
+              });
             });
       }));
 }
