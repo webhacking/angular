@@ -52,7 +52,7 @@ import "package:angular2/src/web_workers/ui/renderer.dart"
     show MessageBasedRenderer;
 import "package:angular2/src/web_workers/ui/xhr_impl.dart"
     show MessageBasedXHRImpl;
-import "package:angular2/src/router/browser_platform_location.dart"
+import "package:angular2/src/router/location/browser_platform_location.dart"
     show BrowserPlatformLocation;
 import "package:angular2/src/web_workers/shared/service_message_broker.dart"
     show ServiceMessageBrokerFactory, ServiceMessageBrokerFactory_;
