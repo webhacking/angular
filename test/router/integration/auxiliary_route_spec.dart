@@ -7,13 +7,19 @@ import "util.dart"
         describeWith,
         describeWithout,
         describeWithAndWithout,
-        itShouldRoute;
+        itShouldRoute,
+        TEST_ROUTER_PROVIDERS;
+import "package:angular2/testing_internal.dart"
+    show beforeEachProviders, describe;
 import "impl/aux_route_spec_impl.dart" show registerSpecs;
 
 main() {
-  registerSpecs();
-  describeRouter("aux routes", () {
-    itShouldRoute();
-    describeWith("a primary route", itShouldRoute);
+  describe("auxiliary route spec", () {
+    beforeEachProviders(() => TEST_ROUTER_PROVIDERS);
+    registerSpecs();
+    describeRouter("aux routes", () {
+      itShouldRoute();
+      describeWith("a primary route", itShouldRoute);
+    });
   });
 }

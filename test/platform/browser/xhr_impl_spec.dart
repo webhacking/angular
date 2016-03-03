@@ -13,14 +13,25 @@ import "package:angular2/testing_internal.dart"
         xit;
 import "package:angular2/src/platform/browser/xhr_impl.dart" show XHRImpl;
 import "package:angular2/src/facade/async.dart" show PromiseWrapper;
+import "package:angular2/src/facade/lang.dart" show IS_DART;
 
 main() {
   describe("XHRImpl", () {
     XHRImpl xhr;
-    var url200 =
-        "/base/modules/angular2/test/platform/browser/static_assets/200.html";
-    var url404 =
-        "/base/modules/angular2/test/platform/browser/static_assets/404.html";
+    // TODO(juliemr): This file currently won't work with dart unit tests run using
+
+    // exclusive it or describe (iit or ddescribe). This is because when
+
+    // pub run test is executed against this specific file the relative paths
+
+    // will be relative to here, so url200 should look like
+
+    // static_assets/200.html.
+
+    // We currently have no way of detecting this.
+    var urlBase = IS_DART ? "" : "/base/modules/angular2/";
+    var url200 = urlBase + "test/platform/browser/static_assets/200.html";
+    var url404 = "/bad/path/404.html";
     beforeEach(() {
       xhr = new XHRImpl();
     });

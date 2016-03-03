@@ -83,9 +83,8 @@ main() {
                 .getDirectiveMetadata(ComponentWithoutModuleId)
                 .type
                 .moduleUrl;
-            var expectedEndValue = IS_DART
-                ? "base/dist/dart/angular2/test/compiler/runtime_metadata_spec.dart"
-                : "./";
+            var expectedEndValue =
+                IS_DART ? "test/compiler/runtime_metadata_spec.dart" : "./";
             expect(value.endsWith(expectedEndValue)).toBe(true);
           }));
     });
