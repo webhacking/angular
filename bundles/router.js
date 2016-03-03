@@ -2410,16 +2410,16 @@ System.register("angular2/src/router/rules/rule_set", ["angular2/src/facade/lang
   return module.exports;
 });
 
-System.register("angular2/src/router/router_providers", ["angular2/router", "angular2/core", "angular2/src/facade/lang", "angular2/src/router/location/browser_platform_location", "angular2/src/router/location/platform_location"], true, function(require, exports, module) {
+System.register("angular2/src/router/router_providers", ["angular2/src/router/router_providers_common", "angular2/core", "angular2/src/facade/lang", "angular2/src/router/location/browser_platform_location", "angular2/src/router/location/platform_location"], true, function(require, exports, module) {
   var global = System.global,
       __define = global.define;
   global.define = undefined;
-  var router_1 = require("angular2/router");
+  var router_providers_common_1 = require("angular2/src/router/router_providers_common");
   var core_1 = require("angular2/core");
   var lang_1 = require("angular2/src/facade/lang");
   var browser_platform_location_1 = require("angular2/src/router/location/browser_platform_location");
   var platform_location_1 = require("angular2/src/router/location/platform_location");
-  exports.ROUTER_PROVIDERS = lang_1.CONST_EXPR([router_1.ROUTER_PROVIDERS_COMMON, lang_1.CONST_EXPR(new core_1.Provider(platform_location_1.PlatformLocation, {useClass: browser_platform_location_1.BrowserPlatformLocation}))]);
+  exports.ROUTER_PROVIDERS = lang_1.CONST_EXPR([router_providers_common_1.ROUTER_PROVIDERS_COMMON, lang_1.CONST_EXPR(new core_1.Provider(platform_location_1.PlatformLocation, {useClass: browser_platform_location_1.BrowserPlatformLocation}))]);
   exports.ROUTER_BINDINGS = exports.ROUTER_PROVIDERS;
   global.define = __define;
   return module.exports;
