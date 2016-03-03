@@ -51,6 +51,12 @@ export declare class Router {
      */
     registerPrimaryOutlet(outlet: RouterOutlet): Promise<boolean>;
     /**
+     * Unregister an outlet (because it was destroyed, etc).
+     *
+     * You probably don't need to use this unless you're writing a custom outlet implementation.
+     */
+    unregisterPrimaryOutlet(outlet: RouterOutlet): void;
+    /**
      * Register an outlet to notified of auxiliary route changes.
      *
      * You probably don't need to use this unless you're writing a reusable component.

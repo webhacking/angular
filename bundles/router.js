@@ -2054,7 +2054,7 @@ System.register("angular2/src/router/lifecycle/route_lifecycle_reflector", ["ang
   return module.exports;
 });
 
-System.register("angular2/src/router/directives/router_outlet", ["angular2/src/facade/async", "angular2/src/facade/collection", "angular2/src/facade/lang", "angular2/src/facade/exceptions", "angular2/core", "angular2/src/router/router", "angular2/src/router/instruction", "angular2/src/router/lifecycle/lifecycle_annotations", "angular2/src/router/lifecycle/route_lifecycle_reflector"], true, function(require, exports, module) {
+System.register("angular2/src/router/directives/router_outlet", ["angular2/src/facade/async", "angular2/src/facade/collection", "angular2/src/facade/lang", "angular2/core", "angular2/src/router/router", "angular2/src/router/instruction", "angular2/src/router/lifecycle/lifecycle_annotations", "angular2/src/router/lifecycle/route_lifecycle_reflector"], true, function(require, exports, module) {
   var global = System.global,
       __define = global.define;
   global.define = undefined;
@@ -2082,7 +2082,6 @@ System.register("angular2/src/router/directives/router_outlet", ["angular2/src/f
   var async_1 = require("angular2/src/facade/async");
   var collection_1 = require("angular2/src/facade/collection");
   var lang_1 = require("angular2/src/facade/lang");
-  var exceptions_1 = require("angular2/src/facade/exceptions");
   var core_1 = require("angular2/core");
   var routerMod = require("angular2/src/router/router");
   var instruction_1 = require("angular2/src/router/instruction");
@@ -2122,7 +2121,7 @@ System.register("angular2/src/router/directives/router_outlet", ["angular2/src/f
       var previousInstruction = this._currentInstruction;
       this._currentInstruction = nextInstruction;
       if (lang_1.isBlank(this._componentRef)) {
-        throw new exceptions_1.BaseException("Cannot reuse an outlet that does not contain a component.");
+        return this.activate(nextInstruction);
       }
       return async_1.PromiseWrapper.resolve(route_lifecycle_reflector_1.hasLifecycleHook(hookMod.routerOnReuse, this._currentInstruction.componentType) ? this._componentRef.instance.routerOnReuse(nextInstruction, previousInstruction) : true);
     };
@@ -2158,6 +2157,9 @@ System.register("angular2/src/router/directives/router_outlet", ["angular2/src/f
         result = nextInstruction == this._currentInstruction || (lang_1.isPresent(nextInstruction.params) && lang_1.isPresent(this._currentInstruction.params) && collection_1.StringMapWrapper.equals(nextInstruction.params, this._currentInstruction.params));
       }
       return async_1.PromiseWrapper.resolve(result);
+    };
+    RouterOutlet.prototype.ngOnDestroy = function() {
+      this._parentRouter.unregisterPrimaryOutlet(this);
     };
     RouterOutlet = __decorate([core_1.Directive({selector: 'router-outlet'}), __param(3, core_1.Attribute('name')), __metadata('design:paramtypes', [core_1.ElementRef, core_1.DynamicComponentLoader, routerMod.Router, String])], RouterOutlet);
     return RouterOutlet;
@@ -2870,11 +2872,20 @@ System.register("angular2/src/router/router", ["angular2/src/facade/async", "ang
       if (lang_1.isPresent(outlet.name)) {
         throw new exceptions_1.BaseException("registerPrimaryOutlet expects to be called with an unnamed outlet.");
       }
+      if (lang_1.isPresent(this._outlet)) {
+        throw new exceptions_1.BaseException("Primary outlet is already registered.");
+      }
       this._outlet = outlet;
       if (lang_1.isPresent(this._currentInstruction)) {
         return this.commit(this._currentInstruction, false);
       }
       return _resolveToTrue;
+    };
+    Router.prototype.unregisterPrimaryOutlet = function(outlet) {
+      if (lang_1.isPresent(outlet.name)) {
+        throw new exceptions_1.BaseException("registerPrimaryOutlet expects to be called with an unnamed outlet.");
+      }
+      this._outlet = null;
     };
     Router.prototype.registerAuxOutlet = function(outlet) {
       var outletName = outlet.name;
@@ -2938,6 +2949,22 @@ System.register("angular2/src/router/router", ["angular2/src/facade/async", "ang
         return _this._afterPromiseFinishNavigating(_this._navigate(instruction, _skipLocationChange));
       });
     };
+    Router.prototype._settleInstruction = function(instruction) {
+      var _this = this;
+      return instruction.resolveComponent().then(function(_) {
+        var unsettledInstructions = [];
+        if (lang_1.isPresent(instruction.component)) {
+          instruction.component.reuse = false;
+        }
+        if (lang_1.isPresent(instruction.child)) {
+          unsettledInstructions.push(_this._settleInstruction(instruction.child));
+        }
+        collection_1.StringMapWrapper.forEach(instruction.auxInstruction, function(instruction, _) {
+          unsettledInstructions.push(_this._settleInstruction(instruction));
+        });
+        return async_1.PromiseWrapper.all(unsettledInstructions);
+      });
+    };
     Router.prototype._navigate = function(instruction, _skipLocationChange) {
       var _this = this;
       return this._settleInstruction(instruction).then(function(_) {
@@ -2956,22 +2983,6 @@ System.register("angular2/src/router/router", ["angular2/src/facade/async", "ang
             });
           }
         });
-      });
-    };
-    Router.prototype._settleInstruction = function(instruction) {
-      var _this = this;
-      return instruction.resolveComponent().then(function(_) {
-        var unsettledInstructions = [];
-        if (lang_1.isPresent(instruction.component)) {
-          instruction.component.reuse = false;
-        }
-        if (lang_1.isPresent(instruction.child)) {
-          unsettledInstructions.push(_this._settleInstruction(instruction.child));
-        }
-        collection_1.StringMapWrapper.forEach(instruction.auxInstruction, function(instruction, _) {
-          unsettledInstructions.push(_this._settleInstruction(instruction));
-        });
-        return async_1.PromiseWrapper.all(unsettledInstructions);
       });
     };
     Router.prototype._emitNavigationFinish = function(url) {

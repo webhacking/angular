@@ -36268,11 +36268,20 @@ System.register("angular2/src/router/router", ["angular2/src/facade/async", "ang
       if (lang_1.isPresent(outlet.name)) {
         throw new exceptions_1.BaseException("registerPrimaryOutlet expects to be called with an unnamed outlet.");
       }
+      if (lang_1.isPresent(this._outlet)) {
+        throw new exceptions_1.BaseException("Primary outlet is already registered.");
+      }
       this._outlet = outlet;
       if (lang_1.isPresent(this._currentInstruction)) {
         return this.commit(this._currentInstruction, false);
       }
       return _resolveToTrue;
+    };
+    Router.prototype.unregisterPrimaryOutlet = function(outlet) {
+      if (lang_1.isPresent(outlet.name)) {
+        throw new exceptions_1.BaseException("registerPrimaryOutlet expects to be called with an unnamed outlet.");
+      }
+      this._outlet = null;
     };
     Router.prototype.registerAuxOutlet = function(outlet) {
       var outletName = outlet.name;
@@ -36336,6 +36345,22 @@ System.register("angular2/src/router/router", ["angular2/src/facade/async", "ang
         return _this._afterPromiseFinishNavigating(_this._navigate(instruction, _skipLocationChange));
       });
     };
+    Router.prototype._settleInstruction = function(instruction) {
+      var _this = this;
+      return instruction.resolveComponent().then(function(_) {
+        var unsettledInstructions = [];
+        if (lang_1.isPresent(instruction.component)) {
+          instruction.component.reuse = false;
+        }
+        if (lang_1.isPresent(instruction.child)) {
+          unsettledInstructions.push(_this._settleInstruction(instruction.child));
+        }
+        collection_1.StringMapWrapper.forEach(instruction.auxInstruction, function(instruction, _) {
+          unsettledInstructions.push(_this._settleInstruction(instruction));
+        });
+        return async_1.PromiseWrapper.all(unsettledInstructions);
+      });
+    };
     Router.prototype._navigate = function(instruction, _skipLocationChange) {
       var _this = this;
       return this._settleInstruction(instruction).then(function(_) {
@@ -36354,22 +36379,6 @@ System.register("angular2/src/router/router", ["angular2/src/facade/async", "ang
             });
           }
         });
-      });
-    };
-    Router.prototype._settleInstruction = function(instruction) {
-      var _this = this;
-      return instruction.resolveComponent().then(function(_) {
-        var unsettledInstructions = [];
-        if (lang_1.isPresent(instruction.component)) {
-          instruction.component.reuse = false;
-        }
-        if (lang_1.isPresent(instruction.child)) {
-          unsettledInstructions.push(_this._settleInstruction(instruction.child));
-        }
-        collection_1.StringMapWrapper.forEach(instruction.auxInstruction, function(instruction, _) {
-          unsettledInstructions.push(_this._settleInstruction(instruction));
-        });
-        return async_1.PromiseWrapper.all(unsettledInstructions);
       });
     };
     Router.prototype._emitNavigationFinish = function(url) {

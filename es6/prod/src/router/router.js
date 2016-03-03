@@ -70,11 +70,25 @@ export let Router = class {
         if (isPresent(outlet.name)) {
             throw new BaseException(`registerPrimaryOutlet expects to be called with an unnamed outlet.`);
         }
+        if (isPresent(this._outlet)) {
+            throw new BaseException(`Primary outlet is already registered.`);
+        }
         this._outlet = outlet;
         if (isPresent(this._currentInstruction)) {
             return this.commit(this._currentInstruction, false);
         }
         return _resolveToTrue;
+    }
+    /**
+     * Unregister an outlet (because it was destroyed, etc).
+     *
+     * You probably don't need to use this unless you're writing a custom outlet implementation.
+     */
+    unregisterPrimaryOutlet(outlet) {
+        if (isPresent(outlet.name)) {
+            throw new BaseException(`registerPrimaryOutlet expects to be called with an unnamed outlet.`);
+        }
+        this._outlet = null;
     }
     /**
      * Register an outlet to notified of auxiliary route changes.
@@ -174,6 +188,22 @@ export let Router = class {
         });
     }
     /** @internal */
+    _settleInstruction(instruction) {
+        return instruction.resolveComponent().then((_) => {
+            var unsettledInstructions = [];
+            if (isPresent(instruction.component)) {
+                instruction.component.reuse = false;
+            }
+            if (isPresent(instruction.child)) {
+                unsettledInstructions.push(this._settleInstruction(instruction.child));
+            }
+            StringMapWrapper.forEach(instruction.auxInstruction, (instruction, _) => {
+                unsettledInstructions.push(this._settleInstruction(instruction));
+            });
+            return PromiseWrapper.all(unsettledInstructions);
+        });
+    }
+    /** @internal */
     _navigate(instruction, _skipLocationChange) {
         return this._settleInstruction(instruction)
             .then((_) => this._routerCanReuse(instruction))
@@ -192,22 +222,6 @@ export let Router = class {
                     });
                 }
             });
-        });
-    }
-    /** @internal */
-    _settleInstruction(instruction) {
-        return instruction.resolveComponent().then((_) => {
-            var unsettledInstructions = [];
-            if (isPresent(instruction.component)) {
-                instruction.component.reuse = false;
-            }
-            if (isPresent(instruction.child)) {
-                unsettledInstructions.push(this._settleInstruction(instruction.child));
-            }
-            StringMapWrapper.forEach(instruction.auxInstruction, (instruction, _) => {
-                unsettledInstructions.push(this._settleInstruction(instruction));
-            });
-            return PromiseWrapper.all(unsettledInstructions);
         });
     }
     _emitNavigationFinish(url) { ObservableWrapper.callEmit(this._subject, url); }

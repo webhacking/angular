@@ -32901,11 +32901,25 @@ return /******/ (function(modules) { // webpackBootstrap
 	        if (lang_1.isPresent(outlet.name)) {
 	            throw new exceptions_1.BaseException("registerPrimaryOutlet expects to be called with an unnamed outlet.");
 	        }
+	        if (lang_1.isPresent(this._outlet)) {
+	            throw new exceptions_1.BaseException("Primary outlet is already registered.");
+	        }
 	        this._outlet = outlet;
 	        if (lang_1.isPresent(this._currentInstruction)) {
 	            return this.commit(this._currentInstruction, false);
 	        }
 	        return _resolveToTrue;
+	    };
+	    /**
+	     * Unregister an outlet (because it was destroyed, etc).
+	     *
+	     * You probably don't need to use this unless you're writing a custom outlet implementation.
+	     */
+	    Router.prototype.unregisterPrimaryOutlet = function (outlet) {
+	        if (lang_1.isPresent(outlet.name)) {
+	            throw new exceptions_1.BaseException("registerPrimaryOutlet expects to be called with an unnamed outlet.");
+	        }
+	        this._outlet = null;
 	    };
 	    /**
 	     * Register an outlet to notified of auxiliary route changes.
@@ -33010,6 +33024,23 @@ return /******/ (function(modules) { // webpackBootstrap
 	        });
 	    };
 	    /** @internal */
+	    Router.prototype._settleInstruction = function (instruction) {
+	        var _this = this;
+	        return instruction.resolveComponent().then(function (_) {
+	            var unsettledInstructions = [];
+	            if (lang_1.isPresent(instruction.component)) {
+	                instruction.component.reuse = false;
+	            }
+	            if (lang_1.isPresent(instruction.child)) {
+	                unsettledInstructions.push(_this._settleInstruction(instruction.child));
+	            }
+	            collection_1.StringMapWrapper.forEach(instruction.auxInstruction, function (instruction, _) {
+	                unsettledInstructions.push(_this._settleInstruction(instruction));
+	            });
+	            return async_1.PromiseWrapper.all(unsettledInstructions);
+	        });
+	    };
+	    /** @internal */
 	    Router.prototype._navigate = function (instruction, _skipLocationChange) {
 	        var _this = this;
 	        return this._settleInstruction(instruction)
@@ -33029,23 +33060,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    });
 	                }
 	            });
-	        });
-	    };
-	    /** @internal */
-	    Router.prototype._settleInstruction = function (instruction) {
-	        var _this = this;
-	        return instruction.resolveComponent().then(function (_) {
-	            var unsettledInstructions = [];
-	            if (lang_1.isPresent(instruction.component)) {
-	                instruction.component.reuse = false;
-	            }
-	            if (lang_1.isPresent(instruction.child)) {
-	                unsettledInstructions.push(_this._settleInstruction(instruction.child));
-	            }
-	            collection_1.StringMapWrapper.forEach(instruction.auxInstruction, function (instruction, _) {
-	                unsettledInstructions.push(_this._settleInstruction(instruction));
-	            });
-	            return async_1.PromiseWrapper.all(unsettledInstructions);
 	        });
 	    };
 	    Router.prototype._emitNavigationFinish = function (url) { async_1.ObservableWrapper.callEmit(this._subject, url); };
@@ -35700,7 +35714,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	var async_1 = __webpack_require__(46);
 	var collection_1 = __webpack_require__(12);
 	var lang_1 = __webpack_require__(5);
-	var exceptions_1 = __webpack_require__(14);
 	var core_1 = __webpack_require__(2);
 	var routerMod = __webpack_require__(237);
 	var instruction_1 = __webpack_require__(242);
@@ -35764,8 +35777,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	    RouterOutlet.prototype.reuse = function (nextInstruction) {
 	        var previousInstruction = this._currentInstruction;
 	        this._currentInstruction = nextInstruction;
+	        // it's possible the component is removed before it can be reactivated (if nested withing
+	        // another dynamically loaded component, for instance). In that case, we simply activate
+	        // a new one.
 	        if (lang_1.isBlank(this._componentRef)) {
-	            throw new exceptions_1.BaseException("Cannot reuse an outlet that does not contain a component.");
+	            return this.activate(nextInstruction);
 	        }
 	        return async_1.PromiseWrapper.resolve(route_lifecycle_reflector_1.hasLifecycleHook(hookMod.routerOnReuse, this._currentInstruction.componentType) ?
 	            this._componentRef.instance
@@ -35836,6 +35852,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	        return async_1.PromiseWrapper.resolve(result);
 	    };
+	    RouterOutlet.prototype.ngOnDestroy = function () { this._parentRouter.unregisterPrimaryOutlet(this); };
 	    RouterOutlet = __decorate([
 	        core_1.Directive({ selector: 'router-outlet' }),
 	        __param(3, core_1.Attribute('name')), 

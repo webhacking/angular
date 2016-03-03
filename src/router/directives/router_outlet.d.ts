@@ -1,4 +1,4 @@
-import { DynamicComponentLoader, ElementRef } from 'angular2/core';
+import { DynamicComponentLoader, ElementRef, OnDestroy } from 'angular2/core';
 import * as routerMod from '../router';
 import { ComponentInstruction } from '../instruction';
 /**
@@ -10,7 +10,7 @@ import { ComponentInstruction } from '../instruction';
  * <router-outlet></router-outlet>
  * ```
  */
-export declare class RouterOutlet {
+export declare class RouterOutlet implements OnDestroy {
     private _elementRef;
     private _loader;
     private _parentRouter;
@@ -54,4 +54,5 @@ export declare class RouterOutlet {
      * or resolves to true if the hook is not present.
      */
     routerCanReuse(nextInstruction: ComponentInstruction): Promise<boolean>;
+    ngOnDestroy(): void;
 }

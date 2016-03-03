@@ -13,7 +13,6 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 import { PromiseWrapper } from 'angular2/src/facade/async';
 import { StringMapWrapper } from 'angular2/src/facade/collection';
 import { isBlank, isPresent } from 'angular2/src/facade/lang';
-import { BaseException } from 'angular2/src/facade/exceptions';
 import { Directive, Attribute, DynamicComponentLoader, ElementRef, Injector, provide } from 'angular2/core';
 import * as routerMod from '../router';
 import { RouteParams, RouteData } from '../instruction';
@@ -76,8 +75,11 @@ export let RouterOutlet = class {
     reuse(nextInstruction) {
         var previousInstruction = this._currentInstruction;
         this._currentInstruction = nextInstruction;
+        // it's possible the component is removed before it can be reactivated (if nested withing
+        // another dynamically loaded component, for instance). In that case, we simply activate
+        // a new one.
         if (isBlank(this._componentRef)) {
-            throw new BaseException(`Cannot reuse an outlet that does not contain a component.`);
+            return this.activate(nextInstruction);
         }
         return PromiseWrapper.resolve(hasLifecycleHook(hookMod.routerOnReuse, this._currentInstruction.componentType) ?
             this._componentRef.instance
@@ -147,6 +149,7 @@ export let RouterOutlet = class {
         }
         return PromiseWrapper.resolve(result);
     }
+    ngOnDestroy() { this._parentRouter.unregisterPrimaryOutlet(this); }
 };
 RouterOutlet = __decorate([
     Directive({ selector: 'router-outlet' }),
