@@ -86,7 +86,7 @@ main() {
           var baseHref = DOM.getBaseHref();
           DOM.removeChild(headEl, baseEl);
           DOM.resetBaseElement();
-          expect(baseHref.endsWith("/base")).toBe(true);
+          expect(baseHref).toEqual("/base");
         });
       });
     }

@@ -353,9 +353,8 @@ main() {
     if (IS_DART) {
       describe("importUri", () {
         it("should return the importUri for a type", () {
-          expect(reflector
-                  .importUri(TestObjWith00Args)
-                  .endsWith("test/core/reflection/reflector_spec.dart"))
+          expect(reflector.importUri(TestObjWith00Args).endsWith(
+                  "base/dist/dart/angular2/test/core/reflection/reflector_spec.dart"))
               .toBe(true);
         });
       });

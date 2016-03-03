@@ -7,29 +7,23 @@ import "util.dart"
         describeWith,
         describeWithout,
         describeWithAndWithout,
-        itShouldRoute,
-        TEST_ROUTER_PROVIDERS;
-import "package:angular2/testing_internal.dart"
-    show beforeEachProviders, describe, ddescribe;
+        itShouldRoute;
 import "impl/sync_route_spec_impl.dart" show registerSpecs;
 
 main() {
-  describe("sync route spec", () {
-    beforeEachProviders(() => TEST_ROUTER_PROVIDERS);
-    registerSpecs();
-    describeRouter("sync routes", () {
-      describeWithout("children", () {
+  registerSpecs();
+  describeRouter("sync routes", () {
+    describeWithout("children", () {
+      describeWithAndWithout("params", itShouldRoute);
+    });
+    describeWith("sync children", () {
+      describeWithout("default routes", () {
         describeWithAndWithout("params", itShouldRoute);
       });
-      describeWith("sync children", () {
-        describeWithout("default routes", () {
-          describeWithAndWithout("params", itShouldRoute);
-        });
-        describeWith("default routes", () {
-          describeWithout("params", itShouldRoute);
-        });
+      describeWith("default routes", () {
+        describeWithout("params", itShouldRoute);
       });
-      describeWith("dynamic components", itShouldRoute);
     });
+    describeWith("dynamic components", itShouldRoute);
   });
 }

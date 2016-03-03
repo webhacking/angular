@@ -46,60 +46,53 @@ import "schema_registry_mock.dart" show MockSchemaRegistry;
 import "../core/change_detection/parser/unparser.dart" show Unparser;
 
 var expressionUnparser = new Unparser();
-var MOCK_SCHEMA_REGISTRY = [
-  provide(ElementSchemaRegistry,
-      useValue: new MockSchemaRegistry(
-          {"invalidProp": false}, {"mappedAttr": "mappedProp"}))
-];
 main() {
-  var ngIf;
-  var parse;
-  commonBeforeEach() {
-    beforeEach(inject([TemplateParser], (parser) {
+  describe("TemplateParser", () {
+    beforeEachProviders(() => [
+          TEST_PROVIDERS,
+          provide(ElementSchemaRegistry,
+              useValue: new MockSchemaRegistry(
+                  {"invalidProp": false}, {"mappedAttr": "mappedProp"}))
+        ]);
+    TemplateParser parser;
+    var ngIf;
+    beforeEach(inject([TemplateParser], (_parser) {
+      parser = _parser;
       ngIf = CompileDirectiveMetadata.create(
           selector: "[ngIf]",
           type: new CompileTypeMetadata(name: "NgIf"),
           inputs: ["ngIf"]);
-      parse = /* List < TemplateAst > */ (String template,
-          List<CompileDirectiveMetadata> directives,
-          [List<CompilePipeMetadata> pipes = null]) {
-        if (identical(pipes, null)) {
-          pipes = [];
-        }
-        return parser.parse(template, directives, pipes, "TestComp");
-      };
     }));
-  }
-  describe("TemplateParser template transform", () {
-    beforeEachProviders(() => [TEST_PROVIDERS, MOCK_SCHEMA_REGISTRY]);
-    beforeEachProviders(() => [
-          provide(TEMPLATE_TRANSFORMS,
-              useValue: new FooAstTransformer(), multi: true)
-        ]);
-    describe("single", () {
-      commonBeforeEach();
+    List<TemplateAst> parse(
+        String template, List<CompileDirectiveMetadata> directives,
+        [List<CompilePipeMetadata> pipes = null]) {
+      if (identical(pipes, null)) {
+        pipes = [];
+      }
+      return parser.parse(template, directives, pipes, "TestComp");
+    }
+    describe("template transform", () {
+      beforeEachProviders(() => [
+            provide(TEMPLATE_TRANSFORMS,
+                useValue: new FooAstTransformer(), multi: true)
+          ]);
       it("should transform TemplateAST", () {
         expect(humanizeTplAst(parse("<div>", []))).toEqual([
           [ElementAst, "foo"]
         ]);
       });
-    });
-    describe("multiple", () {
-      beforeEachProviders(() => [
-            provide(TEMPLATE_TRANSFORMS,
-                useValue: new BarAstTransformer(), multi: true)
+      describe("multiple", () {
+        beforeEachProviders(() => [
+              provide(TEMPLATE_TRANSFORMS,
+                  useValue: new BarAstTransformer(), multi: true)
+            ]);
+        it("should compose transformers", () {
+          expect(humanizeTplAst(parse("<div>", []))).toEqual([
+            [ElementAst, "bar"]
           ]);
-      commonBeforeEach();
-      it("should compose transformers", () {
-        expect(humanizeTplAst(parse("<div>", []))).toEqual([
-          [ElementAst, "bar"]
-        ]);
+        });
       });
     });
-  });
-  describe("TemplateParser", () {
-    beforeEachProviders(() => [TEST_PROVIDERS, MOCK_SCHEMA_REGISTRY]);
-    commonBeforeEach();
     describe("parse", () {
       describe("nodes without bindings", () {
         it("should parse text nodes", () {

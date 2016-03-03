@@ -8,7 +8,7 @@ import "package:angular2/src/web_workers/shared/client_message_broker.dart"
     show UiArguments;
 import "package:angular2/src/facade/lang.dart" show Type, isPresent;
 import "../worker/spies.dart" show SpyMessageBroker;
-import "package:angular2/src/testing/matchers.dart" show expect;
+import "package:angular2/testing_internal.dart" show expect;
 import "package:angular2/src/web_workers/shared/message_bus.dart"
     show MessageBusSink, MessageBusSource, MessageBus;
 import "package:angular2/src/web_workers/shared/client_message_broker.dart"
