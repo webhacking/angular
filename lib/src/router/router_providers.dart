@@ -1,7 +1,6 @@
-// import {ROUTER_PROVIDERS_COMMON} from './router_providers_common';
 library angular2.src.router.router_providers;
 
-import "package:angular2/router.dart" show ROUTER_PROVIDERS_COMMON;
+import "router_providers_common.dart" show ROUTER_PROVIDERS_COMMON;
 import "package:angular2/core.dart" show Provider;
 import "location/browser_platform_location.dart" show BrowserPlatformLocation;
 import "location/platform_location.dart" show PlatformLocation;

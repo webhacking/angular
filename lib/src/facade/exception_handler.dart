@@ -1,8 +1,8 @@
 library angular2.src.facade.exception_handler;
 
 import "package:angular2/src/facade/lang.dart" show isPresent, isBlank, print;
-import "package:angular2/src/facade/exceptions.dart"
-    show BaseException, WrappedException;
+import "package:angular2/src/facade/base_wrapped_exception.dart"
+    show BaseWrappedException;
 import "package:angular2/src/facade/collection.dart"
     show ListWrapper, isListLikeIterable;
 
@@ -92,7 +92,7 @@ class ExceptionHandler {
 
   /** @internal */
   String _extractMessage(dynamic exception) {
-    return exception is WrappedException
+    return exception is BaseWrappedException
         ? exception.wrapperMessage
         : exception.toString();
   }
@@ -107,7 +107,7 @@ class ExceptionHandler {
   /** @internal */
   dynamic _findContext(dynamic exception) {
     try {
-      if (!(exception is WrappedException)) return null;
+      if (!(exception is BaseWrappedException)) return null;
       return isPresent(exception.context)
           ? exception.context
           : this._findContext(exception.originalException);
@@ -119,9 +119,9 @@ class ExceptionHandler {
 
   /** @internal */
   dynamic _findOriginalException(dynamic exception) {
-    if (!(exception is WrappedException)) return null;
+    if (!(exception is BaseWrappedException)) return null;
     var e = exception.originalException;
-    while (e is WrappedException && isPresent(e.originalException)) {
+    while (e is BaseWrappedException && isPresent(e.originalException)) {
       e = e.originalException;
     }
     return e;
@@ -129,12 +129,12 @@ class ExceptionHandler {
 
   /** @internal */
   dynamic _findOriginalStack(dynamic exception) {
-    if (!(exception is WrappedException)) return null;
+    if (!(exception is BaseWrappedException)) return null;
     var e = exception;
     var stack = exception.originalStack;
-    while (e is WrappedException && isPresent(e.originalException)) {
+    while (e is BaseWrappedException && isPresent(e.originalException)) {
       e = e.originalException;
-      if (e is WrappedException && isPresent(e.originalException)) {
+      if (e is BaseWrappedException && isPresent(e.originalException)) {
         stack = e.originalStack;
       }
     }
