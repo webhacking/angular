@@ -1,4 +1,4 @@
-import { ParseError, ParseSourceSpan } from './parse_util';
+import { ParseLocation, ParseError, ParseSourceSpan } from './parse_util';
 export declare enum HtmlTokenType {
     TAG_OPEN_START = 0,
     TAG_OPEN_END = 1,
@@ -24,7 +24,7 @@ export declare class HtmlToken {
 }
 export declare class HtmlTokenError extends ParseError {
     tokenType: HtmlTokenType;
-    constructor(errorMsg: string, tokenType: HtmlTokenType, span: ParseSourceSpan);
+    constructor(errorMsg: string, tokenType: HtmlTokenType, location: ParseLocation);
 }
 export declare class HtmlTokenizeResult {
     tokens: HtmlToken[];

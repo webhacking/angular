@@ -13,23 +13,14 @@ export class ParseSourceFile {
         this.url = url;
     }
 }
-export class ParseSourceSpan {
-    constructor(start, end) {
-        this.start = start;
-        this.end = end;
-    }
-    toString() {
-        return this.start.file.content.substring(this.start.offset, this.end.offset);
-    }
-}
 export class ParseError {
-    constructor(span, msg) {
-        this.span = span;
+    constructor(location, msg) {
+        this.location = location;
         this.msg = msg;
     }
     toString() {
-        var source = this.span.start.file.content;
-        var ctxStart = this.span.start.offset;
+        var source = this.location.file.content;
+        var ctxStart = this.location.offset;
         if (ctxStart > source.length - 1) {
             ctxStart = source.length - 1;
         }
@@ -56,8 +47,17 @@ export class ParseError {
                 }
             }
         }
-        let context = source.substring(ctxStart, this.span.start.offset) + '[ERROR ->]' +
-            source.substring(this.span.start.offset, ctxEnd + 1);
-        return `${this.msg} ("${context}"): ${this.span.start}`;
+        let context = source.substring(ctxStart, this.location.offset) + '[ERROR ->]' +
+            source.substring(this.location.offset, ctxEnd + 1);
+        return `${this.msg} ("${context}"): ${this.location}`;
+    }
+}
+export class ParseSourceSpan {
+    constructor(start, end) {
+        this.start = start;
+        this.end = end;
+    }
+    toString() {
+        return this.start.file.content.substring(this.start.offset, this.end.offset);
     }
 }

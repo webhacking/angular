@@ -19,11 +19,13 @@ import {ParseError, ParseLocation, ParseSourceSpan} from './parse_util';
 import {HtmlTagDefinition, getHtmlTagDefinition, getNsPrefix, mergeNsAndName} from './html_tags';
 
 export class HtmlTreeError extends ParseError {
-  static create(elementName: string, span: ParseSourceSpan, msg: string): HtmlTreeError {
-    return new HtmlTreeError(elementName, span, msg);
+  static create(elementName: string, location: ParseLocation, msg: string): HtmlTreeError {
+    return new HtmlTreeError(elementName, location, msg);
   }
 
-  constructor(public elementName: string, span: ParseSourceSpan, msg: string) { super(span, msg); }
+  constructor(public elementName: string, location: ParseLocation, msg: string) {
+    super(location, msg);
+  }
 }
 
 export class HtmlParseTreeResult {
@@ -144,7 +146,7 @@ class TreeBuilder {
       selfClosing = true;
       if (getNsPrefix(fullName) == null && !getHtmlTagDefinition(fullName).isVoid) {
         this.errors.push(HtmlTreeError.create(
-            fullName, startTagToken.sourceSpan,
+            fullName, startTagToken.sourceSpan.start,
             `Only void and foreign elements can be self closed "${startTagToken.parts[1]}"`));
       }
     } else if (this.peek.type === HtmlTokenType.TAG_OPEN_END) {
@@ -187,10 +189,10 @@ class TreeBuilder {
 
     if (getHtmlTagDefinition(fullName).isVoid) {
       this.errors.push(
-          HtmlTreeError.create(fullName, endTagToken.sourceSpan,
+          HtmlTreeError.create(fullName, endTagToken.sourceSpan.start,
                                `Void elements do not have end tags "${endTagToken.parts[1]}"`));
     } else if (!this._popElement(fullName)) {
-      this.errors.push(HtmlTreeError.create(fullName, endTagToken.sourceSpan,
+      this.errors.push(HtmlTreeError.create(fullName, endTagToken.sourceSpan.start,
                                             `Unexpected closing tag "${endTagToken.parts[1]}"`));
     }
   }

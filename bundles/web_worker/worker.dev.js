@@ -19237,25 +19237,14 @@ System.register("angular2/src/compiler/parse_util", [], true, function(require, 
     return ParseSourceFile;
   })();
   exports.ParseSourceFile = ParseSourceFile;
-  var ParseSourceSpan = (function() {
-    function ParseSourceSpan(start, end) {
-      this.start = start;
-      this.end = end;
-    }
-    ParseSourceSpan.prototype.toString = function() {
-      return this.start.file.content.substring(this.start.offset, this.end.offset);
-    };
-    return ParseSourceSpan;
-  })();
-  exports.ParseSourceSpan = ParseSourceSpan;
   var ParseError = (function() {
-    function ParseError(span, msg) {
-      this.span = span;
+    function ParseError(location, msg) {
+      this.location = location;
       this.msg = msg;
     }
     ParseError.prototype.toString = function() {
-      var source = this.span.start.file.content;
-      var ctxStart = this.span.start.offset;
+      var source = this.location.file.content;
+      var ctxStart = this.location.offset;
       if (ctxStart > source.length - 1) {
         ctxStart = source.length - 1;
       }
@@ -19282,12 +19271,23 @@ System.register("angular2/src/compiler/parse_util", [], true, function(require, 
           }
         }
       }
-      var context = source.substring(ctxStart, this.span.start.offset) + '[ERROR ->]' + source.substring(this.span.start.offset, ctxEnd + 1);
-      return this.msg + " (\"" + context + "\"): " + this.span.start;
+      var context = source.substring(ctxStart, this.location.offset) + '[ERROR ->]' + source.substring(this.location.offset, ctxEnd + 1);
+      return this.msg + " (\"" + context + "\"): " + this.location;
     };
     return ParseError;
   })();
   exports.ParseError = ParseError;
+  var ParseSourceSpan = (function() {
+    function ParseSourceSpan(start, end) {
+      this.start = start;
+      this.end = end;
+    }
+    ParseSourceSpan.prototype.toString = function() {
+      return this.start.file.content.substring(this.start.offset, this.end.offset);
+    };
+    return ParseSourceSpan;
+  })();
+  exports.ParseSourceSpan = ParseSourceSpan;
   global.define = __define;
   return module.exports;
 });
@@ -25678,8 +25678,8 @@ System.register("angular2/src/compiler/html_lexer", ["angular2/src/facade/lang",
   exports.HtmlToken = HtmlToken;
   var HtmlTokenError = (function(_super) {
     __extends(HtmlTokenError, _super);
-    function HtmlTokenError(errorMsg, tokenType, span) {
-      _super.call(this, span, errorMsg);
+    function HtmlTokenError(errorMsg, tokenType, location) {
+      _super.call(this, location, errorMsg);
       this.tokenType = tokenType;
     }
     return HtmlTokenError;
@@ -25796,15 +25796,6 @@ System.register("angular2/src/compiler/html_lexer", ["angular2/src/facade/lang",
     _HtmlTokenizer.prototype._getLocation = function() {
       return new parse_util_1.ParseLocation(this.file, this.index, this.line, this.column);
     };
-    _HtmlTokenizer.prototype._getSpan = function(start, end) {
-      if (lang_1.isBlank(start)) {
-        start = this._getLocation();
-      }
-      if (lang_1.isBlank(end)) {
-        end = this._getLocation();
-      }
-      return new parse_util_1.ParseSourceSpan(start, end);
-    };
     _HtmlTokenizer.prototype._beginToken = function(type, start) {
       if (start === void 0) {
         start = null;
@@ -25828,15 +25819,15 @@ System.register("angular2/src/compiler/html_lexer", ["angular2/src/facade/lang",
       this.currentTokenType = null;
       return token;
     };
-    _HtmlTokenizer.prototype._createError = function(msg, span) {
-      var error = new HtmlTokenError(msg, this.currentTokenType, span);
+    _HtmlTokenizer.prototype._createError = function(msg, position) {
+      var error = new HtmlTokenError(msg, this.currentTokenType, position);
       this.currentTokenStart = null;
       this.currentTokenType = null;
       return new ControlFlowError(error);
     };
     _HtmlTokenizer.prototype._advance = function() {
       if (this.index >= this.length) {
-        throw this._createError(unexpectedCharacterErrorMsg($EOF), this._getSpan());
+        throw this._createError(unexpectedCharacterErrorMsg($EOF), this._getLocation());
       }
       if (this.peek === $LF) {
         this.line++;
@@ -25864,7 +25855,7 @@ System.register("angular2/src/compiler/html_lexer", ["angular2/src/facade/lang",
     _HtmlTokenizer.prototype._requireCharCode = function(charCode) {
       var location = this._getLocation();
       if (!this._attemptCharCode(charCode)) {
-        throw this._createError(unexpectedCharacterErrorMsg(this.peek), this._getSpan(location, location));
+        throw this._createError(unexpectedCharacterErrorMsg(this.peek), location);
       }
     };
     _HtmlTokenizer.prototype._attemptStr = function(chars) {
@@ -25886,7 +25877,7 @@ System.register("angular2/src/compiler/html_lexer", ["angular2/src/facade/lang",
     _HtmlTokenizer.prototype._requireStr = function(chars) {
       var location = this._getLocation();
       if (!this._attemptStr(chars)) {
-        throw this._createError(unexpectedCharacterErrorMsg(this.peek), this._getSpan(location));
+        throw this._createError(unexpectedCharacterErrorMsg(this.peek), location);
       }
     };
     _HtmlTokenizer.prototype._attemptCharCodeUntilFn = function(predicate) {
@@ -25898,7 +25889,7 @@ System.register("angular2/src/compiler/html_lexer", ["angular2/src/facade/lang",
       var start = this._getLocation();
       this._attemptCharCodeUntilFn(predicate);
       if (this.index - start.offset < len) {
-        throw this._createError(unexpectedCharacterErrorMsg(this.peek), this._getSpan(start, start));
+        throw this._createError(unexpectedCharacterErrorMsg(this.peek), start);
       }
     };
     _HtmlTokenizer.prototype._attemptUntilChar = function(char) {
@@ -25923,7 +25914,7 @@ System.register("angular2/src/compiler/html_lexer", ["angular2/src/facade/lang",
         var numberStart = this._getLocation().offset;
         this._attemptCharCodeUntilFn(isDigitEntityEnd);
         if (this.peek != $SEMICOLON) {
-          throw this._createError(unexpectedCharacterErrorMsg(this.peek), this._getSpan());
+          throw this._createError(unexpectedCharacterErrorMsg(this.peek), this._getLocation());
         }
         this._advance();
         var strNum = this.input.substring(numberStart, this.index - 1);
@@ -25932,7 +25923,7 @@ System.register("angular2/src/compiler/html_lexer", ["angular2/src/facade/lang",
           return lang_1.StringWrapper.fromCharCode(charCode);
         } catch (e) {
           var entity = this.input.substring(start.offset + 1, this.index - 1);
-          throw this._createError(unknownEntityErrorMsg(entity), this._getSpan(start));
+          throw this._createError(unknownEntityErrorMsg(entity), start);
         }
       } else {
         var startPosition = this._savePosition();
@@ -25945,7 +25936,7 @@ System.register("angular2/src/compiler/html_lexer", ["angular2/src/facade/lang",
         var name_1 = this.input.substring(start.offset + 1, this.index - 1);
         var char = html_tags_1.NAMED_ENTITIES[name_1];
         if (lang_1.isBlank(char)) {
-          throw this._createError(unknownEntityErrorMsg(name_1), this._getSpan(start));
+          throw this._createError(unknownEntityErrorMsg(name_1), start);
         }
         return char;
       }
@@ -26020,7 +26011,7 @@ System.register("angular2/src/compiler/html_lexer", ["angular2/src/facade/lang",
       var lowercaseTagName;
       try {
         if (!isAsciiLetter(this.peek)) {
-          throw this._createError(unexpectedCharacterErrorMsg(this.peek), this._getSpan());
+          throw this._createError(unexpectedCharacterErrorMsg(this.peek), this._getLocation());
         }
         var nameStart = this.index;
         this._consumeTagOpenStart(start);
@@ -30092,12 +30083,12 @@ System.register("angular2/src/compiler/html_parser", ["angular2/src/facade/lang"
   var html_tags_1 = require("angular2/src/compiler/html_tags");
   var HtmlTreeError = (function(_super) {
     __extends(HtmlTreeError, _super);
-    function HtmlTreeError(elementName, span, msg) {
-      _super.call(this, span, msg);
+    function HtmlTreeError(elementName, location, msg) {
+      _super.call(this, location, msg);
       this.elementName = elementName;
     }
-    HtmlTreeError.create = function(elementName, span, msg) {
-      return new HtmlTreeError(elementName, span, msg);
+    HtmlTreeError.create = function(elementName, location, msg) {
+      return new HtmlTreeError(elementName, location, msg);
     };
     return HtmlTreeError;
   })(parse_util_1.ParseError);
@@ -30206,7 +30197,7 @@ System.register("angular2/src/compiler/html_parser", ["angular2/src/facade/lang"
         this._advance();
         selfClosing = true;
         if (html_tags_1.getNsPrefix(fullName) == null && !html_tags_1.getHtmlTagDefinition(fullName).isVoid) {
-          this.errors.push(HtmlTreeError.create(fullName, startTagToken.sourceSpan, "Only void and foreign elements can be self closed \"" + startTagToken.parts[1] + "\""));
+          this.errors.push(HtmlTreeError.create(fullName, startTagToken.sourceSpan.start, "Only void and foreign elements can be self closed \"" + startTagToken.parts[1] + "\""));
         }
       } else if (this.peek.type === html_lexer_1.HtmlTokenType.TAG_OPEN_END) {
         this._advance();
@@ -30241,9 +30232,9 @@ System.register("angular2/src/compiler/html_parser", ["angular2/src/facade/lang"
     TreeBuilder.prototype._consumeEndTag = function(endTagToken) {
       var fullName = getElementFullName(endTagToken.parts[0], endTagToken.parts[1], this._getParentElement());
       if (html_tags_1.getHtmlTagDefinition(fullName).isVoid) {
-        this.errors.push(HtmlTreeError.create(fullName, endTagToken.sourceSpan, "Void elements do not have end tags \"" + endTagToken.parts[1] + "\""));
+        this.errors.push(HtmlTreeError.create(fullName, endTagToken.sourceSpan.start, "Void elements do not have end tags \"" + endTagToken.parts[1] + "\""));
       } else if (!this._popElement(fullName)) {
-        this.errors.push(HtmlTreeError.create(fullName, endTagToken.sourceSpan, "Unexpected closing tag \"" + endTagToken.parts[1] + "\""));
+        this.errors.push(HtmlTreeError.create(fullName, endTagToken.sourceSpan.start, "Unexpected closing tag \"" + endTagToken.parts[1] + "\""));
       }
     };
     TreeBuilder.prototype._popElement = function(fullName) {
@@ -33959,8 +33950,8 @@ System.register("angular2/src/compiler/template_parser", ["angular2/src/facade/c
   exports.TEMPLATE_TRANSFORMS = lang_2.CONST_EXPR(new core_1.OpaqueToken('TemplateTransforms'));
   var TemplateParseError = (function(_super) {
     __extends(TemplateParseError, _super);
-    function TemplateParseError(message, span) {
-      _super.call(this, span, message);
+    function TemplateParseError(message, location) {
+      _super.call(this, location, message);
     }
     return TemplateParseError;
   })(parse_util_1.ParseError);
@@ -34012,7 +34003,7 @@ System.register("angular2/src/compiler/template_parser", ["angular2/src/facade/c
       });
     }
     TemplateParseVisitor.prototype._reportError = function(message, sourceSpan) {
-      this.errors.push(new TemplateParseError(message, sourceSpan));
+      this.errors.push(new TemplateParseError(message, sourceSpan.start));
     };
     TemplateParseVisitor.prototype._parseInterpolation = function(value, sourceSpan) {
       var sourceInfo = sourceSpan.start.toString();

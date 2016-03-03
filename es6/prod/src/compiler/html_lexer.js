@@ -28,8 +28,8 @@ export class HtmlToken {
     }
 }
 export class HtmlTokenError extends ParseError {
-    constructor(errorMsg, tokenType, span) {
-        super(span, errorMsg);
+    constructor(errorMsg, tokenType, location) {
+        super(location, errorMsg);
         this.tokenType = tokenType;
     }
 }
@@ -105,8 +105,7 @@ class _HtmlTokenizer {
     }
     _processCarriageReturns(content) {
         // http://www.w3.org/TR/html5/syntax.html#preprocessing-the-input-stream
-        // In order to keep the original position in the source, we can not
-        // pre-process it.
+        // In order to keep the original position in the source, we can not pre-process it.
         // Instead CRs are processed right before instantiating the tokens.
         return StringWrapper.replaceAll(content, CR_OR_CRLF_REGEXP, '\n');
     }
@@ -153,15 +152,6 @@ class _HtmlTokenizer {
     _getLocation() {
         return new ParseLocation(this.file, this.index, this.line, this.column);
     }
-    _getSpan(start, end) {
-        if (isBlank(start)) {
-            start = this._getLocation();
-        }
-        if (isBlank(end)) {
-            end = this._getLocation();
-        }
-        return new ParseSourceSpan(start, end);
-    }
     _beginToken(type, start = null) {
         if (isBlank(start)) {
             start = this._getLocation();
@@ -179,15 +169,15 @@ class _HtmlTokenizer {
         this.currentTokenType = null;
         return token;
     }
-    _createError(msg, span) {
-        var error = new HtmlTokenError(msg, this.currentTokenType, span);
+    _createError(msg, position) {
+        var error = new HtmlTokenError(msg, this.currentTokenType, position);
         this.currentTokenStart = null;
         this.currentTokenType = null;
         return new ControlFlowError(error);
     }
     _advance() {
         if (this.index >= this.length) {
-            throw this._createError(unexpectedCharacterErrorMsg($EOF), this._getSpan());
+            throw this._createError(unexpectedCharacterErrorMsg($EOF), this._getLocation());
         }
         if (this.peek === $LF) {
             this.line++;
@@ -216,7 +206,7 @@ class _HtmlTokenizer {
     _requireCharCode(charCode) {
         var location = this._getLocation();
         if (!this._attemptCharCode(charCode)) {
-            throw this._createError(unexpectedCharacterErrorMsg(this.peek), this._getSpan(location, location));
+            throw this._createError(unexpectedCharacterErrorMsg(this.peek), location);
         }
     }
     _attemptStr(chars) {
@@ -238,7 +228,7 @@ class _HtmlTokenizer {
     _requireStr(chars) {
         var location = this._getLocation();
         if (!this._attemptStr(chars)) {
-            throw this._createError(unexpectedCharacterErrorMsg(this.peek), this._getSpan(location));
+            throw this._createError(unexpectedCharacterErrorMsg(this.peek), location);
         }
     }
     _attemptCharCodeUntilFn(predicate) {
@@ -250,7 +240,7 @@ class _HtmlTokenizer {
         var start = this._getLocation();
         this._attemptCharCodeUntilFn(predicate);
         if (this.index - start.offset < len) {
-            throw this._createError(unexpectedCharacterErrorMsg(this.peek), this._getSpan(start, start));
+            throw this._createError(unexpectedCharacterErrorMsg(this.peek), start);
         }
     }
     _attemptUntilChar(char) {
@@ -276,7 +266,7 @@ class _HtmlTokenizer {
             let numberStart = this._getLocation().offset;
             this._attemptCharCodeUntilFn(isDigitEntityEnd);
             if (this.peek != $SEMICOLON) {
-                throw this._createError(unexpectedCharacterErrorMsg(this.peek), this._getSpan());
+                throw this._createError(unexpectedCharacterErrorMsg(this.peek), this._getLocation());
             }
             this._advance();
             let strNum = this.input.substring(numberStart, this.index - 1);
@@ -286,7 +276,7 @@ class _HtmlTokenizer {
             }
             catch (e) {
                 let entity = this.input.substring(start.offset + 1, this.index - 1);
-                throw this._createError(unknownEntityErrorMsg(entity), this._getSpan(start));
+                throw this._createError(unknownEntityErrorMsg(entity), start);
             }
         }
         else {
@@ -300,7 +290,7 @@ class _HtmlTokenizer {
             let name = this.input.substring(start.offset + 1, this.index - 1);
             let char = NAMED_ENTITIES[name];
             if (isBlank(char)) {
-                throw this._createError(unknownEntityErrorMsg(name), this._getSpan(start));
+                throw this._createError(unknownEntityErrorMsg(name), start);
             }
             return char;
         }
@@ -370,7 +360,7 @@ class _HtmlTokenizer {
         let lowercaseTagName;
         try {
             if (!isAsciiLetter(this.peek)) {
-                throw this._createError(unexpectedCharacterErrorMsg(this.peek), this._getSpan());
+                throw this._createError(unexpectedCharacterErrorMsg(this.peek), this._getLocation());
             }
             var nameStart = this.index;
             this._consumeTagOpenStart(start);
