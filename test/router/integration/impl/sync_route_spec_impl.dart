@@ -18,7 +18,14 @@ import "../util.dart"
 import "package:angular2/platform/common_dom.dart" show By;
 import "package:angular2/router.dart" show Router, Route, Location;
 import "fixture_components.dart"
-    show HelloCmp, UserCmp, TeamCmp, ParentCmp, ParentWithDefaultCmp;
+    show
+        HelloCmp,
+        UserCmp,
+        TeamCmp,
+        ParentCmp,
+        ParentWithDefaultCmp,
+        DynamicLoaderCmp;
+import "package:angular2/src/facade/async.dart" show PromiseWrapper;
 
 getLinkElement(ComponentFixture rtc) {
   return rtc.debugElement.query(By.css("a")).nativeElement;
@@ -522,6 +529,58 @@ syncRoutesWithSyncChildrenWithDefaultRoutesWithoutParams() {
       }));
 }
 
+syncRoutesWithDynamicComponents() {
+  var fixture;
+  var tcb;
+  Router rtr;
+  beforeEachProviders(() => TEST_ROUTER_PROVIDERS);
+  beforeEach(inject([TestComponentBuilder, Router], (tcBuilder, router) {
+    tcb = tcBuilder;
+    rtr = router;
+  }));
+  it(
+      "should work",
+      inject([AsyncTestCompleter], (async) {
+        tcb
+            .createAsync(DynamicLoaderCmp)
+            .then((rtc) {
+              fixture = rtc;
+            })
+            .then(
+                (_) => rtr.config([new Route(path: "/", component: HelloCmp)]))
+            .then((_) {
+              fixture.detectChanges();
+              expect(fixture.debugElement.nativeElement).toHaveText("{  }");
+              return fixture.componentInstance.onSomeAction();
+            })
+            .then((_) {
+              fixture.detectChanges();
+              return rtr.navigateByUrl("/");
+            })
+            .then((_) {
+              fixture.detectChanges();
+              expect(fixture.debugElement.nativeElement)
+                  .toHaveText("{ hello }");
+              return fixture.componentInstance.onSomeAction();
+            })
+            .then((_) {
+              // TODO(i): This should be rewritten to use NgZone#onStable or
+
+              // something
+
+              // similar basically the assertion needs to run when the world is
+
+              // stable and we don't know when that is, only zones know.
+              PromiseWrapper.resolve(null).then((_) {
+                fixture.detectChanges();
+                expect(fixture.debugElement.nativeElement)
+                    .toHaveText("{ hello }");
+                async.done();
+              });
+            });
+      }));
+}
+
 registerSpecs() {
   specs["syncRoutesWithoutChildrenWithoutParams"] =
       syncRoutesWithoutChildrenWithoutParams;
@@ -533,4 +592,5 @@ registerSpecs() {
       syncRoutesWithSyncChildrenWithoutDefaultRoutesWithParams;
   specs["syncRoutesWithSyncChildrenWithDefaultRoutesWithoutParams"] =
       syncRoutesWithSyncChildrenWithDefaultRoutesWithoutParams;
+  specs["syncRoutesWithDynamicComponents"] = syncRoutesWithDynamicComponents;
 }

@@ -77,11 +77,27 @@ class Router {
       throw new BaseException(
           '''registerPrimaryOutlet expects to be called with an unnamed outlet.''');
     }
+    if (isPresent(this._outlet)) {
+      throw new BaseException('''Primary outlet is already registered.''');
+    }
     this._outlet = outlet;
     if (isPresent(this._currentInstruction)) {
       return this.commit(this._currentInstruction, false);
     }
     return _resolveToTrue;
+  }
+
+  /**
+   * Unregister an outlet (because it was destroyed, etc).
+   *
+   * You probably don't need to use this unless you're writing a custom outlet implementation.
+   */
+  void unregisterPrimaryOutlet(RouterOutlet outlet) {
+    if (isPresent(outlet.name)) {
+      throw new BaseException(
+          '''registerPrimaryOutlet expects to be called with an unnamed outlet.''');
+    }
+    this._outlet = null;
   }
 
   /**
@@ -196,6 +212,23 @@ class Router {
   }
 
   /** @internal */
+  Future<dynamic> _settleInstruction(Instruction instruction) {
+    return instruction.resolveComponent().then((_) {
+      List<Future<dynamic>> unsettledInstructions = [];
+      if (isPresent(instruction.component)) {
+        instruction.component.reuse = false;
+      }
+      if (isPresent(instruction.child)) {
+        unsettledInstructions.add(this._settleInstruction(instruction.child));
+      }
+      StringMapWrapper.forEach(instruction.auxInstruction, (instruction, _) {
+        unsettledInstructions.add(this._settleInstruction(instruction));
+      });
+      return PromiseWrapper.all(unsettledInstructions);
+    });
+  }
+
+  /** @internal */
   Future<dynamic> _navigate(Instruction instruction, bool _skipLocationChange) {
     return this
         ._settleInstruction(instruction)
@@ -213,23 +246,6 @@ class Router {
           });
         }
       });
-    });
-  }
-
-  /** @internal */
-  Future<dynamic> _settleInstruction(Instruction instruction) {
-    return instruction.resolveComponent().then((_) {
-      List<Future<dynamic>> unsettledInstructions = [];
-      if (isPresent(instruction.component)) {
-        instruction.component.reuse = false;
-      }
-      if (isPresent(instruction.child)) {
-        unsettledInstructions.add(this._settleInstruction(instruction.child));
-      }
-      StringMapWrapper.forEach(instruction.auxInstruction, (instruction, _) {
-        unsettledInstructions.add(this._settleInstruction(instruction));
-      });
-      return PromiseWrapper.all(unsettledInstructions);
     });
   }
 

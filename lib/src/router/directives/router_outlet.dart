@@ -4,8 +4,6 @@ import "dart:async";
 import "package:angular2/src/facade/async.dart" show PromiseWrapper;
 import "package:angular2/src/facade/collection.dart" show StringMapWrapper;
 import "package:angular2/src/facade/lang.dart" show isBlank, isPresent;
-import "package:angular2/src/facade/exceptions.dart"
-    show BaseException, WrappedException;
 import "package:angular2/core.dart"
     show
         Directive,
@@ -15,7 +13,8 @@ import "package:angular2/core.dart"
         ElementRef,
         Injector,
         provide,
-        Dependency;
+        Dependency,
+        OnDestroy;
 import "../router.dart" as routerMod;
 import "../instruction.dart" show ComponentInstruction, RouteParams, RouteData;
 import "../lifecycle/lifecycle_annotations.dart" as hookMod;
@@ -35,7 +34,7 @@ var _resolveToTrue = PromiseWrapper.resolve(true);
  * ```
  */
 @Directive(selector: "router-outlet")
-class RouterOutlet {
+class RouterOutlet implements OnDestroy {
   ElementRef _elementRef;
   DynamicComponentLoader _loader;
   routerMod.Router _parentRouter;
@@ -85,9 +84,13 @@ class RouterOutlet {
   Future<dynamic> reuse(ComponentInstruction nextInstruction) {
     var previousInstruction = this._currentInstruction;
     this._currentInstruction = nextInstruction;
+    // it's possible the component is removed before it can be reactivated (if nested withing
+
+    // another dynamically loaded component, for instance). In that case, we simply activate
+
+    // a new one.
     if (isBlank(this._componentRef)) {
-      throw new BaseException(
-          '''Cannot reuse an outlet that does not contain a component.''');
+      return this.activate(nextInstruction);
     }
     return PromiseWrapper.resolve(hasLifecycleHook(
             hookMod.routerOnReuse, this._currentInstruction.componentType)
@@ -167,5 +170,9 @@ class RouterOutlet {
                   nextInstruction.params, this._currentInstruction.params));
     }
     return PromiseWrapper.resolve(result);
+  }
+
+  void ngOnDestroy() {
+    this._parentRouter.unregisterPrimaryOutlet(this);
   }
 }

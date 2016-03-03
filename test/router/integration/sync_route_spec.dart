@@ -24,5 +24,6 @@ main() {
         describeWithout("params", itShouldRoute);
       });
     });
+    describeWith("dynamic components", itShouldRoute);
   });
 }
