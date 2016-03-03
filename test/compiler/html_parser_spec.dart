@@ -364,14 +364,14 @@ List<dynamic> humanizeErrors(List<ParseError> errors) {
       return [
         (error.elementName as dynamic),
         error.msg,
-        humanizeLineColumn(error.location)
+        humanizeLineColumn(error.span.start)
       ];
     }
     // Tokenizer errors
     return [
       ((error as dynamic)).tokenType,
       error.msg,
-      humanizeLineColumn(error.location)
+      humanizeLineColumn(error.span.start)
     ];
   }).toList();
 }
