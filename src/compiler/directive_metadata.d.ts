@@ -99,15 +99,21 @@ export declare class CompileFactoryMetadata implements CompileIdentifierMetadata
     moduleUrl: string;
     constConstructor: boolean;
     diDeps: CompileDiDependencyMetadata[];
-    constructor({runtime, name, moduleUrl, constConstructor, diDeps}: {
+    constructor({runtime, name, moduleUrl, prefix, constConstructor, diDeps}: {
         runtime?: Function;
         name?: string;
+        prefix?: string;
         moduleUrl?: string;
         constConstructor?: boolean;
         diDeps?: CompileDiDependencyMetadata[];
     });
     identifier: CompileIdentifierMetadata;
-    toJson(): any;
+    static fromJson(data: {
+        [key: string]: any;
+    }): CompileFactoryMetadata;
+    toJson(): {
+        [key: string]: any;
+    };
 }
 /**
  * Metadata regarding compilation of a type.

@@ -89,28 +89,30 @@ export let NgClass = class {
             v = v.split(' ');
         }
         this._rawClass = v;
-        this._iterableDiffer = null;
-        this._keyValueDiffer = null;
         if (isPresent(v)) {
             if (isListLikeIterable(v)) {
-                this._iterableDiffer = this._iterableDiffers.find(v).create(null);
+                this._differ = this._iterableDiffers.find(v).create(null);
+                this._mode = 'iterable';
             }
             else {
-                this._keyValueDiffer = this._keyValueDiffers.find(v).create(null);
+                this._differ = this._keyValueDiffers.find(v).create(null);
+                this._mode = 'keyValue';
             }
+        }
+        else {
+            this._differ = null;
         }
     }
     ngDoCheck() {
-        if (isPresent(this._iterableDiffer)) {
-            var changes = this._iterableDiffer.diff(this._rawClass);
+        if (isPresent(this._differ)) {
+            var changes = this._differ.diff(this._rawClass);
             if (isPresent(changes)) {
-                this._applyIterableChanges(changes);
-            }
-        }
-        if (isPresent(this._keyValueDiffer)) {
-            var changes = this._keyValueDiffer.diff(this._rawClass);
-            if (isPresent(changes)) {
-                this._applyKeyValueChanges(changes);
+                if (this._mode == 'iterable') {
+                    this._applyIterableChanges(changes);
+                }
+                else {
+                    this._applyKeyValueChanges(changes);
+                }
             }
         }
     }
@@ -145,7 +147,7 @@ export let NgClass = class {
             }
             else {
                 StringMapWrapper.forEach(rawClassVal, (expVal, className) => {
-                    if (isPresent(expVal))
+                    if (expVal)
                         this._toggleClass(className, !isCleanup);
                 });
             }

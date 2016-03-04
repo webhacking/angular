@@ -106,7 +106,7 @@ export class DefaultKeyValueDiffer {
                     newSeqRecord = records.get(key);
                 }
                 else {
-                    newSeqRecord = new KeyValueChangeRecord(key);
+                    newSeqRecord = new KVChangeRecord(key);
                     records.set(key, newSeqRecord);
                     newSeqRecord.currentValue = value;
                     this._addToAdditions(newSeqRecord);
@@ -325,7 +325,7 @@ export class DefaultKeyValueDiffer {
         }
     }
 }
-export class KeyValueChangeRecord {
+export class KVChangeRecord {
     constructor(key) {
         this.key = key;
         this.previousValue = null;

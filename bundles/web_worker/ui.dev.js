@@ -3256,7 +3256,7 @@ System.register("angular2/src/core/change_detection/differs/default_keyvalue_dif
           if (records.has(key)) {
             newSeqRecord = records.get(key);
           } else {
-            newSeqRecord = new KeyValueChangeRecord(key);
+            newSeqRecord = new KVChangeRecord(key);
             records.set(key, newSeqRecord);
             newSeqRecord.currentValue = value;
             _this._addToAdditions(newSeqRecord);
@@ -3399,8 +3399,8 @@ System.register("angular2/src/core/change_detection/differs/default_keyvalue_dif
     return DefaultKeyValueDiffer;
   })();
   exports.DefaultKeyValueDiffer = DefaultKeyValueDiffer;
-  var KeyValueChangeRecord = (function() {
-    function KeyValueChangeRecord(key) {
+  var KVChangeRecord = (function() {
+    function KVChangeRecord(key) {
       this.key = key;
       this.previousValue = null;
       this.currentValue = null;
@@ -3411,12 +3411,12 @@ System.register("angular2/src/core/change_detection/differs/default_keyvalue_dif
       this._prevRemoved = null;
       this._nextChanged = null;
     }
-    KeyValueChangeRecord.prototype.toString = function() {
+    KVChangeRecord.prototype.toString = function() {
       return lang_1.looseIdentical(this.previousValue, this.currentValue) ? lang_1.stringify(this.key) : (lang_1.stringify(this.key) + '[' + lang_1.stringify(this.previousValue) + '->' + lang_1.stringify(this.currentValue) + ']');
     };
-    return KeyValueChangeRecord;
+    return KVChangeRecord;
   })();
-  exports.KeyValueChangeRecord = KeyValueChangeRecord;
+  exports.KVChangeRecord = KVChangeRecord;
   global.define = __define;
   return module.exports;
 });
@@ -6261,8 +6261,6 @@ System.register("angular2/src/core/change_detection", ["angular2/src/core/change
   exports.SimpleChange = change_detection_1.SimpleChange;
   exports.IterableDiffers = change_detection_1.IterableDiffers;
   exports.KeyValueDiffers = change_detection_1.KeyValueDiffers;
-  exports.CollectionChangeRecord = change_detection_1.CollectionChangeRecord;
-  exports.KeyValueChangeRecord = change_detection_1.KeyValueChangeRecord;
   global.define = __define;
   return module.exports;
 });
@@ -13655,13 +13653,19 @@ System.register("angular2/src/compiler/directive_metadata", ["angular2/src/facad
     CompileProviderMetadata.fromJson = function(data) {
       return new CompileProviderMetadata({
         token: objFromJson(data['token'], CompileIdentifierMetadata.fromJson),
-        useClass: objFromJson(data['useClass'], CompileTypeMetadata.fromJson)
+        useClass: objFromJson(data['useClass'], CompileTypeMetadata.fromJson),
+        useExisting: objFromJson(data['useExisting'], CompileIdentifierMetadata.fromJson),
+        useValue: objFromJson(data['useValue'], CompileIdentifierMetadata.fromJson),
+        useFactory: objFromJson(data['useFactory'], CompileFactoryMetadata.fromJson)
       });
     };
     CompileProviderMetadata.prototype.toJson = function() {
       return {
         'token': objToJson(this.token),
-        'useClass': objToJson(this.useClass)
+        'useClass': objToJson(this.useClass),
+        'useExisting': objToJson(this.useExisting),
+        'useValue': objToJson(this.useValue),
+        'useFactory': objToJson(this.useFactory)
       };
     };
     return CompileProviderMetadata;
@@ -13672,10 +13676,12 @@ System.register("angular2/src/compiler/directive_metadata", ["angular2/src/facad
       var runtime = _a.runtime,
           name = _a.name,
           moduleUrl = _a.moduleUrl,
+          prefix = _a.prefix,
           constConstructor = _a.constConstructor,
           diDeps = _a.diDeps;
       this.runtime = runtime;
       this.name = name;
+      this.prefix = prefix;
       this.moduleUrl = moduleUrl;
       this.diDeps = diDeps;
       this.constConstructor = constConstructor;
@@ -13687,8 +13693,23 @@ System.register("angular2/src/compiler/directive_metadata", ["angular2/src/facad
       enumerable: true,
       configurable: true
     });
+    CompileFactoryMetadata.fromJson = function(data) {
+      return new CompileFactoryMetadata({
+        name: data['name'],
+        prefix: data['prefix'],
+        moduleUrl: data['moduleUrl'],
+        constConstructor: data['constConstructor'],
+        diDeps: arrayFromJson(data['diDeps'], CompileDiDependencyMetadata.fromJson)
+      });
+    };
     CompileFactoryMetadata.prototype.toJson = function() {
-      return null;
+      return {
+        'name': this.name,
+        'prefix': this.prefix,
+        'moduleUrl': this.moduleUrl,
+        'constConstructor': this.constConstructor,
+        'diDeps': arrayToJson(this.diDeps)
+      };
     };
     return CompileFactoryMetadata;
   })();
@@ -21329,7 +21350,7 @@ System.register("angular2/src/core/di", ["angular2/src/core/di/metadata", "angul
   return module.exports;
 });
 
-System.register("angular2/src/core/change_detection/change_detection", ["angular2/src/core/change_detection/differs/iterable_differs", "angular2/src/core/change_detection/differs/default_iterable_differ", "angular2/src/core/change_detection/differs/keyvalue_differs", "angular2/src/core/change_detection/differs/default_keyvalue_differ", "angular2/src/facade/lang", "angular2/src/core/change_detection/differs/default_keyvalue_differ", "angular2/src/core/change_detection/differs/default_iterable_differ", "angular2/src/core/change_detection/parser/ast", "angular2/src/core/change_detection/parser/lexer", "angular2/src/core/change_detection/parser/parser", "angular2/src/core/change_detection/parser/locals", "angular2/src/core/change_detection/exceptions", "angular2/src/core/change_detection/interfaces", "angular2/src/core/change_detection/constants", "angular2/src/core/change_detection/proto_change_detector", "angular2/src/core/change_detection/jit_proto_change_detector", "angular2/src/core/change_detection/binding_record", "angular2/src/core/change_detection/directive_record", "angular2/src/core/change_detection/dynamic_change_detector", "angular2/src/core/change_detection/change_detector_ref", "angular2/src/core/change_detection/differs/iterable_differs", "angular2/src/core/change_detection/differs/keyvalue_differs", "angular2/src/core/change_detection/change_detection_util"], true, function(require, exports, module) {
+System.register("angular2/src/core/change_detection/change_detection", ["angular2/src/core/change_detection/differs/iterable_differs", "angular2/src/core/change_detection/differs/default_iterable_differ", "angular2/src/core/change_detection/differs/keyvalue_differs", "angular2/src/core/change_detection/differs/default_keyvalue_differ", "angular2/src/facade/lang", "angular2/src/core/change_detection/parser/ast", "angular2/src/core/change_detection/parser/lexer", "angular2/src/core/change_detection/parser/parser", "angular2/src/core/change_detection/parser/locals", "angular2/src/core/change_detection/exceptions", "angular2/src/core/change_detection/interfaces", "angular2/src/core/change_detection/constants", "angular2/src/core/change_detection/proto_change_detector", "angular2/src/core/change_detection/jit_proto_change_detector", "angular2/src/core/change_detection/binding_record", "angular2/src/core/change_detection/directive_record", "angular2/src/core/change_detection/dynamic_change_detector", "angular2/src/core/change_detection/change_detector_ref", "angular2/src/core/change_detection/differs/iterable_differs", "angular2/src/core/change_detection/differs/keyvalue_differs", "angular2/src/core/change_detection/change_detection_util"], true, function(require, exports, module) {
   var global = System.global,
       __define = global.define;
   global.define = undefined;
@@ -21338,12 +21359,6 @@ System.register("angular2/src/core/change_detection/change_detection", ["angular
   var keyvalue_differs_1 = require("angular2/src/core/change_detection/differs/keyvalue_differs");
   var default_keyvalue_differ_1 = require("angular2/src/core/change_detection/differs/default_keyvalue_differ");
   var lang_1 = require("angular2/src/facade/lang");
-  var default_keyvalue_differ_2 = require("angular2/src/core/change_detection/differs/default_keyvalue_differ");
-  exports.DefaultKeyValueDifferFactory = default_keyvalue_differ_2.DefaultKeyValueDifferFactory;
-  exports.KeyValueChangeRecord = default_keyvalue_differ_2.KeyValueChangeRecord;
-  var default_iterable_differ_2 = require("angular2/src/core/change_detection/differs/default_iterable_differ");
-  exports.DefaultIterableDifferFactory = default_iterable_differ_2.DefaultIterableDifferFactory;
-  exports.CollectionChangeRecord = default_iterable_differ_2.CollectionChangeRecord;
   var ast_1 = require("angular2/src/core/change_detection/parser/ast");
   exports.ASTWithSource = ast_1.ASTWithSource;
   exports.AST = ast_1.AST;

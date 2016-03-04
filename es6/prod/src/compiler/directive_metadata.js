@@ -100,27 +100,51 @@ export class CompileProviderMetadata {
     static fromJson(data) {
         return new CompileProviderMetadata({
             token: objFromJson(data['token'], CompileIdentifierMetadata.fromJson),
-            useClass: objFromJson(data['useClass'], CompileTypeMetadata.fromJson)
+            useClass: objFromJson(data['useClass'], CompileTypeMetadata.fromJson),
+            useExisting: objFromJson(data['useExisting'], CompileIdentifierMetadata.fromJson),
+            useValue: objFromJson(data['useValue'], CompileIdentifierMetadata.fromJson),
+            useFactory: objFromJson(data['useFactory'], CompileFactoryMetadata.fromJson)
         });
     }
     toJson() {
         return {
             // Note: Runtime type can't be serialized...
             'token': objToJson(this.token),
-            'useClass': objToJson(this.useClass)
+            'useClass': objToJson(this.useClass),
+            'useExisting': objToJson(this.useExisting),
+            'useValue': objToJson(this.useValue),
+            'useFactory': objToJson(this.useFactory)
         };
     }
 }
 export class CompileFactoryMetadata {
-    constructor({ runtime, name, moduleUrl, constConstructor, diDeps }) {
+    constructor({ runtime, name, moduleUrl, prefix, constConstructor, diDeps }) {
         this.runtime = runtime;
         this.name = name;
+        this.prefix = prefix;
         this.moduleUrl = moduleUrl;
         this.diDeps = diDeps;
         this.constConstructor = constConstructor;
     }
     get identifier() { return this; }
-    toJson() { return null; }
+    static fromJson(data) {
+        return new CompileFactoryMetadata({
+            name: data['name'],
+            prefix: data['prefix'],
+            moduleUrl: data['moduleUrl'],
+            constConstructor: data['constConstructor'],
+            diDeps: arrayFromJson(data['diDeps'], CompileDiDependencyMetadata.fromJson)
+        });
+    }
+    toJson() {
+        return {
+            'name': this.name,
+            'prefix': this.prefix,
+            'moduleUrl': this.moduleUrl,
+            'constConstructor': this.constConstructor,
+            'diDeps': arrayToJson(this.diDeps)
+        };
+    }
 }
 /**
  * Metadata regarding compilation of a type.
