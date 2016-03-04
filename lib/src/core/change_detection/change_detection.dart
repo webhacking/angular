@@ -1,12 +1,16 @@
 library angular2.src.core.change_detection.change_detection;
 
 import "differs/iterable_differs.dart"
-    show IterableDiffers, IterableDifferFactory, TrackByFn;
+    show IterableDiffers, IterableDifferFactory;
 import "differs/default_iterable_differ.dart" show DefaultIterableDifferFactory;
 import "differs/keyvalue_differs.dart"
     show KeyValueDiffers, KeyValueDifferFactory;
-import "differs/default_keyvalue_differ.dart" show DefaultKeyValueDifferFactory;
-import "package:angular2/src/facade/lang.dart" show isPresent;
+import "differs/default_keyvalue_differ.dart"
+    show DefaultKeyValueDifferFactory, KeyValueChangeRecord;
+export "differs/default_keyvalue_differ.dart"
+    show DefaultKeyValueDifferFactory, KeyValueChangeRecord;
+export "differs/default_iterable_differ.dart"
+    show DefaultIterableDifferFactory, CollectionChangeRecord;
 export "parser/ast.dart"
     show
         ASTWithSource,
