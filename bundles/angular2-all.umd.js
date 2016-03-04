@@ -23117,20 +23117,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	    CompileProviderMetadata.fromJson = function (data) {
 	        return new CompileProviderMetadata({
 	            token: objFromJson(data['token'], CompileIdentifierMetadata.fromJson),
-	            useClass: objFromJson(data['useClass'], CompileTypeMetadata.fromJson),
-	            useExisting: objFromJson(data['useExisting'], CompileIdentifierMetadata.fromJson),
-	            useValue: objFromJson(data['useValue'], CompileIdentifierMetadata.fromJson),
-	            useFactory: objFromJson(data['useFactory'], CompileFactoryMetadata.fromJson)
+	            useClass: objFromJson(data['useClass'], CompileTypeMetadata.fromJson)
 	        });
 	    };
 	    CompileProviderMetadata.prototype.toJson = function () {
 	        return {
 	            // Note: Runtime type can't be serialized...
 	            'token': objToJson(this.token),
-	            'useClass': objToJson(this.useClass),
-	            'useExisting': objToJson(this.useExisting),
-	            'useValue': objToJson(this.useValue),
-	            'useFactory': objToJson(this.useFactory)
+	            'useClass': objToJson(this.useClass)
 	        };
 	    };
 	    return CompileProviderMetadata;
@@ -23138,10 +23132,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.CompileProviderMetadata = CompileProviderMetadata;
 	var CompileFactoryMetadata = (function () {
 	    function CompileFactoryMetadata(_a) {
-	        var runtime = _a.runtime, name = _a.name, moduleUrl = _a.moduleUrl, prefix = _a.prefix, constConstructor = _a.constConstructor, diDeps = _a.diDeps;
+	        var runtime = _a.runtime, name = _a.name, moduleUrl = _a.moduleUrl, constConstructor = _a.constConstructor, diDeps = _a.diDeps;
 	        this.runtime = runtime;
 	        this.name = name;
-	        this.prefix = prefix;
 	        this.moduleUrl = moduleUrl;
 	        this.diDeps = diDeps;
 	        this.constConstructor = constConstructor;
@@ -23151,24 +23144,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        enumerable: true,
 	        configurable: true
 	    });
-	    CompileFactoryMetadata.fromJson = function (data) {
-	        return new CompileFactoryMetadata({
-	            name: data['name'],
-	            prefix: data['prefix'],
-	            moduleUrl: data['moduleUrl'],
-	            constConstructor: data['constConstructor'],
-	            diDeps: arrayFromJson(data['diDeps'], CompileDiDependencyMetadata.fromJson)
-	        });
-	    };
-	    CompileFactoryMetadata.prototype.toJson = function () {
-	        return {
-	            'name': this.name,
-	            'prefix': this.prefix,
-	            'moduleUrl': this.moduleUrl,
-	            'constConstructor': this.constConstructor,
-	            'diDeps': arrayToJson(this.diDeps)
-	        };
-	    };
+	    CompileFactoryMetadata.prototype.toJson = function () { return null; };
 	    return CompileFactoryMetadata;
 	})();
 	exports.CompileFactoryMetadata = CompileFactoryMetadata;
