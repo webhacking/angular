@@ -42,15 +42,19 @@ class Router {
   RouteRegistry registry;
   Router parent;
   dynamic hostComponent;
+  Router root;
   bool navigating = false;
   String lastNavigationAttempt;
-  Instruction _currentInstruction = null;
+  /**
+   * The current `Instruction` for the router
+   */
+  Instruction currentInstruction = null;
   Future<dynamic> _currentNavigation = _resolveToTrue;
   RouterOutlet _outlet = null;
   var _auxRouters = new Map<String, Router>();
   Router _childRouter;
   EventEmitter<dynamic> _subject = new EventEmitter();
-  Router(this.registry, this.parent, this.hostComponent) {}
+  Router(this.registry, this.parent, this.hostComponent, [this.root]) {}
   /**
    * Constructs a child router. You probably don't need to use this unless you're writing a reusable
    * component.
@@ -81,8 +85,8 @@ class Router {
       throw new BaseException('''Primary outlet is already registered.''');
     }
     this._outlet = outlet;
-    if (isPresent(this._currentInstruction)) {
-      return this.commit(this._currentInstruction, false);
+    if (isPresent(this.currentInstruction)) {
+      return this.commit(this.currentInstruction, false);
     }
     return _resolveToTrue;
   }
@@ -115,9 +119,9 @@ class Router {
     this._auxRouters[outletName] = router;
     router._outlet = outlet;
     var auxInstruction;
-    if (isPresent(this._currentInstruction) &&
+    if (isPresent(this.currentInstruction) &&
         isPresent(auxInstruction =
-            this._currentInstruction.auxInstruction[outletName])) {
+            this.currentInstruction.auxInstruction[outletName])) {
       return router.commit(auxInstruction);
     }
     return _resolveToTrue;
@@ -133,8 +137,8 @@ class Router {
       router = router.parent;
       instruction = instruction.child;
     }
-    return isPresent(this._currentInstruction) &&
-        this._currentInstruction.component == instruction.component;
+    return isPresent(this.currentInstruction) &&
+        this.currentInstruction.component == instruction.component;
   }
 
   /**
@@ -283,7 +287,7 @@ class Router {
   }
 
   Future<bool> _canActivate(Instruction nextInstruction) {
-    return canActivateOne(nextInstruction, this._currentInstruction);
+    return canActivateOne(nextInstruction, this.currentInstruction);
   }
 
   Future<bool> _routerCanDeactivate(Instruction instruction) {
@@ -321,7 +325,7 @@ class Router {
    */
   Future<dynamic> commit(Instruction instruction,
       [bool _skipLocationChange = false]) {
-    this._currentInstruction = instruction;
+    this.currentInstruction = instruction;
     Future<dynamic> next = _resolveToTrue;
     if (isPresent(this._outlet) && isPresent(instruction.component)) {
       var componentInstruction = instruction.component;
@@ -396,10 +400,10 @@ class Router {
   }
 
   List<Instruction> _getAncestorInstructions() {
-    var ancestorInstructions = [this._currentInstruction];
+    var ancestorInstructions = [this.currentInstruction];
     Router ancestorRouter = this;
     while (isPresent(ancestorRouter = ancestorRouter.parent)) {
-      (ancestorInstructions..insert(0, ancestorRouter._currentInstruction))
+      (ancestorInstructions..insert(0, ancestorRouter.currentInstruction))
           .length;
     }
     return ancestorInstructions;
@@ -435,6 +439,7 @@ class RootRouter extends Router {
       @Inject(ROUTER_PRIMARY_COMPONENT) Type primaryComponent)
       : super(registry, null, primaryComponent) {
     /* super call moved to initializer */;
+    this.root = this;
     this._location = location;
     this._locationSub = this._location.subscribe((change) {
       // we call recognize ourselves
@@ -499,7 +504,7 @@ class RootRouter extends Router {
 
 class ChildRouter extends Router {
   ChildRouter(Router parent, hostComponent)
-      : super(parent.registry, parent, hostComponent) {
+      : super(parent.registry, parent, hostComponent, parent.root) {
     /* super call moved to initializer */;
     this.parent = parent;
   }
