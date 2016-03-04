@@ -25,15 +25,19 @@ export declare class Router {
     registry: RouteRegistry;
     parent: Router;
     hostComponent: any;
+    root: Router;
     navigating: boolean;
     lastNavigationAttempt: string;
-    private _currentInstruction;
+    /**
+     * The current `Instruction` for the router
+     */
+    currentInstruction: Instruction;
     private _currentNavigation;
     private _outlet;
     private _auxRouters;
     private _childRouter;
     private _subject;
-    constructor(registry: RouteRegistry, parent: Router, hostComponent: any);
+    constructor(registry: RouteRegistry, parent: Router, hostComponent: any, root?: Router);
     /**
      * Constructs a child router. You probably don't need to use this unless you're writing a reusable
      * component.
