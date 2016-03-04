@@ -162,13 +162,23 @@ class CompileProviderMetadata {
   static CompileProviderMetadata fromJson(Map<String, dynamic> data) {
     return new CompileProviderMetadata(
         token: objFromJson(data["token"], CompileIdentifierMetadata.fromJson),
-        useClass: objFromJson(data["useClass"], CompileTypeMetadata.fromJson));
+        useClass: objFromJson(data["useClass"], CompileTypeMetadata.fromJson),
+        useExisting: objFromJson(
+            data["useExisting"], CompileIdentifierMetadata.fromJson),
+        useValue:
+            objFromJson(data["useValue"], CompileIdentifierMetadata.fromJson),
+        useFactory:
+            objFromJson(data["useFactory"], CompileFactoryMetadata.fromJson));
   }
 
   Map<String, dynamic> toJson() {
     return {
       // Note: Runtime type can't be serialized...
-      "token": objToJson(this.token), "useClass": objToJson(this.useClass)
+      "token": objToJson(this.token),
+      "useClass": objToJson(this.useClass),
+      "useExisting": objToJson(this.useExisting),
+      "useValue": objToJson(this.useValue),
+      "useFactory": objToJson(this.useFactory)
     };
   }
 }
@@ -180,9 +190,11 @@ class CompileFactoryMetadata implements CompileIdentifierMetadata {
   String moduleUrl;
   bool constConstructor;
   List<CompileDiDependencyMetadata> diDeps;
-  CompileFactoryMetadata({runtime, name, moduleUrl, constConstructor, diDeps}) {
+  CompileFactoryMetadata(
+      {runtime, name, moduleUrl, prefix, constConstructor, diDeps}) {
     this.runtime = runtime;
     this.name = name;
+    this.prefix = prefix;
     this.moduleUrl = moduleUrl;
     this.diDeps = diDeps;
     this.constConstructor = constConstructor;
@@ -191,8 +203,24 @@ class CompileFactoryMetadata implements CompileIdentifierMetadata {
     return this;
   }
 
-  toJson() {
-    return null;
+  static CompileFactoryMetadata fromJson(Map<String, dynamic> data) {
+    return new CompileFactoryMetadata(
+        name: data["name"],
+        prefix: data["prefix"],
+        moduleUrl: data["moduleUrl"],
+        constConstructor: data["constConstructor"],
+        diDeps: arrayFromJson(
+            data["diDeps"], CompileDiDependencyMetadata.fromJson));
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      "name": this.name,
+      "prefix": this.prefix,
+      "moduleUrl": this.moduleUrl,
+      "constConstructor": this.constConstructor,
+      "diDeps": arrayToJson(this.diDeps)
+    };
   }
 }
 
