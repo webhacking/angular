@@ -1,18 +1,20 @@
 library angular2.src.common.directives.ng_class;
 
 import "package:angular2/src/facade/lang.dart"
-    show isPresent, isString, StringWrapper, isBlank, isArray;
+    show isPresent, isString, isArray;
 import "package:angular2/core.dart"
     show
         DoCheck,
         OnDestroy,
         Directive,
         ElementRef,
-        IterableDiffer,
         IterableDiffers,
-        KeyValueDiffer,
         KeyValueDiffers,
-        Renderer;
+        Renderer,
+        IterableDiffer,
+        KeyValueDiffer,
+        CollectionChangeRecord,
+        KeyValueChangeRecord;
 import "package:angular2/src/facade/collection.dart"
     show StringMapWrapper, isListLikeIterable;
 
@@ -83,47 +85,48 @@ class NgClass implements DoCheck, OnDestroy {
   KeyValueDiffers _keyValueDiffers;
   ElementRef _ngEl;
   Renderer _renderer;
-  dynamic _differ;
-  String _mode;
-  var _initialClasses = [];
-  var _rawClass;
+  IterableDiffer _iterableDiffer;
+  KeyValueDiffer _keyValueDiffer;
+  List<String> _initialClasses = [];
+  dynamic /* List < String > | Set < String > */ _rawClass;
   NgClass(this._iterableDiffers, this._keyValueDiffers, this._ngEl,
       this._renderer) {}
-  set initialClasses(v) {
+  set initialClasses(String v) {
     this._applyInitialClasses(true);
     this._initialClasses = isPresent(v) && isString(v) ? v.split(" ") : [];
     this._applyInitialClasses(false);
     this._applyClasses(this._rawClass, false);
   }
 
-  set rawClass(v) {
+  set rawClass(
+      dynamic /* String | List < String > | Set < String > | Map < String , dynamic > */ v) {
     this._cleanupClasses(this._rawClass);
     if (isString(v)) {
-      v = v.split(" ");
+      v = ((v as String)).split(" ");
     }
-    this._rawClass = v;
+    this._rawClass = (v as dynamic /* List < String > | Set < String > */);
+    this._iterableDiffer = null;
+    this._keyValueDiffer = null;
     if (isPresent(v)) {
       if (isListLikeIterable(v)) {
-        this._differ = this._iterableDiffers.find(v).create(null);
-        this._mode = "iterable";
+        this._iterableDiffer = this._iterableDiffers.find(v).create(null);
       } else {
-        this._differ = this._keyValueDiffers.find(v).create(null);
-        this._mode = "keyValue";
+        this._keyValueDiffer = this._keyValueDiffers.find(v).create(null);
       }
-    } else {
-      this._differ = null;
     }
   }
 
   void ngDoCheck() {
-    if (isPresent(this._differ)) {
-      var changes = this._differ.diff(this._rawClass);
+    if (isPresent(this._iterableDiffer)) {
+      var changes = this._iterableDiffer.diff(this._rawClass);
       if (isPresent(changes)) {
-        if (this._mode == "iterable") {
-          this._applyIterableChanges(changes);
-        } else {
-          this._applyKeyValueChanges(changes);
-        }
+        this._applyIterableChanges(changes);
+      }
+    }
+    if (isPresent(this._keyValueDiffer)) {
+      var changes = this._keyValueDiffer.diff(this._rawClass);
+      if (isPresent(changes)) {
+        this._applyKeyValueChanges(changes);
       }
     }
   }
@@ -132,19 +135,20 @@ class NgClass implements DoCheck, OnDestroy {
     this._cleanupClasses(this._rawClass);
   }
 
-  void _cleanupClasses(rawClassVal) {
+  void _cleanupClasses(
+      dynamic /* List < String > | Set < String > | Map < String , dynamic > */ rawClassVal) {
     this._applyClasses(rawClassVal, true);
     this._applyInitialClasses(false);
   }
 
   void _applyKeyValueChanges(dynamic changes) {
-    changes.forEachAddedItem((record) {
+    changes.forEachAddedItem((KeyValueChangeRecord record) {
       this._toggleClass(record.key, record.currentValue);
     });
-    changes.forEachChangedItem((record) {
+    changes.forEachChangedItem((KeyValueChangeRecord record) {
       this._toggleClass(record.key, record.currentValue);
     });
-    changes.forEachRemovedItem((record) {
+    changes.forEachRemovedItem((KeyValueChangeRecord record) {
       if (record.previousValue) {
         this._toggleClass(record.key, false);
       }
@@ -152,10 +156,10 @@ class NgClass implements DoCheck, OnDestroy {
   }
 
   void _applyIterableChanges(dynamic changes) {
-    changes.forEachAddedItem((record) {
+    changes.forEachAddedItem((CollectionChangeRecord record) {
       this._toggleClass(record.item, true);
     });
-    changes.forEachRemovedItem((record) {
+    changes.forEachRemovedItem((CollectionChangeRecord record) {
       this._toggleClass(record.item, false);
     });
   }
@@ -167,7 +171,7 @@ class NgClass implements DoCheck, OnDestroy {
   }
 
   _applyClasses(
-      dynamic /* List < String > | Set < String > | Map < String , String > */ rawClassVal,
+      dynamic /* List < String > | Set < String > | Map < String , dynamic > */ rawClassVal,
       bool isCleanup) {
     if (isPresent(rawClassVal)) {
       if (isArray(rawClassVal)) {
@@ -177,15 +181,15 @@ class NgClass implements DoCheck, OnDestroy {
         ((rawClassVal as Set<String>))
             .forEach((className) => this._toggleClass(className, !isCleanup));
       } else {
-        StringMapWrapper.forEach((rawClassVal as Map<String, String>),
-            (expVal, className) {
-          if (expVal) this._toggleClass(className, !isCleanup);
+        StringMapWrapper.forEach((rawClassVal as Map<String, dynamic>),
+            (dynamic expVal, String className) {
+          if (isPresent(expVal)) this._toggleClass(className, !isCleanup);
         });
       }
     }
   }
 
-  void _toggleClass(String className, enabled) {
+  void _toggleClass(String className, bool enabled) {
     className = className.trim();
     if (className.length > 0) {
       if (className.indexOf(" ") > -1) {
