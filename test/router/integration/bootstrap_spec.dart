@@ -231,7 +231,6 @@ main() {
                 expect(appInstance.helloCmp.message).toBe("Ahoy");
                 async.done();
               });
-              router.navigateByUrl("/rainbow(pony)");
             });
           }));
     });
