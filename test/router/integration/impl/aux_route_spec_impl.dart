@@ -22,8 +22,7 @@ import "package:angular2/router.dart"
     show Router, ROUTER_DIRECTIVES, RouteParams, RouteData, Location;
 import "package:angular2/src/router/route_config/route_config_decorator.dart"
     show RouteConfig, Route, AuxRoute, Redirect;
-import "../util.dart"
-    show specs, compile, TEST_ROUTER_PROVIDERS, clickOnElement, getHref;
+import "../util.dart" show specs, compile, clickOnElement, getHref;
 import "package:angular2/src/facade/exceptions.dart" show BaseException;
 
 getLinkElement(ComponentFixture rtc, [num linkIndex = 0]) {
@@ -34,7 +33,6 @@ auxRoutes() {
   TestComponentBuilder tcb;
   ComponentFixture fixture;
   var rtr;
-  beforeEachProviders(() => TEST_ROUTER_PROVIDERS);
   beforeEach(inject([TestComponentBuilder, Router], (tcBuilder, router) {
     tcb = tcBuilder;
     rtr = router;
@@ -157,7 +155,6 @@ auxRoutesWithAPrimaryRoute() {
   TestComponentBuilder tcb;
   ComponentFixture fixture;
   var rtr;
-  beforeEachProviders(() => TEST_ROUTER_PROVIDERS);
   beforeEach(inject([TestComponentBuilder, Router], (tcBuilder, router) {
     tcb = tcBuilder;
     rtr = router;
