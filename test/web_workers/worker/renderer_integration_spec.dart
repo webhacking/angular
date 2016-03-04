@@ -109,7 +109,6 @@ main() {
       var domRootRenderer = uiInjector.get(DomRootRenderer);
       workerRenderStore = new RenderStore();
       return [
-        Serializer,
         provide(ChangeDetectorGenConfig,
             useValue: new ChangeDetectorGenConfig(true, true, false)),
         provide(RenderStore, useValue: workerRenderStore),
