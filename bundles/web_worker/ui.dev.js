@@ -13655,13 +13655,19 @@ System.register("angular2/src/compiler/directive_metadata", ["angular2/src/facad
     CompileProviderMetadata.fromJson = function(data) {
       return new CompileProviderMetadata({
         token: objFromJson(data['token'], CompileIdentifierMetadata.fromJson),
-        useClass: objFromJson(data['useClass'], CompileTypeMetadata.fromJson)
+        useClass: objFromJson(data['useClass'], CompileTypeMetadata.fromJson),
+        useExisting: objFromJson(data['useExisting'], CompileIdentifierMetadata.fromJson),
+        useValue: objFromJson(data['useValue'], CompileIdentifierMetadata.fromJson),
+        useFactory: objFromJson(data['useFactory'], CompileFactoryMetadata.fromJson)
       });
     };
     CompileProviderMetadata.prototype.toJson = function() {
       return {
         'token': objToJson(this.token),
-        'useClass': objToJson(this.useClass)
+        'useClass': objToJson(this.useClass),
+        'useExisting': objToJson(this.useExisting),
+        'useValue': objToJson(this.useValue),
+        'useFactory': objToJson(this.useFactory)
       };
     };
     return CompileProviderMetadata;
@@ -13672,10 +13678,12 @@ System.register("angular2/src/compiler/directive_metadata", ["angular2/src/facad
       var runtime = _a.runtime,
           name = _a.name,
           moduleUrl = _a.moduleUrl,
+          prefix = _a.prefix,
           constConstructor = _a.constConstructor,
           diDeps = _a.diDeps;
       this.runtime = runtime;
       this.name = name;
+      this.prefix = prefix;
       this.moduleUrl = moduleUrl;
       this.diDeps = diDeps;
       this.constConstructor = constConstructor;
@@ -13687,8 +13695,23 @@ System.register("angular2/src/compiler/directive_metadata", ["angular2/src/facad
       enumerable: true,
       configurable: true
     });
+    CompileFactoryMetadata.fromJson = function(data) {
+      return new CompileFactoryMetadata({
+        name: data['name'],
+        prefix: data['prefix'],
+        moduleUrl: data['moduleUrl'],
+        constConstructor: data['constConstructor'],
+        diDeps: arrayFromJson(data['diDeps'], CompileDiDependencyMetadata.fromJson)
+      });
+    };
     CompileFactoryMetadata.prototype.toJson = function() {
-      return null;
+      return {
+        'name': this.name,
+        'prefix': this.prefix,
+        'moduleUrl': this.moduleUrl,
+        'constConstructor': this.constConstructor,
+        'diDeps': arrayToJson(this.diDeps)
+      };
     };
     return CompileFactoryMetadata;
   })();
