@@ -6373,6 +6373,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.SimpleChange = change_detection_1.SimpleChange;
 	exports.IterableDiffers = change_detection_1.IterableDiffers;
 	exports.KeyValueDiffers = change_detection_1.KeyValueDiffers;
+	exports.CollectionChangeRecord = change_detection_1.CollectionChangeRecord;
+	exports.KeyValueChangeRecord = change_detection_1.KeyValueChangeRecord;
 
 
 /***/ },
@@ -6384,6 +6386,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	var keyvalue_differs_1 = __webpack_require__(28);
 	var default_keyvalue_differ_1 = __webpack_require__(29);
 	var lang_1 = __webpack_require__(5);
+	var default_keyvalue_differ_2 = __webpack_require__(29);
+	exports.DefaultKeyValueDifferFactory = default_keyvalue_differ_2.DefaultKeyValueDifferFactory;
+	exports.KeyValueChangeRecord = default_keyvalue_differ_2.KeyValueChangeRecord;
+	var default_iterable_differ_2 = __webpack_require__(27);
+	exports.DefaultIterableDifferFactory = default_iterable_differ_2.DefaultIterableDifferFactory;
+	exports.CollectionChangeRecord = default_iterable_differ_2.CollectionChangeRecord;
 	var ast_1 = __webpack_require__(30);
 	exports.ASTWithSource = ast_1.ASTWithSource;
 	exports.AST = ast_1.AST;
@@ -7408,7 +7416,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    newSeqRecord = records.get(key);
 	                }
 	                else {
-	                    newSeqRecord = new KVChangeRecord(key);
+	                    newSeqRecord = new KeyValueChangeRecord(key);
 	                    records.set(key, newSeqRecord);
 	                    newSeqRecord.currentValue = value;
 	                    _this._addToAdditions(newSeqRecord);
@@ -7629,8 +7637,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return DefaultKeyValueDiffer;
 	})();
 	exports.DefaultKeyValueDiffer = DefaultKeyValueDiffer;
-	var KVChangeRecord = (function () {
-	    function KVChangeRecord(key) {
+	var KeyValueChangeRecord = (function () {
+	    function KeyValueChangeRecord(key) {
 	        this.key = key;
 	        this.previousValue = null;
 	        this.currentValue = null;
@@ -7647,15 +7655,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	        /** @internal */
 	        this._nextChanged = null;
 	    }
-	    KVChangeRecord.prototype.toString = function () {
+	    KeyValueChangeRecord.prototype.toString = function () {
 	        return lang_1.looseIdentical(this.previousValue, this.currentValue) ?
 	            lang_1.stringify(this.key) :
 	            (lang_1.stringify(this.key) + '[' + lang_1.stringify(this.previousValue) + '->' +
 	                lang_1.stringify(this.currentValue) + ']');
 	    };
-	    return KVChangeRecord;
+	    return KeyValueChangeRecord;
 	})();
-	exports.KVChangeRecord = KVChangeRecord;
+	exports.KeyValueChangeRecord = KeyValueChangeRecord;
 
 
 /***/ },
@@ -18556,33 +18564,31 @@ return /******/ (function(modules) { // webpackBootstrap
 	                v = v.split(' ');
 	            }
 	            this._rawClass = v;
+	            this._iterableDiffer = null;
+	            this._keyValueDiffer = null;
 	            if (lang_1.isPresent(v)) {
 	                if (collection_1.isListLikeIterable(v)) {
-	                    this._differ = this._iterableDiffers.find(v).create(null);
-	                    this._mode = 'iterable';
+	                    this._iterableDiffer = this._iterableDiffers.find(v).create(null);
 	                }
 	                else {
-	                    this._differ = this._keyValueDiffers.find(v).create(null);
-	                    this._mode = 'keyValue';
+	                    this._keyValueDiffer = this._keyValueDiffers.find(v).create(null);
 	                }
-	            }
-	            else {
-	                this._differ = null;
 	            }
 	        },
 	        enumerable: true,
 	        configurable: true
 	    });
 	    NgClass.prototype.ngDoCheck = function () {
-	        if (lang_1.isPresent(this._differ)) {
-	            var changes = this._differ.diff(this._rawClass);
+	        if (lang_1.isPresent(this._iterableDiffer)) {
+	            var changes = this._iterableDiffer.diff(this._rawClass);
 	            if (lang_1.isPresent(changes)) {
-	                if (this._mode == 'iterable') {
-	                    this._applyIterableChanges(changes);
-	                }
-	                else {
-	                    this._applyKeyValueChanges(changes);
-	                }
+	                this._applyIterableChanges(changes);
+	            }
+	        }
+	        if (lang_1.isPresent(this._keyValueDiffer)) {
+	            var changes = this._keyValueDiffer.diff(this._rawClass);
+	            if (lang_1.isPresent(changes)) {
+	                this._applyKeyValueChanges(changes);
 	            }
 	        }
 	    };
@@ -18621,7 +18627,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            }
 	            else {
 	                collection_1.StringMapWrapper.forEach(rawClassVal, function (expVal, className) {
-	                    if (expVal)
+	                    if (lang_1.isPresent(expVal))
 	                        _this._toggleClass(className, !isCleanup);
 	                });
 	            }
@@ -23111,20 +23117,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	    CompileProviderMetadata.fromJson = function (data) {
 	        return new CompileProviderMetadata({
 	            token: objFromJson(data['token'], CompileIdentifierMetadata.fromJson),
-	            useClass: objFromJson(data['useClass'], CompileTypeMetadata.fromJson),
-	            useExisting: objFromJson(data['useExisting'], CompileIdentifierMetadata.fromJson),
-	            useValue: objFromJson(data['useValue'], CompileIdentifierMetadata.fromJson),
-	            useFactory: objFromJson(data['useFactory'], CompileFactoryMetadata.fromJson)
+	            useClass: objFromJson(data['useClass'], CompileTypeMetadata.fromJson)
 	        });
 	    };
 	    CompileProviderMetadata.prototype.toJson = function () {
 	        return {
 	            // Note: Runtime type can't be serialized...
 	            'token': objToJson(this.token),
-	            'useClass': objToJson(this.useClass),
-	            'useExisting': objToJson(this.useExisting),
-	            'useValue': objToJson(this.useValue),
-	            'useFactory': objToJson(this.useFactory)
+	            'useClass': objToJson(this.useClass)
 	        };
 	    };
 	    return CompileProviderMetadata;
@@ -23132,10 +23132,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.CompileProviderMetadata = CompileProviderMetadata;
 	var CompileFactoryMetadata = (function () {
 	    function CompileFactoryMetadata(_a) {
-	        var runtime = _a.runtime, name = _a.name, moduleUrl = _a.moduleUrl, prefix = _a.prefix, constConstructor = _a.constConstructor, diDeps = _a.diDeps;
+	        var runtime = _a.runtime, name = _a.name, moduleUrl = _a.moduleUrl, constConstructor = _a.constConstructor, diDeps = _a.diDeps;
 	        this.runtime = runtime;
 	        this.name = name;
-	        this.prefix = prefix;
 	        this.moduleUrl = moduleUrl;
 	        this.diDeps = diDeps;
 	        this.constConstructor = constConstructor;
@@ -23145,24 +23144,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        enumerable: true,
 	        configurable: true
 	    });
-	    CompileFactoryMetadata.fromJson = function (data) {
-	        return new CompileFactoryMetadata({
-	            name: data['name'],
-	            prefix: data['prefix'],
-	            moduleUrl: data['moduleUrl'],
-	            constConstructor: data['constConstructor'],
-	            diDeps: arrayFromJson(data['diDeps'], CompileDiDependencyMetadata.fromJson)
-	        });
-	    };
-	    CompileFactoryMetadata.prototype.toJson = function () {
-	        return {
-	            'name': this.name,
-	            'prefix': this.prefix,
-	            'moduleUrl': this.moduleUrl,
-	            'constConstructor': this.constConstructor,
-	            'diDeps': arrayToJson(this.diDeps)
-	        };
-	    };
+	    CompileFactoryMetadata.prototype.toJson = function () { return null; };
 	    return CompileFactoryMetadata;
 	})();
 	exports.CompileFactoryMetadata = CompileFactoryMetadata;
