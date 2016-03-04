@@ -32973,16 +32973,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * The router uses the `RouteRegistry` to get an `Instruction`.
 	 */
 	var Router = (function () {
-	    function Router(registry, parent, hostComponent, root) {
+	    function Router(registry, parent, hostComponent) {
 	        this.registry = registry;
 	        this.parent = parent;
 	        this.hostComponent = hostComponent;
-	        this.root = root;
 	        this.navigating = false;
-	        /**
-	         * The current `Instruction` for the router
-	         */
-	        this.currentInstruction = null;
+	        this._currentInstruction = null;
 	        this._currentNavigation = _resolveToTrue;
 	        this._outlet = null;
 	        this._auxRouters = new collection_1.Map();
@@ -33013,8 +33009,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	            throw new exceptions_1.BaseException("Primary outlet is already registered.");
 	        }
 	        this._outlet = outlet;
-	        if (lang_1.isPresent(this.currentInstruction)) {
-	            return this.commit(this.currentInstruction, false);
+	        if (lang_1.isPresent(this._currentInstruction)) {
+	            return this.commit(this._currentInstruction, false);
 	        }
 	        return _resolveToTrue;
 	    };
@@ -33043,8 +33039,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this._auxRouters.set(outletName, router);
 	        router._outlet = outlet;
 	        var auxInstruction;
-	        if (lang_1.isPresent(this.currentInstruction) &&
-	            lang_1.isPresent(auxInstruction = this.currentInstruction.auxInstruction[outletName])) {
+	        if (lang_1.isPresent(this._currentInstruction) &&
+	            lang_1.isPresent(auxInstruction = this._currentInstruction.auxInstruction[outletName])) {
 	            return router.commit(auxInstruction);
 	        }
 	        return _resolveToTrue;
@@ -33059,8 +33055,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	            router = router.parent;
 	            instruction = instruction.child;
 	        }
-	        return lang_1.isPresent(this.currentInstruction) &&
-	            this.currentInstruction.component == instruction.component;
+	        return lang_1.isPresent(this._currentInstruction) &&
+	            this._currentInstruction.component == instruction.component;
 	    };
 	    /**
 	     * Dynamically update the routing configuration and trigger a navigation.
@@ -33199,7 +33195,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        });
 	    };
 	    Router.prototype._canActivate = function (nextInstruction) {
-	        return canActivateOne(nextInstruction, this.currentInstruction);
+	        return canActivateOne(nextInstruction, this._currentInstruction);
 	    };
 	    Router.prototype._routerCanDeactivate = function (instruction) {
 	        var _this = this;
@@ -33238,7 +33234,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    Router.prototype.commit = function (instruction, _skipLocationChange) {
 	        var _this = this;
 	        if (_skipLocationChange === void 0) { _skipLocationChange = false; }
-	        this.currentInstruction = instruction;
+	        this._currentInstruction = instruction;
 	        var next = _resolveToTrue;
 	        if (lang_1.isPresent(this._outlet) && lang_1.isPresent(instruction.component)) {
 	            var componentInstruction = instruction.component;
@@ -33304,10 +33300,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return this.registry.recognize(url, ancestorComponents);
 	    };
 	    Router.prototype._getAncestorInstructions = function () {
-	        var ancestorInstructions = [this.currentInstruction];
+	        var ancestorInstructions = [this._currentInstruction];
 	        var ancestorRouter = this;
 	        while (lang_1.isPresent(ancestorRouter = ancestorRouter.parent)) {
-	            ancestorInstructions.unshift(ancestorRouter.currentInstruction);
+	            ancestorInstructions.unshift(ancestorRouter._currentInstruction);
 	        }
 	        return ancestorInstructions;
 	    };
@@ -33330,7 +33326,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    };
 	    Router = __decorate([
 	        core_1.Injectable(), 
-	        __metadata('design:paramtypes', [route_registry_1.RouteRegistry, Router, Object, Router])
+	        __metadata('design:paramtypes', [route_registry_1.RouteRegistry, Router, Object])
 	    ], Router);
 	    return Router;
 	})();
@@ -33340,7 +33336,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    function RootRouter(registry, location, primaryComponent) {
 	        var _this = this;
 	        _super.call(this, registry, null, primaryComponent);
-	        this.root = this;
 	        this._location = location;
 	        this._locationSub = this._location.subscribe(function (change) {
 	            // we call recognize ourselves
@@ -33407,7 +33402,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	var ChildRouter = (function (_super) {
 	    __extends(ChildRouter, _super);
 	    function ChildRouter(parent, hostComponent) {
-	        _super.call(this, parent.registry, parent, hostComponent, parent.root);
+	        _super.call(this, parent.registry, parent, hostComponent);
 	        this.parent = parent;
 	    }
 	    ChildRouter.prototype.navigateByUrl = function (url, _skipLocationChange) {

@@ -38,16 +38,12 @@ let _resolveToFalse = PromiseWrapper.resolve(false);
  * The router uses the `RouteRegistry` to get an `Instruction`.
  */
 export let Router = class {
-    constructor(registry, parent, hostComponent, root) {
+    constructor(registry, parent, hostComponent) {
         this.registry = registry;
         this.parent = parent;
         this.hostComponent = hostComponent;
-        this.root = root;
         this.navigating = false;
-        /**
-         * The current `Instruction` for the router
-         */
-        this.currentInstruction = null;
+        this._currentInstruction = null;
         this._currentNavigation = _resolveToTrue;
         this._outlet = null;
         this._auxRouters = new Map();
@@ -78,8 +74,8 @@ export let Router = class {
             throw new BaseException(`Primary outlet is already registered.`);
         }
         this._outlet = outlet;
-        if (isPresent(this.currentInstruction)) {
-            return this.commit(this.currentInstruction, false);
+        if (isPresent(this._currentInstruction)) {
+            return this.commit(this._currentInstruction, false);
         }
         return _resolveToTrue;
     }
@@ -108,8 +104,8 @@ export let Router = class {
         this._auxRouters.set(outletName, router);
         router._outlet = outlet;
         var auxInstruction;
-        if (isPresent(this.currentInstruction) &&
-            isPresent(auxInstruction = this.currentInstruction.auxInstruction[outletName])) {
+        if (isPresent(this._currentInstruction) &&
+            isPresent(auxInstruction = this._currentInstruction.auxInstruction[outletName])) {
             return router.commit(auxInstruction);
         }
         return _resolveToTrue;
@@ -124,8 +120,8 @@ export let Router = class {
             router = router.parent;
             instruction = instruction.child;
         }
-        return isPresent(this.currentInstruction) &&
-            this.currentInstruction.component == instruction.component;
+        return isPresent(this._currentInstruction) &&
+            this._currentInstruction.component == instruction.component;
     }
     /**
      * Dynamically update the routing configuration and trigger a navigation.
@@ -255,7 +251,7 @@ export let Router = class {
         });
     }
     _canActivate(nextInstruction) {
-        return canActivateOne(nextInstruction, this.currentInstruction);
+        return canActivateOne(nextInstruction, this._currentInstruction);
     }
     _routerCanDeactivate(instruction) {
         if (isBlank(this._outlet)) {
@@ -291,7 +287,7 @@ export let Router = class {
      * Updates this router and all descendant routers according to the given instruction
      */
     commit(instruction, _skipLocationChange = false) {
-        this.currentInstruction = instruction;
+        this._currentInstruction = instruction;
         var next = _resolveToTrue;
         if (isPresent(this._outlet) && isPresent(instruction.component)) {
             var componentInstruction = instruction.component;
@@ -356,10 +352,10 @@ export let Router = class {
         return this.registry.recognize(url, ancestorComponents);
     }
     _getAncestorInstructions() {
-        var ancestorInstructions = [this.currentInstruction];
+        var ancestorInstructions = [this._currentInstruction];
         var ancestorRouter = this;
         while (isPresent(ancestorRouter = ancestorRouter.parent)) {
-            ancestorInstructions.unshift(ancestorRouter.currentInstruction);
+            ancestorInstructions.unshift(ancestorRouter._currentInstruction);
         }
         return ancestorInstructions;
     }
@@ -383,12 +379,11 @@ export let Router = class {
 };
 Router = __decorate([
     Injectable(), 
-    __metadata('design:paramtypes', [RouteRegistry, Router, Object, Router])
+    __metadata('design:paramtypes', [RouteRegistry, Router, Object])
 ], Router);
 export let RootRouter = class extends Router {
     constructor(registry, location, primaryComponent) {
         super(registry, null, primaryComponent);
-        this.root = this;
         this._location = location;
         this._locationSub = this._location.subscribe((change) => {
             // we call recognize ourselves
@@ -450,7 +445,7 @@ RootRouter = __decorate([
 ], RootRouter);
 class ChildRouter extends Router {
     constructor(parent, hostComponent) {
-        super(parent.registry, parent, hostComponent, parent.root);
+        super(parent.registry, parent, hostComponent);
         this.parent = parent;
     }
     navigateByUrl(url, _skipLocationChange = false) {
