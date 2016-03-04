@@ -10,7 +10,7 @@ import "package:angular2/core.dart"
         Renderer;
 import "package:angular2/src/facade/lang.dart" show isPresent, isBlank, print;
 import "../../core/change_detection/differs/default_keyvalue_differ.dart"
-    show KeyValueChangeRecord;
+    show KVChangeRecord;
 
 /**
  * The `NgStyle` directive changes styles based on a result of expression evaluation.
@@ -90,13 +90,13 @@ class NgStyle implements DoCheck {
   }
 
   void _applyChanges(dynamic changes) {
-    changes.forEachAddedItem((KeyValueChangeRecord record) {
+    changes.forEachAddedItem((KVChangeRecord record) {
       this._setStyle(record.key, record.currentValue);
     });
-    changes.forEachChangedItem((KeyValueChangeRecord record) {
+    changes.forEachChangedItem((KVChangeRecord record) {
       this._setStyle(record.key, record.currentValue);
     });
-    changes.forEachRemovedItem((KeyValueChangeRecord record) {
+    changes.forEachRemovedItem((KVChangeRecord record) {
       this._setStyle(record.key, null);
     });
   }

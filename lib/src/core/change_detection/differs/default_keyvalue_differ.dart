@@ -23,14 +23,14 @@ class DefaultKeyValueDifferFactory implements KeyValueDifferFactory {
 
 class DefaultKeyValueDiffer implements KeyValueDiffer {
   Map<dynamic, dynamic> _records = new Map();
-  KeyValueChangeRecord _mapHead = null;
-  KeyValueChangeRecord _previousMapHead = null;
-  KeyValueChangeRecord _changesHead = null;
-  KeyValueChangeRecord _changesTail = null;
-  KeyValueChangeRecord _additionsHead = null;
-  KeyValueChangeRecord _additionsTail = null;
-  KeyValueChangeRecord _removalsHead = null;
-  KeyValueChangeRecord _removalsTail = null;
+  KVChangeRecord _mapHead = null;
+  KVChangeRecord _previousMapHead = null;
+  KVChangeRecord _changesHead = null;
+  KVChangeRecord _changesTail = null;
+  KVChangeRecord _additionsHead = null;
+  KVChangeRecord _additionsTail = null;
+  KVChangeRecord _removalsHead = null;
+  KVChangeRecord _removalsTail = null;
   bool get isDirty {
     return !identical(this._additionsHead, null) ||
         !identical(this._changesHead, null) ||
@@ -38,7 +38,7 @@ class DefaultKeyValueDiffer implements KeyValueDiffer {
   }
 
   forEachItem(Function fn) {
-    KeyValueChangeRecord record;
+    KVChangeRecord record;
     for (record = this._mapHead;
         !identical(record, null);
         record = record._next) {
@@ -47,7 +47,7 @@ class DefaultKeyValueDiffer implements KeyValueDiffer {
   }
 
   forEachPreviousItem(Function fn) {
-    KeyValueChangeRecord record;
+    KVChangeRecord record;
     for (record = this._previousMapHead;
         !identical(record, null);
         record = record._nextPrevious) {
@@ -56,7 +56,7 @@ class DefaultKeyValueDiffer implements KeyValueDiffer {
   }
 
   forEachChangedItem(Function fn) {
-    KeyValueChangeRecord record;
+    KVChangeRecord record;
     for (record = this._changesHead;
         !identical(record, null);
         record = record._nextChanged) {
@@ -65,7 +65,7 @@ class DefaultKeyValueDiffer implements KeyValueDiffer {
   }
 
   forEachAddedItem(Function fn) {
-    KeyValueChangeRecord record;
+    KVChangeRecord record;
     for (record = this._additionsHead;
         !identical(record, null);
         record = record._nextAdded) {
@@ -74,7 +74,7 @@ class DefaultKeyValueDiffer implements KeyValueDiffer {
   }
 
   forEachRemovedItem(Function fn) {
-    KeyValueChangeRecord record;
+    KVChangeRecord record;
     for (record = this._removalsHead;
         !identical(record, null);
         record = record._nextRemoved) {
@@ -98,9 +98,9 @@ class DefaultKeyValueDiffer implements KeyValueDiffer {
   bool check(Map<dynamic, dynamic> map) {
     this._reset();
     var records = this._records;
-    KeyValueChangeRecord oldSeqRecord = this._mapHead;
-    KeyValueChangeRecord lastOldSeqRecord = null;
-    KeyValueChangeRecord lastNewSeqRecord = null;
+    KVChangeRecord oldSeqRecord = this._mapHead;
+    KVChangeRecord lastOldSeqRecord = null;
+    KVChangeRecord lastNewSeqRecord = null;
     bool seqChanged = false;
     this._forEach(map, (value, key) {
       var newSeqRecord;
@@ -121,7 +121,7 @@ class DefaultKeyValueDiffer implements KeyValueDiffer {
         if (records.containsKey(key)) {
           newSeqRecord = records[key];
         } else {
-          newSeqRecord = new KeyValueChangeRecord(key);
+          newSeqRecord = new KVChangeRecord(key);
           records[key] = newSeqRecord;
           newSeqRecord.currentValue = value;
           this._addToAdditions(newSeqRecord);
@@ -148,7 +148,7 @@ class DefaultKeyValueDiffer implements KeyValueDiffer {
   /** @internal */
   _reset() {
     if (this.isDirty) {
-      KeyValueChangeRecord record;
+      KVChangeRecord record;
       // Record the state of the mapping
       for (record = this._previousMapHead = this._mapHead;
           !identical(record, null);
@@ -221,7 +221,7 @@ class DefaultKeyValueDiffer implements KeyValueDiffer {
   }
 
   /** @internal */
-  _truncate(KeyValueChangeRecord lastRecord, KeyValueChangeRecord record) {
+  _truncate(KVChangeRecord lastRecord, KVChangeRecord record) {
     while (!identical(record, null)) {
       if (identical(lastRecord, null)) {
         this._mapHead = null;
@@ -242,7 +242,7 @@ class DefaultKeyValueDiffer implements KeyValueDiffer {
       lastRecord = record;
       record = nextRecord;
     }
-    for (KeyValueChangeRecord rec = this._removalsHead;
+    for (KVChangeRecord rec = this._removalsHead;
         !identical(rec, null);
         rec = rec._nextRemoved) {
       rec.previousValue = rec.currentValue;
@@ -253,14 +253,14 @@ class DefaultKeyValueDiffer implements KeyValueDiffer {
   }
 
   /** @internal */
-  _isInRemovals(KeyValueChangeRecord record) {
+  _isInRemovals(KVChangeRecord record) {
     return identical(record, this._removalsHead) ||
         !identical(record._nextRemoved, null) ||
         !identical(record._prevRemoved, null);
   }
 
   /** @internal */
-  _addToRemovals(KeyValueChangeRecord record) {
+  _addToRemovals(KVChangeRecord record) {
     // todo(vicb) assert
 
     // assert(record._next == null);
@@ -282,7 +282,7 @@ class DefaultKeyValueDiffer implements KeyValueDiffer {
   }
 
   /** @internal */
-  _removeFromSeq(KeyValueChangeRecord prev, KeyValueChangeRecord record) {
+  _removeFromSeq(KVChangeRecord prev, KVChangeRecord record) {
     var next = record._next;
     if (identical(prev, null)) {
       this._mapHead = next;
@@ -292,7 +292,7 @@ class DefaultKeyValueDiffer implements KeyValueDiffer {
   }
 
   /** @internal */
-  _removeFromRemovals(KeyValueChangeRecord record) {
+  _removeFromRemovals(KVChangeRecord record) {
     // todo(vicb) assert
 
     // assert(record._next == null);
@@ -316,7 +316,7 @@ class DefaultKeyValueDiffer implements KeyValueDiffer {
   }
 
   /** @internal */
-  _addToAdditions(KeyValueChangeRecord record) {
+  _addToAdditions(KVChangeRecord record) {
     // todo(vicb): assert
 
     // assert(record._next == null);
@@ -337,7 +337,7 @@ class DefaultKeyValueDiffer implements KeyValueDiffer {
   }
 
   /** @internal */
-  _addToChanges(KeyValueChangeRecord record) {
+  _addToChanges(KVChangeRecord record) {
     // todo(vicb) assert
 
     // assert(record._nextAdded == null);
@@ -361,7 +361,7 @@ class DefaultKeyValueDiffer implements KeyValueDiffer {
     var changes = [];
     var additions = [];
     var removals = [];
-    KeyValueChangeRecord record;
+    KVChangeRecord record;
     for (record = this._mapHead;
         !identical(record, null);
         record = record._next) {
@@ -415,23 +415,23 @@ class DefaultKeyValueDiffer implements KeyValueDiffer {
   }
 }
 
-class KeyValueChangeRecord {
+class KVChangeRecord {
   dynamic key;
   dynamic previousValue = null;
   dynamic currentValue = null;
   /** @internal */
-  KeyValueChangeRecord _nextPrevious = null;
+  KVChangeRecord _nextPrevious = null;
   /** @internal */
-  KeyValueChangeRecord _next = null;
+  KVChangeRecord _next = null;
   /** @internal */
-  KeyValueChangeRecord _nextAdded = null;
+  KVChangeRecord _nextAdded = null;
   /** @internal */
-  KeyValueChangeRecord _nextRemoved = null;
+  KVChangeRecord _nextRemoved = null;
   /** @internal */
-  KeyValueChangeRecord _prevRemoved = null;
+  KVChangeRecord _prevRemoved = null;
   /** @internal */
-  KeyValueChangeRecord _nextChanged = null;
-  KeyValueChangeRecord(this.key) {}
+  KVChangeRecord _nextChanged = null;
+  KVChangeRecord(this.key) {}
   String toString() {
     return looseIdentical(this.previousValue, this.currentValue)
         ? stringify(this.key)
