@@ -19605,8 +19605,6 @@ System.register("angular2/src/compiler/html_tags", ["angular2/src/facade/lang"],
   })();
   exports.HtmlTagDefinition = HtmlTagDefinition;
   var TAG_DEFINITIONS = {
-    'base': new HtmlTagDefinition({isVoid: true}),
-    'meta': new HtmlTagDefinition({isVoid: true}),
     'area': new HtmlTagDefinition({isVoid: true}),
     'embed': new HtmlTagDefinition({isVoid: true}),
     'link': new HtmlTagDefinition({isVoid: true}),

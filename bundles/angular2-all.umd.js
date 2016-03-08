@@ -27958,8 +27958,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	// see http://www.w3.org/TR/html51/syntax.html#optional-tags
 	// This implementation does not fully conform to the HTML5 spec.
 	var TAG_DEFINITIONS = {
-	    'base': new HtmlTagDefinition({ isVoid: true }),
-	    'meta': new HtmlTagDefinition({ isVoid: true }),
 	    'area': new HtmlTagDefinition({ isVoid: true }),
 	    'embed': new HtmlTagDefinition({ isVoid: true }),
 	    'link': new HtmlTagDefinition({ isVoid: true }),
@@ -29113,9 +29111,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	            var mc = new Hammer(element);
 	            mc.get('pinch').set({ enable: true });
 	            mc.get('rotate').set({ enable: true });
-	            var handler = function (eventObj) { zone.run(function () { handler(eventObj); }); };
-	            mc.on(eventName, handler);
-	            return function () { mc.off(eventName, handler); };
+	            var callback = function (eventObj) { zone.run(function () { handler(eventObj); }); };
+	            mc.on(eventName, callback);
+	            return function () { mc.off(eventName, callback); };
 	        });
 	    };
 	    HammerGesturesPlugin = __decorate([
