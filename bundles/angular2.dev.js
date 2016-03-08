@@ -20893,14 +20893,14 @@ System.register("angular2/src/platform/dom/events/hammer_gestures", ["angular2/s
         var mc = new Hammer(element);
         mc.get('pinch').set({enable: true});
         mc.get('rotate').set({enable: true});
-        var handler = function(eventObj) {
+        var callback = function(eventObj) {
           zone.run(function() {
             handler(eventObj);
           });
         };
-        mc.on(eventName, handler);
+        mc.on(eventName, callback);
         return function() {
-          mc.off(eventName, handler);
+          mc.off(eventName, callback);
         };
       });
     };
