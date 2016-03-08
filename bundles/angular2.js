@@ -19969,6 +19969,8 @@ System.register("angular2/src/compiler/html_tags", ["angular2/src/facade/lang"],
   })();
   exports.HtmlTagDefinition = HtmlTagDefinition;
   var TAG_DEFINITIONS = {
+    'base': new HtmlTagDefinition({isVoid: true}),
+    'meta': new HtmlTagDefinition({isVoid: true}),
     'area': new HtmlTagDefinition({isVoid: true}),
     'embed': new HtmlTagDefinition({isVoid: true}),
     'link': new HtmlTagDefinition({isVoid: true}),
@@ -20891,14 +20893,14 @@ System.register("angular2/src/platform/dom/events/hammer_gestures", ["angular2/s
         var mc = new Hammer(element);
         mc.get('pinch').set({enable: true});
         mc.get('rotate').set({enable: true});
-        var callback = function(eventObj) {
+        var handler = function(eventObj) {
           zone.run(function() {
             handler(eventObj);
           });
         };
-        mc.on(eventName, callback);
+        mc.on(eventName, handler);
         return function() {
-          mc.off(eventName, callback);
+          mc.off(eventName, handler);
         };
       });
     };
