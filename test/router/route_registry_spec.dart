@@ -19,7 +19,7 @@ import "package:angular2/src/router/route_config/route_config_decorator.dart"
 
 main() {
   describe("RouteRegistry", () {
-    RouteRegistry registry;
+    var registry;
     beforeEach(() {
       registry = new RouteRegistry(RootHostCmp);
     });
