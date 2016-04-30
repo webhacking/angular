@@ -31,8 +31,6 @@ import {
   global,
   stringify,
   isBlank,
-  CONST,
-  CONST_EXPR,
   IS_DART
 } from 'angular2/src/facade/lang';
 import {BaseException, WrappedException} from 'angular2/src/facade/exceptions';
@@ -93,7 +91,7 @@ import {TemplateRef_, TemplateRef} from 'angular2/src/core/linker/template_ref';
 
 import {Renderer} from 'angular2/src/core/render';
 
-const ANCHOR_ELEMENT = CONST_EXPR(new OpaqueToken('AnchorElement'));
+const ANCHOR_ELEMENT = /*@ts2dart_const*/ new OpaqueToken('AnchorElement');
 
 export function main() {
   if (IS_DART) {
@@ -2274,7 +2272,9 @@ class PublicApi {
 
 @Directive({
   selector: '[public-api]',
-  providers: [new Provider(PublicApi, {useExisting: PrivateImpl, deps: []})]
+  providers: [
+    /* @ts2dart_Provider */ {provide: PublicApi, useExisting: PrivateImpl, deps: []}
+  ]
 })
 @Injectable()
 class PrivateImpl extends PublicApi {
@@ -2345,7 +2345,11 @@ function createInjectableWithLogging(inj: Injector) {
 @Component({
   selector: 'component-providing-logging-injectable',
   providers: [
-    new Provider(InjectableService, {useFactory: createInjectableWithLogging, deps: [Injector]})
+    /* @ts2dart_Provider */ {
+      provide: InjectableService,
+      useFactory: createInjectableWithLogging,
+      deps: [Injector]
+    }
   ],
   template: ''
 })
@@ -2371,8 +2375,8 @@ class DirectiveProvidingInjectableInView {
 
 @Component({
   selector: 'directive-providing-injectable',
-  providers: [new Provider(InjectableService, {useValue: 'host'})],
-  viewProviders: [new Provider(InjectableService, {useValue: 'view'})],
+  providers: [/* @ts2dart_Provider */ {provide: InjectableService, useValue: 'host'}],
+  viewProviders: [/* @ts2dart_Provider */ {provide: InjectableService, useValue: 'view'}],
   template: ''
 })
 @Injectable()
@@ -2409,7 +2413,7 @@ class DirectiveConsumingInjectableUnbounded {
 }
 
 
-@CONST()
+/* @ts2dart_const */
 class EventBus {
   parentEventBus: EventBus;
   name: string;
@@ -2422,7 +2426,9 @@ class EventBus {
 
 @Directive({
   selector: 'grand-parent-providing-event-bus',
-  providers: [new Provider(EventBus, {useValue: new EventBus(null, "grandparent")})]
+  providers: [
+    /* @ts2dart_Provider */ {provide: EventBus, useValue: new EventBus(null, "grandparent")}
+  ]
 })
 class GrandParentProvidingEventBus {
   bus: EventBus;
